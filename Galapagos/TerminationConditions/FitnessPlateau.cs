@@ -14,7 +14,7 @@ namespace Galapagos.TerminationConditions
         private readonly Population _population;
         private readonly int _plateauLength;
 
-        private uint _bestFitness = 1;
+        private double _bestFitness = 0;
         private int _count = 0;
 
         /// <summary>

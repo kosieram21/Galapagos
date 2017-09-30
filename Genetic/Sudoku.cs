@@ -86,7 +86,7 @@ namespace Genetic
             return traits;
         }
 
-        private Func<Creature, uint> ConstructFitnessFunction()
+        private Func<Creature, double> ConstructFitnessFunction()
         {
             return (creature) =>
             {

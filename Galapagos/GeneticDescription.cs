@@ -144,14 +144,14 @@ namespace Galapagos
         }
 
         private readonly IList<Trait> _traits = new List<Trait>();
-        private readonly Func<Creature, uint> _fitnessFunction;
+        private readonly Func<Creature, double> _fitnessFunction;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="GeneticDescription"/> class.
         /// </summary>
         /// <param name="fitnessFunction">The fitness function.</param>
         /// <param name="traits">The genetic traits.</param>
-        public GeneticDescription(Func<Creature, uint> fitnessFunction, IList<Trait> traits = null)
+        public GeneticDescription(Func<Creature, double> fitnessFunction, IList<Trait> traits = null)
         {
             _fitnessFunction = fitnessFunction;
             if (traits != null)
@@ -164,7 +164,7 @@ namespace Galapagos
         /// <summary>
         /// Gets the fitness function.
         /// </summary>
-        internal Func<Creature, uint> FitnessFunction => _fitnessFunction;
+        internal Func<Creature, double> FitnessFunction => _fitnessFunction;
 
         /// <summary>
         /// Adds a trait to the genetic description.

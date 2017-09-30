@@ -12,14 +12,14 @@ namespace Galapagos.TerminationConditions
     internal class FitnessThreshold : ITerminationCondition
     {
         private readonly Population _population;
-        private readonly uint _fitnessThreshold;
+        private readonly double _fitnessThreshold;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessThreshold"/> class.
         /// </summary>
         /// <param name="population">The creature population.</param>
         /// <param name="fitnessThreshold">The fitness threshold.</param>
-        public FitnessThreshold(Population population, uint fitnessThreshold)
+        public FitnessThreshold(Population population, double fitnessThreshold)
         {
             _population = population;
             _fitnessThreshold = fitnessThreshold;

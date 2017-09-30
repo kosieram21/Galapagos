@@ -14,7 +14,7 @@ namespace Galapagos.SelectionAlgorithms
         protected readonly Random _rng = new Random(DateTime.Now.Millisecond);
 
         protected readonly Creature[] _creatures;
-        protected readonly uint F = 0;
+        protected readonly double F = 0;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
@@ -24,7 +24,12 @@ namespace Galapagos.SelectionAlgorithms
         {
             _creatures = creatures.OrderByDescending(creature => creature.Fitness).ToArray();
             foreach (var creature in creatures)
+            {
+                if (!(creature.Fitness > 0))
+                    throw new InvalidOperationException("Error! Fitness porprtionate selction requires a positive fitness value");
+
                 F += creature.Fitness;
+            }
         }
 
         /// <summary>

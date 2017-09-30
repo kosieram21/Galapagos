@@ -14,7 +14,7 @@ namespace Galapagos
         private readonly GeneticDescription _geneticDescription;
         private readonly IDictionary<string, IChromosome> _chromosomes = new Dictionary<string, IChromosome>();
 
-        private uint _fitness = 0;
+        private double _fitness = 0;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Creature"/> class.
@@ -45,7 +45,7 @@ namespace Galapagos
         /// <summary>
         /// Gets the creature's fitness.
         /// </summary>
-        public uint Fitness
+        public double Fitness
         {
             get
             {
@@ -60,10 +60,7 @@ namespace Galapagos
         internal void EvaluateFitness()
         {
             if (_fitness == 0)
-            {
                 _fitness = _geneticDescription.FitnessFunction(this);
-                if (_fitness == 0) _fitness = 1;
-            }
         }
 
         /// <summary>

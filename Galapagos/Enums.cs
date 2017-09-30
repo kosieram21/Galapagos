@@ -76,4 +76,13 @@ namespace Galapagos
         GenerationThreshold,
         Timer
     }
+
+    /// <summary>
+    /// The available chromosome types.
+    /// </summary>
+    public enum ChromosomeType
+    {
+        Binary,
+        Permutation
+    }
 }

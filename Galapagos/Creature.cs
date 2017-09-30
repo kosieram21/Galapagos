@@ -23,8 +23,8 @@ namespace Galapagos
         internal Creature(GeneticDescription description)
         {
             _geneticDescription = description;
-            foreach (var trait in description)
-                _chromosomes.Add(trait.Name, GeneticFactory.ConstructChromosome(trait));
+            foreach (var metadata in description)
+                _chromosomes.Add(metadata.Name, GeneticFactory.ConstructChromosome(metadata));
         }
 
         /// <summary>
@@ -34,10 +34,10 @@ namespace Galapagos
         internal Creature Clone()
         {
             var clone = new Creature(_geneticDescription);
-            foreach(var trait in _geneticDescription)
+            foreach(var metadata in _geneticDescription)
             {
-                var chromosome = GetChromosome(trait.Name);
-                clone.SetChromosome(trait.Name, chromosome);
+                var chromosome = GetChromosome(metadata.Name);
+                clone.SetChromosome(metadata.Name, chromosome);
             }
             return clone;
         }
@@ -73,19 +73,19 @@ namespace Galapagos
             var rng = new Random(DateTime.Now.Millisecond);
 
             var child = new Creature(_geneticDescription);
-            foreach(var trait in _geneticDescription)
+            foreach(var metadata in _geneticDescription)
             {
-                var mutation = trait.Mutations[rng.Next() % trait.Mutations.Count()];
-                var crossover = trait.Crossovers[rng.Next() % trait.Crossovers.Count()];
+                var mutation = metadata.Mutations[rng.Next() % metadata.Mutations.Count()];
+                var crossover = metadata.Crossovers[rng.Next() % metadata.Crossovers.Count()];
 
                 var R = (double)(rng.Next() % 100) / 100;
-                var newDna = R < trait.CrossoverRate ? crossover.Invoke(GetChromosome(trait.Name), mate.GetChromosome(trait.Name)) : GetChromosome(trait.Name);
+                var newDna = R < metadata.CrossoverRate ? crossover.Invoke(GetChromosome(metadata.Name), mate.GetChromosome(metadata.Name)) : GetChromosome(metadata.Name);
 
                 R = (double)(rng.Next() % 100) / 100;
-                if (R < trait.MutationRate)
-                    child.SetChromosome(trait.Name, mutation.Invoke(newDna));
+                if (R < metadata.MutationRate)
+                    child.SetChromosome(metadata.Name, mutation.Invoke(newDna));
                 else
-                    child.SetChromosome(trait.Name, newDna);
+                    child.SetChromosome(metadata.Name, newDna);
             }
 
             return child;

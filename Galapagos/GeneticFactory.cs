@@ -151,15 +151,21 @@ namespace Galapagos
         }
 
         /// <summary>
-        /// Constructs a chromosome from a trait.
+        /// Constructs a chromosome from metadata.
         /// </summary>
-        /// <param name="trait">The trait trait.</param>
+        /// <param name="metadata">The chromosome metadata.</param>
         /// <returns>The chromosome.</returns>
-        internal static IChromosome ConstructChromosome(GeneticDescription.Trait trait)
+        internal static IChromosome ConstructChromosome(GeneticDescription.ChromosomeMetadata metadata)
         {
-            if (trait is GeneticDescription.BinaryTrait) return new BinaryChromosome(((GeneticDescription.BinaryTrait)trait).Bitcount);
-            if (trait is GeneticDescription.PermutationTrait) return new PermutationChromosome(((GeneticDescription.PermutationTrait)trait).N);
-            else throw new ArgumentException($"Error! Invalid trait type.");
+            switch(metadata.Type)
+            {
+                case ChromosomeType.Binary:
+                    return new BinaryChromosome(metadata.GeneCount);
+                case ChromosomeType.Permutation:
+                    return new PermutationChromosome(metadata.GeneCount);
+                default:
+                    throw new ArgumentException($"Error! Invalid chromosome type.");
+            }
         }
 
         /// <summary>

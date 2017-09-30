@@ -60,14 +60,14 @@ namespace Genetic
 
         private GeneticDescription ConstructGeneticDescription()
         {
-            var traits = ConstructTraits();
+            var ChromosomeMetadata = ConstructMetadata();
             var fitnessFunction = ConstructFitnessFunction();
-            return new GeneticDescription(fitnessFunction, traits);
+            return new GeneticDescription(fitnessFunction, ChromosomeMetadata);
         }
 
-        private IList<GeneticDescription.Trait> ConstructTraits()
+        private IList<GeneticDescription.ChromosomeMetadata> ConstructMetadata()
         {
-            var traits = new List<GeneticDescription.Trait>();
+            var metadata = new List<GeneticDescription.ChromosomeMetadata>();
 
             _unknownValues.Clear();
             for (var i = 0; i < 9; i++)
@@ -80,10 +80,10 @@ namespace Genetic
                         _unknownValues[i].Remove(_initialBoard[i,j]);
                 }
 
-                traits.Add(new GeneticDescription.PermutationTrait($"Row{i}", (uint)_unknownValues[i].Count, CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
+                metadata.Add(new GeneticDescription.ChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, ChromosomeType.Permutation, CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
             }
 
-            return traits;
+            return metadata;
         }
 
         private Func<Creature, double> ConstructFitnessFunction()

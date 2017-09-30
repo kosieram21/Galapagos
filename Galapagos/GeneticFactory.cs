@@ -97,24 +97,31 @@ namespace Galapagos
         /// <returns>The selection algorithm.</returns>
         internal static ISelectionAlgorithm ConstructSelectionAlgorithm(Creature[] creatures, SelectionAlgorithm algorithm, object param)
         {
-            switch(algorithm)
+            try
             {
-                case SelectionAlgorithm.FitnessProportionate:
-                    return new FitnessProportionateSelection(creatures);
-                case SelectionAlgorithm.StochasticUniversalSampling:
-                    if (param != null) ValidateParameterType(typeof(int), param?.GetType());
-                    int? n = param == null ? default(int?) : Convert.ToInt32(param);
-                    return new StochasticUniversalSampling(creatures, n);
-                case SelectionAlgorithm.Tournament:
-                    if (param != null) ValidateParameterType(typeof(int), param?.GetType());
-                    int? k = param == null ? default(int?) : Convert.ToInt32(param);
-                    return new TournamentSelection(creatures, k);
-                case SelectionAlgorithm.Truncation:
-                    if(param != null) ValidateParameterType(typeof(double), param?.GetType());
-                    double? truncationRate = param == null ? default(double?) : Convert.ToDouble(param);
-                    return new TruncationSelection(creatures, truncationRate);
-                default:
-                    throw new ArgumentException("Error! Invalid algorithm selection.");
+                switch (algorithm)
+                {
+                    case SelectionAlgorithm.FitnessProportionate:
+                        return new FitnessProportionateSelection(creatures);
+                    case SelectionAlgorithm.StochasticUniversalSampling:
+                        //if (param != null) ValidateParameterType(typeof(int), param?.GetType());
+                        int? n = param == null ? default(int?) : Convert.ToInt32(param);
+                        return new StochasticUniversalSampling(creatures, n);
+                    case SelectionAlgorithm.Tournament:
+                        //if (param != null) ValidateParameterType(typeof(int), param?.GetType());
+                        int? k = param == null ? default(int?) : Convert.ToInt32(param);
+                        return new TournamentSelection(creatures, k);
+                    case SelectionAlgorithm.Truncation:
+                        //if(param != null) ValidateParameterType(typeof(double), param?.GetType());
+                        double? truncationRate = param == null ? default(double?) : Convert.ToDouble(param);
+                        return new TruncationSelection(creatures, truncationRate);
+                    default:
+                        throw new ArgumentException("Error! Invalid algorithm selection.");
+                }
+            }
+            catch
+            {
+                throw new ArgumentException("Error! Invalid constructor argument.");
             }
         }
 
@@ -127,26 +134,33 @@ namespace Galapagos
         /// <returns>The constructed termination condition.</returns>
         internal static ITerminationCondition ConstructTerminationCondition(Population population, TerminationCondition condition, object param)
         {
-            switch(condition)
+            try
             {
-                case TerminationCondition.FitnessPlateau:
-                    ValidateParameterType(typeof(int), param?.GetType());
-                    var plateauLength = Convert.ToInt32(param);
-                    return new FitnessPlateau(population, plateauLength);
-                case TerminationCondition.FitnessThreshold:
-                    ValidateParameterType(typeof(uint), param?.GetType());
-                    var fitnessThreshold = Convert.ToUInt32(param);
-                    return new FitnessThreshold(population, fitnessThreshold);
-                case TerminationCondition.GenerationThreshold:
-                    ValidateParameterType(typeof(int), param?.GetType());
-                    var generationThreshold = Convert.ToInt32(param);
-                    return new GenerationThreshold(population, generationThreshold);
-                case TerminationCondition.Timer:
-                    ValidateParameterType(typeof(TimeSpan), param?.GetType());
-                    var stopTime = (TimeSpan)param;
-                    return new Timer(stopTime);
-                default:
-                    throw new ArgumentException("Error! Invalid termination condition.");
+                switch (condition)
+                {
+                    case TerminationCondition.FitnessPlateau:
+                        //ValidateParameterType(typeof(int), param?.GetType());
+                        var plateauLength = Convert.ToInt32(param);
+                        return new FitnessPlateau(population, plateauLength);
+                    case TerminationCondition.FitnessThreshold:
+                        //ValidateParameterType(typeof(uint), param?.GetType());
+                        var fitnessThreshold = Convert.ToUInt32(param);
+                        return new FitnessThreshold(population, fitnessThreshold);
+                    case TerminationCondition.GenerationThreshold:
+                        //ValidateParameterType(typeof(int), param?.GetType());
+                        var generationThreshold = Convert.ToInt32(param);
+                        return new GenerationThreshold(population, generationThreshold);
+                    case TerminationCondition.Timer:
+                        //ValidateParameterType(typeof(TimeSpan), param?.GetType());
+                        var stopTime = (TimeSpan)param;
+                        return new Timer(stopTime);
+                    default:
+                        throw new ArgumentException("Error! Invalid termination condition.");
+                }
+            }
+            catch
+            {
+                throw new ArgumentException("Error! Invalid constructor argument.");
             }
         }
 

@@ -19,7 +19,7 @@ namespace Galapagos.CrossoverOperators.Binary
         /// <returns>The new DNA.</returns>
         public IChromosome Invoke(IChromosome x, IChromosome y)
         {
-            if (!(x is PermutationChromosome) || !(y is PermutationChromosome))
+            if (!(x is BinaryChromosome) || !(y is BinaryChromosome))
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
             var binChromosomeX = x as BinaryChromosome;

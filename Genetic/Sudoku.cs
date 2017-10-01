@@ -47,7 +47,7 @@ namespace Genetic
 
         private Creature EvolveSolution()
         {
-            var geneticDescription = ConstructGeneticDescription();
+            var geneticDescription = ConstructCreatureMetadata();
             _population = new Population(POPULATION_SIZE, geneticDescription);
 
             _population.EnableLogging();
@@ -58,16 +58,16 @@ namespace Genetic
             return _population.OptimalCreature;
         }
 
-        private GeneticDescription ConstructGeneticDescription()
+        private CreatureMetadata ConstructCreatureMetadata()
         {
-            var ChromosomeMetadata = ConstructMetadata();
+            var chromosomeMetadata = ConstructChromosomeMetadata();
             var fitnessFunction = ConstructFitnessFunction();
-            return new GeneticDescription(fitnessFunction, ChromosomeMetadata);
+            return new CreatureMetadata(fitnessFunction, chromosomeMetadata);
         }
 
-        private IList<GeneticDescription.ChromosomeMetadata> ConstructMetadata()
+        private IList<ChromosomeMetadata> ConstructChromosomeMetadata()
         {
-            var metadata = new List<GeneticDescription.ChromosomeMetadata>();
+            var metadata = new List<ChromosomeMetadata>();
 
             _unknownValues.Clear();
             for (var i = 0; i < 9; i++)
@@ -80,7 +80,7 @@ namespace Genetic
                         _unknownValues[i].Remove(_initialBoard[i,j]);
                 }
 
-                metadata.Add(new GeneticDescription.ChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, ChromosomeType.Permutation, CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
+                metadata.Add(new ChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, ChromosomeType.Permutation, CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
             }
 
             return metadata;

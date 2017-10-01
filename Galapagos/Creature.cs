@@ -11,7 +11,7 @@ namespace Galapagos
     /// </summary>
     public class Creature
     {
-        private readonly GeneticDescription _geneticDescription;
+        private readonly CreatureMetadata _creatureMetadata;
         private readonly IDictionary<string, IChromosome> _chromosomes = new Dictionary<string, IChromosome>();
 
         private double _fitness = 0;
@@ -19,12 +19,12 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="Creature"/> class.
         /// </summary>
-        /// <param name="description">The genetic descrition of a creature.</param>
-        internal Creature(GeneticDescription description)
+        /// <param name="creatureMetadata">The creature metadata.</param>
+        internal Creature(CreatureMetadata creatureMetadata)
         {
-            _geneticDescription = description;
-            foreach (var metadata in description)
-                _chromosomes.Add(metadata.Name, GeneticFactory.ConstructChromosome(metadata));
+            _creatureMetadata = creatureMetadata;
+            foreach (var chromosomeMetadata in creatureMetadata)
+                _chromosomes.Add(chromosomeMetadata.Name, GeneticFactory.ConstructChromosome(chromosomeMetadata));
         }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace Galapagos
         /// <returns>The cloned creature.</returns>
         internal Creature Clone()
         {
-            var clone = new Creature(_geneticDescription);
-            foreach(var metadata in _geneticDescription)
+            var clone = new Creature(_creatureMetadata);
+            foreach(var chromosomeMetadata in _creatureMetadata)
             {
-                var chromosome = GetChromosome(metadata.Name);
-                clone.SetChromosome(metadata.Name, chromosome);
+                var chromosome = GetChromosome(chromosomeMetadata.Name);
+                clone.SetChromosome(chromosomeMetadata.Name, chromosome);
             }
             return clone;
         }
@@ -60,7 +60,7 @@ namespace Galapagos
         internal void EvaluateFitness()
         {
             if (_fitness == 0)
-                _fitness = _geneticDescription.FitnessFunction(this);
+                _fitness = _creatureMetadata.FitnessFunction(this);
         }
 
         /// <summary>
@@ -72,20 +72,20 @@ namespace Galapagos
         {
             var rng = new Random(DateTime.Now.Millisecond);
 
-            var child = new Creature(_geneticDescription);
-            foreach(var metadata in _geneticDescription)
+            var child = new Creature(_creatureMetadata);
+            foreach(var chromosomeMetadata in _creatureMetadata)
             {
-                var mutation = metadata.Mutations[rng.Next() % metadata.Mutations.Count()];
-                var crossover = metadata.Crossovers[rng.Next() % metadata.Crossovers.Count()];
+                var mutation = chromosomeMetadata.Mutations[rng.Next() % chromosomeMetadata.Mutations.Count()];
+                var crossover = chromosomeMetadata.Crossovers[rng.Next() % chromosomeMetadata.Crossovers.Count()];
 
                 var R = (double)(rng.Next() % 100) / 100;
-                var newDna = R < metadata.CrossoverRate ? crossover.Invoke(GetChromosome(metadata.Name), mate.GetChromosome(metadata.Name)) : GetChromosome(metadata.Name);
+                var newDna = R < chromosomeMetadata.CrossoverRate ? crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : GetChromosome(chromosomeMetadata.Name);
 
                 R = (double)(rng.Next() % 100) / 100;
-                if (R < metadata.MutationRate)
-                    child.SetChromosome(metadata.Name, mutation.Invoke(newDna));
+                if (R < chromosomeMetadata.MutationRate)
+                    child.SetChromosome(chromosomeMetadata.Name, mutation.Invoke(newDna));
                 else
-                    child.SetChromosome(metadata.Name, newDna);
+                    child.SetChromosome(chromosomeMetadata.Name, newDna);
             }
 
             return child;

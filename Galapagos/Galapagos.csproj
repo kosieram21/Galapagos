@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryChromosome.cs" />
+    <Compile Include="ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
     <Compile Include="CrossoverOperators\Binary\SinglePointCrossover.cs" />
@@ -49,7 +50,7 @@
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\OrderCrossover.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="GeneticDescription.cs" />
+    <Compile Include="CreatureMetadata.cs" />
     <Compile Include="GeneticFactory.cs" />
     <Compile Include="IChromosome.cs" />
     <Compile Include="MutationOperators\Binary\CyclicBitShiftMutation.cs" />

@@ -26,20 +26,20 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
         /// </summary>
-        /// <param name="creatureDescription">The genetic description of creatures belonging to the population.</param>
-        public Population(GeneticDescription creatureDescription)
-            : this(1000, creatureDescription) { }
+        /// <param name="creatureMetadata">The gmetadata of creatures belonging to the population.</param>
+        public Population(CreatureMetadata creatureMetadata)
+            : this(1000, creatureMetadata) { }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
         /// </summary>
         /// <param name="size">The population size.</param>
-        /// <param name="creatureDescription">The genetic description of creatures belonging to the population.</param>
-        public Population(uint size, GeneticDescription creatureDescription)
+        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
+        public Population(uint size, CreatureMetadata creatureMetadata)
         {
             _creatures = new Creature[size];
             for (var i = 0; i < _creatures.Count(); i++)
-                _creatures[i] = new Creature(creatureDescription);
+                _creatures[i] = new Creature(creatureMetadata);
         }
 
         /// <summary>

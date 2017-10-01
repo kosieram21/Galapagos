@@ -167,16 +167,16 @@ namespace Galapagos
         /// <summary>
         /// Constructs a chromosome from metadata.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
         /// <returns>The chromosome.</returns>
-        internal static IChromosome ConstructChromosome(GeneticDescription.ChromosomeMetadata metadata)
+        internal static IChromosome ConstructChromosome(ChromosomeMetadata chromosomeMetadata)
         {
-            switch(metadata.Type)
+            switch(chromosomeMetadata.Type)
             {
                 case ChromosomeType.Binary:
-                    return new BinaryChromosome(metadata.GeneCount);
+                    return new BinaryChromosome(chromosomeMetadata.GeneCount);
                 case ChromosomeType.Permutation:
-                    return new PermutationChromosome(metadata.GeneCount);
+                    return new PermutationChromosome(chromosomeMetadata.GeneCount);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }

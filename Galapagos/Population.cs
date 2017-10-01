@@ -211,7 +211,12 @@ namespace Galapagos
                 _optimalCreature = FindOptimalCreature();
 
                 if (_loggingEnabled)
-                    Console.WriteLine($"Generation: {_generation}, Fitness: {OptimalCreature.Fitness}");
+                {
+                    //Temp until better logging infrastructure is established.
+                    var msg = $"Generation: {_generation}, Fitness: {OptimalCreature.Fitness}";
+                    Console.WriteLine(msg);
+                    System.Diagnostics.Debug.WriteLine(msg);
+                }
 
                 if (_terminationConditions.Any(kvp => kvp.Value.Check()))
                     break;

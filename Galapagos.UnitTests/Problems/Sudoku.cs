@@ -122,6 +122,7 @@ namespace Galapagos.UnitTests.Problems
             var geneticDescription = ConstructCreatureMetadata();
             _population = new Population(POPULATION_SIZE, geneticDescription);
 
+            _population.EnableLogging();
             _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
             _population.RegisterTerminationCondition(TerminationCondition.FitnessPlateau, PLATEAU_LENGTH);
             _population.ParallelEvolve(SelectionAlgorithm.Tournament, TOURNAMENT_SIZE, ELITISM, SURVIVAL_RATE);
@@ -247,6 +248,18 @@ namespace Galapagos.UnitTests.Problems
             }
 
             return seen.All(o => o);
+        }
+
+        public static void LogSolution(uint[,] board)
+        {
+            for (var i = 0; i < 9; i++)
+            {
+                var sb = new StringBuilder();
+                sb.Append(board[i, 0]);
+                for (var j = 1; j < 9; j++)
+                    sb.AppendFormat(",{0}", board[i, j]);
+                Debug.WriteLine(sb.ToString());
+            }
         }
     }
 }

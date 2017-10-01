@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Problems\Equation.cs" />
     <Compile Include="Problems\Sudoku.cs" />
     <Compile Include="SampleProblems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

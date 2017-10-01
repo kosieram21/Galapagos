@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genetic", "Genetic\Genetic.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galapagos", "Galapagos\Galapagos.csproj", "{541991D0-0224-4C34-AC3B-C91D6CB60035}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galapagos.UnitTests", "Galapagos.UnitTests\Galapagos.UnitTests.csproj", "{D86DAA88-8481-48F5-B250-21D3F420FAAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{541991D0-0224-4C34-AC3B-C91D6CB60035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{541991D0-0224-4C34-AC3B-C91D6CB60035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{541991D0-0224-4C34-AC3B-C91D6CB60035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86DAA88-8481-48F5-B250-21D3F420FAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86DAA88-8481-48F5-B250-21D3F420FAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86DAA88-8481-48F5-B250-21D3F420FAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86DAA88-8481-48F5-B250-21D3F420FAAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

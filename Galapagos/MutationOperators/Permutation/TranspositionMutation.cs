@@ -11,8 +11,6 @@ namespace Galapagos.MutationOperators.Permutation
     /// </summary>
     internal class TranspositionMutation : IMutation
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         /// <summary>
         /// Invokes the mutation operator.
         /// </summary>
@@ -30,8 +28,8 @@ namespace Galapagos.MutationOperators.Permutation
 
             do
             {
-                i = _rng.Next() % permChromosome.N;
-                j = _rng.Next() % permChromosome.N;
+                i = Stochastic.Next(permChromosome.N);
+                j = Stochastic.Next(permChromosome.N);
             } while (i == j);
 
             permutation[i] = permutation[i] + permutation[j];

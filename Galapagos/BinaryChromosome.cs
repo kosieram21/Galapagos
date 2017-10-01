@@ -11,8 +11,6 @@ namespace Galapagos
     /// </summary>
     public class BinaryChromosome : IChromosome
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         private readonly uint _bits;
         private readonly uint _bitCount;
         private readonly uint _mask;
@@ -23,7 +21,7 @@ namespace Galapagos
         /// <param name="bitCount">The bit count.</param>
         internal BinaryChromosome(uint bitCount = 32)
         {
-            var bits = (uint)_rng.Next();
+            var bits = (uint)Stochastic.Next();
             _bitCount = bitCount;
             _mask = ComputeMask(_bitCount);
             _bits = bits % (_mask >> 1);

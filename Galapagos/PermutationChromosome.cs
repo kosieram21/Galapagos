@@ -11,8 +11,6 @@ namespace Galapagos
     /// </summary>
     public class PermutationChromosome : IChromosome
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         private readonly uint[] _permutation;
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace Galapagos
         }
 
         /// <summary>
-        /// Generates a randome permutation.
+        /// Generates a random permutation.
         /// </summary>
         /// <param name="n">The permutation length.</param>
         /// <returns>A random permutation.</returns>
@@ -47,7 +45,7 @@ namespace Galapagos
             for (uint i = 0; i < n; i++)
                 permutation[i] = i;
 
-            return permutation.OrderBy(index => _rng.Next()).ToArray();
+            return Stochastic.Shuffle(permutation);
         }
 
         /// <summary>

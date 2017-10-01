@@ -27,8 +27,7 @@ namespace Galapagos.CrossoverOperators.Binary
             var binChromosomeX = x as BinaryChromosome;
             var binChromosomeY = y as BinaryChromosome;
 
-            var flip = (double)(_rng.Next() % 100) / 100;
-            return flip < 0.5 ? binChromosomeX : binChromosomeY;
+            return Stochastic.FlipCoin() ? binChromosomeX : binChromosomeY;
         }
     }
 }

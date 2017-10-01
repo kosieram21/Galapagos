@@ -11,8 +11,6 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     internal class FitnessProportionateSelection : ISelectionAlgorithm
     {
-        protected readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         protected readonly Creature[] _creatures;
         protected readonly double F = 0;
 
@@ -38,7 +36,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <returns>The selected creature.</returns>
         public virtual Creature Invoke()
         {
-            var value = _rng.NextDouble() * F;
+            var value = Stochastic.NextDouble() * F;
             foreach(var creature in _creatures)
             {
                 value -= creature.Fitness;

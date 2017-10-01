@@ -11,8 +11,6 @@ namespace Galapagos.MutationOperators.Binary
     /// </summary>
     internal class SingleBitMutation : IMutation
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         /// <summary>
         /// Invokes the mutation operator.
         /// </summary>
@@ -26,7 +24,7 @@ namespace Galapagos.MutationOperators.Binary
             var binChromosome = chromosome as BinaryChromosome;
 
             var bits = binChromosome.Bits;
-            var power = (_rng.Next() % binChromosome.BitCount - 1);
+            var power = Stochastic.Next(binChromosome.BitCount);
             var mask = (uint)Math.Pow(2, power);
 
             return new BinaryChromosome(bits ^ mask, binChromosome.BitCount);

@@ -70,19 +70,17 @@ namespace Galapagos
         /// <returns>The child creature.</returns>
         internal Creature Breed(Creature mate)
         {
-            var rng = new Random(DateTime.Now.Millisecond);
-
             var child = new Creature(_creatureMetadata);
             foreach(var chromosomeMetadata in _creatureMetadata)
             {
-                var mutation = chromosomeMetadata.Mutations[rng.Next() % chromosomeMetadata.Mutations.Count()];
-                var crossover = chromosomeMetadata.Crossovers[rng.Next() % chromosomeMetadata.Crossovers.Count()];
+                var mutation = chromosomeMetadata.Mutations[Stochastic.Next(chromosomeMetadata.Mutations.Count())];
+                var crossover = chromosomeMetadata.Crossovers[Stochastic.Next(chromosomeMetadata.Crossovers.Count())];
 
-                var R = (double)(rng.Next() % 100) / 100;
-                var newDna = R < chromosomeMetadata.CrossoverRate ? crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : GetChromosome(chromosomeMetadata.Name);
+                var newDna = Stochastic.EvaluateProbability(chromosomeMetadata.CrossoverRate) ? 
+                    crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : 
+                    GetChromosome(chromosomeMetadata.Name);
 
-                R = (double)(rng.Next() % 100) / 100;
-                if (R < chromosomeMetadata.MutationRate)
+                if (Stochastic.EvaluateProbability(chromosomeMetadata.MutationRate))
                     child.SetChromosome(chromosomeMetadata.Name, mutation.Invoke(newDna));
                 else
                     child.SetChromosome(chromosomeMetadata.Name, newDna);

@@ -40,7 +40,7 @@ namespace Galapagos.SelectionAlgorithms
         public override Creature Invoke()
         {
             var size = _selection.Count();
-            var i = _rng.Next(0, size);
+            var i = Stochastic.Next(size);
 
             return _selection[i];
         }
@@ -51,7 +51,7 @@ namespace Galapagos.SelectionAlgorithms
         private void ComputeSelection()
         {
             var P = F / N;
-            var start = _rng.Next(0, (int)P);
+            var start = Stochastic.Next(P);
             var pointers = new List<double>();
             
             for(var i = 0; i < N; i++)

@@ -11,8 +11,6 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// </summary>
     internal class NoOpPermutationCrossover : ICrossover
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         /// <summary>
         /// Invokes the crossover operator.
         /// </summary>
@@ -27,8 +25,7 @@ namespace Galapagos.CrossoverOperators.Permutation
             var permChromosomeX = x as PermutationChromosome;
             var permChromosomeY = y as PermutationChromosome;
 
-            var flip = (double)(_rng.Next() % 100) / 100;
-            return flip < 0.5 ? permChromosomeX : permChromosomeY;
+            return Stochastic.FlipCoin() ? permChromosomeX : permChromosomeY;
         }
     }
 }

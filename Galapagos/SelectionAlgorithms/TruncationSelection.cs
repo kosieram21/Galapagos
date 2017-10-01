@@ -43,7 +43,7 @@ namespace Galapagos.SelectionAlgorithms
         public Creature Invoke()
         {
             var size = _creatures.Count();
-            var i = _rng.Next(0, (int)(size * _truncationRate) - 1);
+            var i = Stochastic.Next((size * _truncationRate) - 1);
 
             return _truncation[i];
         }

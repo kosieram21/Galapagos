@@ -11,8 +11,6 @@ namespace Galapagos.MutationOperators.Binary
     /// </summary>
     internal class BoundaryMutation : IMutation
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         /// <summary>
         /// Invokes the mutation operator.
         /// </summary>
@@ -25,8 +23,7 @@ namespace Galapagos.MutationOperators.Binary
 
             var binChromosome = chromosome as BinaryChromosome;
 
-            var roll = _rng.Next() % 2;
-            return roll == 0 ? 
+            return Stochastic.FlipCoin() ? 
                 new BinaryChromosome(uint.MaxValue, binChromosome.BitCount) : 
                 new BinaryChromosome(0, binChromosome.BitCount);
         }

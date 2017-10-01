@@ -11,8 +11,6 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     internal class TournamentSelection : ISelectionAlgorithm
     {
-        private readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         private readonly Creature[] _creatures;
         private readonly int K = 2;
 
@@ -45,7 +43,7 @@ namespace Galapagos.SelectionAlgorithms
 
             for (var i = 0; i < K; i++)
             {
-                var j = _rng.Next(0, size - 1);
+                var j = Stochastic.Next(size);
                 var creature = _creatures[j];
                 if (best == null || creature.Fitness > best.Fitness)
                     best = creature;

@@ -55,7 +55,7 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
-        public ChromosomeMetadata(string name, uint geneCount, ChromosomeType type, uint bitCount = 32, double crossoverRate = 1, double mutationRate = 0.25,
+        public ChromosomeMetadata(string name, uint geneCount, ChromosomeType type, double crossoverRate = 1, double mutationRate = 0.25,
             BinaryCrossover crossoverOptions = BinaryCrossover.SinglePoint,
             BinaryMutation mutationOptions = BinaryMutation.FlipBit | BinaryMutation.SingleBit)
             : this(name, geneCount, type, crossoverRate, mutationRate)

@@ -49,6 +49,7 @@
     <Compile Include="CrossoverOperators\Permutation\AlternatingPositionCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\OrderCrossover.cs" />
+    <Compile Include="DataLogger.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="CreatureMetadata.cs" />
     <Compile Include="GeneticFactory.cs" />

@@ -14,6 +14,8 @@ namespace Galapagos
     /// </summary>
     public class Population : IEnumerable<Creature>
     {
+        private DataLogger _logger = null;
+
         private Creature _optimalCreature;
         private readonly Creature[] _creatures;
 
@@ -124,8 +126,10 @@ namespace Galapagos
         /// <summary>
         /// Enables fitness logging.
         /// </summary>
-        public void EnableLogging()
+        /// <param name="path">The path to log data to.</param>
+        public void EnableLogging(string path = "")
         {
+            if (path != string.Empty) _logger = new DataLogger(path);
             _loggingEnabled = true;
         }
 
@@ -134,6 +138,7 @@ namespace Galapagos
         /// </summary>
         public void DisableLogging()
         {
+            if (_logger != null) _logger = null;
             _loggingEnabled = false;
         }
 
@@ -216,6 +221,7 @@ namespace Galapagos
                     var msg = $"Generation: {_generation}, Fitness: {OptimalCreature.Fitness}";
                     Console.WriteLine(msg);
                     System.Diagnostics.Debug.WriteLine(msg);
+                    if (_logger != null) _logger.Log(_generation, OptimalCreature.Fitness);
                 }
 
                 if (_terminationConditions.Any(kvp => kvp.Value.Check()))

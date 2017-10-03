@@ -45,6 +45,18 @@ namespace Galapagos
         }
 
         /// <summary>
+        /// Constructs a new instance of the <see cref="Population"/> class.
+        /// </summary>
+        /// <param name="size">The population size.</param>
+        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
+        public Population(int size, CreatureMetadata creatureMetadata)
+            : this((uint)size, creatureMetadata)
+        {
+            if (size <= 0)
+                throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
+        /// <summary>
         /// Gets the population size.
         /// </summary>
         public int Size => _creatures.Count();

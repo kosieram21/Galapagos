@@ -77,6 +77,25 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
+        public ChromosomeMetadata(string name, int geneCount, ChromosomeType type, double crossoverRate = 1, double mutationRate = 0.25,
+            BinaryCrossover crossoverOptions = BinaryCrossover.SinglePoint,
+            BinaryMutation mutationOptions = BinaryMutation.FlipBit | BinaryMutation.SingleBit)
+            : this(name, (uint)geneCount, type, crossoverRate, mutationRate, crossoverOptions, mutationOptions)
+        {
+            if (geneCount <= 0)
+                throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="ChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="type">The chromosome type.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="mutationOptions">The mutation options.</param>
         public ChromosomeMetadata(string name, uint geneCount, ChromosomeType type, double crossoverRate = 1, double mutationRate = 0.25,
             PermutationCrossover crossoverOptions = PermutationCrossover.Order,
             PermutationMutation mutationOptions = PermutationMutation.Transposition)
@@ -87,6 +106,25 @@ namespace Galapagos
 
             _crossovers = GeneticFactory.ConstructPermutationCrossoverOperators(crossoverOptions);
             _mutations = GeneticFactory.ConstructPermutationMutationOperators(mutationOptions);
+        }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="ChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="type">The chromosome type.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="mutationOptions">The mutation options.</param>
+        public ChromosomeMetadata(string name, int geneCount, ChromosomeType type, double crossoverRate = 1, double mutationRate = 0.25,
+            PermutationCrossover crossoverOptions = PermutationCrossover.Order,
+            PermutationMutation mutationOptions = PermutationMutation.Transposition)
+            : this(name, (uint)geneCount, type, crossoverRate, mutationRate, crossoverOptions, mutationOptions)
+        {
+            if (geneCount <= 0)
+                throw new ArgumentException("Error! Gene count must be a positive value.");
         }
 
         /// <summary>

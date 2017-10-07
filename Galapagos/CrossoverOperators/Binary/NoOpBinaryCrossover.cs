@@ -9,25 +9,24 @@ namespace Galapagos.CrossoverOperators.Binary
     /// <summary>
     /// NoOp binary crossover.
     /// </summary>
-    internal class NoOpBinaryCrossover : ICrossover
+    internal class NoOpBinaryCrossover : Crossover<BinaryChromosome>
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
+        /// <summary>
+        /// Constructs a new instance of the <see cref="NoOpBinaryCrossover"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public NoOpBinaryCrossover(uint weigth = 1)
+            : base(weigth) { }
 
         /// <summary>
-        /// Invokes the crossover operator.
+        /// Internal invocation of the crossover operator.
         /// </summary>
         /// <param name="x">The mother chromosome.</param>
         /// <param name="y">The father chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome x, IChromosome y)
+        protected override IChromosome InternalInvoke(BinaryChromosome x, BinaryChromosome y)
         {
-            if (!(x is BinaryChromosome) || !(y is BinaryChromosome))
-                throw new ArgumentException("Error! Incompatible chromosomes.");
-
-            var binChromosomeX = x as BinaryChromosome;
-            var binChromosomeY = y as BinaryChromosome;
-
-            return Stochastic.FlipCoin() ? binChromosomeX : binChromosomeY;
+            return Stochastic.FlipCoin() ? x : y;
         }
     }
 }

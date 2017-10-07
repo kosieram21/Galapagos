@@ -45,6 +45,7 @@
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
     <Compile Include="CrossoverOperators\Binary\SinglePointCrossover.cs" />
+    <Compile Include="CrossoverOperators\Crossover.cs" />
     <Compile Include="CrossoverOperators\ICrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\AlternatingPositionCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="MutationOperators\Binary\BoundaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\SingleBitMutation.cs" />
     <Compile Include="MutationOperators\IMutation.cs" />
+    <Compile Include="MutationOperators\Mutation.cs" />
     <Compile Include="MutationOperators\Permutation\CyclicShiftMutation.cs" />
     <Compile Include="MutationOperators\Permutation\RandomizationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\ReverseMutation.cs" />

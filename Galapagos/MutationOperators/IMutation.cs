@@ -9,6 +9,11 @@ namespace Galapagos.MutationOperators
     public interface IMutation
     {
         /// <summary>
+        /// Gets the mutation weight.
+        /// </summary>
+        uint Weight { get; }
+
+        /// <summary>
         /// Invokes the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>

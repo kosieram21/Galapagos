@@ -9,25 +9,28 @@ namespace Galapagos.MutationOperators.Permutation
     /// <summary>
     /// Cyclic shift mutation operator.
     /// </summary>
-    internal class CyclicShiftMutation : IMutation
+    internal class CyclicShiftMutation : Mutation<PermutationChromosome>
     {
         /// <summary>
-        /// Invokes the mutation operator.
+        /// Constructs a new instance of the <see cref="CyclicShiftMutation"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public CyclicShiftMutation(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome chromosome)
+        protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            if (!(chromosome is PermutationChromosome))
-                throw new ArgumentException("Error! Incompatible chromosome.");
-
-            var permChromosome = chromosome as PermutationChromosome;
-            var permutation = permChromosome.Permutation;
+            var permutation = chromosome.Permutation;
 
             var first = permutation[0];
-            for (var i = 1; i < permChromosome.N; i++)
+            for (var i = 1; i < chromosome.N; i++)
                 permutation[i - 1] = permutation[i];
-            permutation[permChromosome.N - 1] = first;
+            permutation[chromosome.N - 1] = first;
 
             return new PermutationChromosome(permutation);
         }

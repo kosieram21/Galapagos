@@ -9,25 +9,27 @@ namespace Galapagos.MutationOperators.Binary
     /// <summary>
     /// Cyclic shift mutation operator.
     /// </summary>
-    internal class CyclicBitShiftMutation : IMutation
+    internal class CyclicBitShiftMutation : Mutation<BinaryChromosome>
     {
         /// <summary>
-        /// Invokes the mutation operator.
+        /// Constructs a new instance of the <see cref="CyclicBitShiftMutation"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public CyclicBitShiftMutation(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome chromosome)
+        protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            if (!(chromosome is BinaryChromosome))
-                throw new ArgumentException("Error! Incompatible chromosome.");
-
-            var binChromosome = chromosome as BinaryChromosome;
-
-            var bits = binChromosome.Bits;
+            var bits = chromosome.Bits;
             var lsb = bits & 1;
             bits >>= 1;
             bits |= (lsb == 1 ? 0x80000000 : 0);
-            return new BinaryChromosome(bits, binChromosome.BitCount);
+            return new BinaryChromosome(bits, chromosome.BitCount);
         }
     }
 }

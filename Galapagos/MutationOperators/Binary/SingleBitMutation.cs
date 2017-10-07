@@ -9,25 +9,27 @@ namespace Galapagos.MutationOperators.Binary
     /// <summary>
     /// Single bit mutation operator.
     /// </summary>
-    internal class SingleBitMutation : IMutation
+    internal class SingleBitMutation : Mutation<BinaryChromosome>
     {
         /// <summary>
-        /// Invokes the mutation operator.
+        /// Constructs a new instance of the <see cref="SingleBitMutation"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public SingleBitMutation(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome chromosome)
+        protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            if (!(chromosome is BinaryChromosome))
-                throw new ArgumentException("Error! Incompatible chromosome.");
-
-            var binChromosome = chromosome as BinaryChromosome;
-
-            var bits = binChromosome.Bits;
-            var power = Stochastic.Next(binChromosome.BitCount);
+            var bits = chromosome.Bits;
+            var power = Stochastic.Next(chromosome.BitCount);
             var mask = (uint)Math.Pow(2, power);
 
-            return new BinaryChromosome(bits ^ mask, binChromosome.BitCount);
+            return new BinaryChromosome(bits ^ mask, chromosome.BitCount);
         }
     }
 }

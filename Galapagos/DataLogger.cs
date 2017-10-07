@@ -36,7 +36,6 @@ namespace Galapagos
         {
             if (!File.Exists(_path))
             {
-                //File.Create(_path);
                 using (StreamWriter file = new StreamWriter(_path, true))
                 {
                     file.WriteLine("Generation,Fitness");

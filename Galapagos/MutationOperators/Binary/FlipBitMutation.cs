@@ -9,22 +9,24 @@ namespace Galapagos.MutationOperators.Binary
     /// <summary>
     /// Flip bit mutation operator.
     /// </summary>
-    internal class FlipBitMutation : IMutation
+    internal class FlipBitMutation : Mutation<BinaryChromosome>
     {
         /// <summary>
-        /// Invokes the mutation operator.
+        /// Constructs a new instance of the <see cref="FlipBitMutation"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public FlipBitMutation(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome chromosome)
+        protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            if (!(chromosome is BinaryChromosome))
-                throw new ArgumentException("Error! Incompatible chromosome.");
-
-            var binChromosome = chromosome as BinaryChromosome;
-
-            var bits = binChromosome.Bits;
-            return new BinaryChromosome(uint.MaxValue - bits, binChromosome.BitCount);
+            var bits = chromosome.Bits;
+            return new BinaryChromosome(uint.MaxValue - bits, chromosome.BitCount);
         }
     }
 }

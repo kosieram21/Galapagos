@@ -152,7 +152,8 @@ namespace Galapagos.UnitTests.Problems
                         _unknownValues[i].Remove(_initialBoard[i, j]);
                 }
 
-                metadata.Add(new ChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, ChromosomeType.Permutation, CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
+                metadata.Add(new PermutationChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, 
+                    CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
             }
 
             return metadata;

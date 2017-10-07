@@ -9,27 +9,30 @@ namespace Galapagos.MutationOperators.Permutation
     /// <summary>
     /// Transposition mutation operator.
     /// </summary>
-    internal class TranspositionMutation : IMutation
+    internal class TranspositionMutation : Mutation<PermutationChromosome>
     {
         /// <summary>
-        /// Invokes the mutation operator.
+        /// Constructs a new instance of the <see cref="TranspositionMutation"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public TranspositionMutation(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation the mutation operator.
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome chromosome)
+        protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            if (!(chromosome is PermutationChromosome))
-                throw new ArgumentException("Error! Incompatible chromosome.");
-
-            var permChromosome = chromosome as PermutationChromosome;
-            var permutation = permChromosome.Permutation;
+            var permutation = chromosome.Permutation;
             long i = 0;
             long j = 0;
 
             do
             {
-                i = Stochastic.Next(permChromosome.N);
-                j = Stochastic.Next(permChromosome.N);
+                i = Stochastic.Next(chromosome.N);
+                j = Stochastic.Next(chromosome.N);
             } while (i == j);
 
             permutation[i] = permutation[i] + permutation[j];

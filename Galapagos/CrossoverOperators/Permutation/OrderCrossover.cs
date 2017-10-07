@@ -9,40 +9,41 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// <summary>
     /// Order crossover operator.
     /// </summary>
-    internal class OrderCrossover : ICrossover
+    internal class OrderCrossover : Crossover<PermutationChromosome>
     {
         /// <summary>
-        /// Invokes the crossover operator.
+        /// Constructs a new instance of the <see cref="OrderCrossover"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public OrderCrossover(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation of the crossover operator.
         /// </summary>
         /// <param name="x">The mother chromosome.</param>
         /// <param name="y">The father chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome x, IChromosome y)
+        protected override IChromosome InternalInvoke(PermutationChromosome x, PermutationChromosome y)
         {
-            if (!(x is PermutationChromosome) || !(y is PermutationChromosome))
+            if(x.N != y.N)
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
-            var permChromosomeX = x as PermutationChromosome;
-            var permChromosomeY = y as PermutationChromosome;
-
-            if(permChromosomeX.N != permChromosomeY.N)
-                throw new ArgumentException("Error! Incompatible chromosomes.");
-
-            var seen = new bool[permChromosomeX.N];
-            var midPoint = permChromosomeX.N / 2;
-            var permutation = new uint[permChromosomeX.N];
+            var seen = new bool[x.N];
+            var midPoint = x.N / 2;
+            var permutation = new uint[x.N];
 
             for (var i = 0; i < midPoint; i++)
             {
-                var number = permChromosomeX.Permutation[i];
+                var number = x.Permutation[i];
                 permutation[i] = number;
                 seen[number] = true;
             }
 
             var index = midPoint;
-            for(var i = 0; i < permChromosomeX.N; i++)
+            for(var i = 0; i < x.N; i++)
             {
-                var number = permChromosomeY.Permutation[i];
+                var number = y.Permutation[i];
                 if(!seen[number])
                 {
                     permutation[index] = number;

@@ -9,33 +9,34 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// <summary>
     /// Alternating position crossover operator.
     /// </summary>
-    internal class AlternatingPositionCrossover : ICrossover
+    internal class AlternatingPositionCrossover : Crossover<PermutationChromosome>
     {
         /// <summary>
-        /// Invokes the crossover operator.
+        /// Constructs a new instance of the <see cref="AlternatingPositionCrossover"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public AlternatingPositionCrossover(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation of the crossover operator.
         /// </summary>
         /// <param name="x">The mother chromosome.</param>
         /// <param name="y">The father chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome x, IChromosome y)
+        protected override IChromosome InternalInvoke(PermutationChromosome x, PermutationChromosome y)
         {
-            if (!(x is PermutationChromosome) || !(y is PermutationChromosome))
+            if (x.N != y.N)
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
-            var permChromosomeX = x as PermutationChromosome;
-            var permChromosomeY = y as PermutationChromosome;
-
-            if (permChromosomeX.N != permChromosomeY.N)
-                throw new ArgumentException("Error! Incompatible chromosomes.");
-
-            var seen = new bool[permChromosomeX.N];
-            var permutation = new uint[permChromosomeX.N];
+            var seen = new bool[x.N];
+            var permutation = new uint[x.N];
 
             var j = 0;
-            for(var i = 0; i < permChromosomeX.N; i++)
+            for(var i = 0; i < x.N; i++)
             {
-                var numX = permChromosomeX.Permutation[i];
-                var numY = permChromosomeY.Permutation[i];
+                var numX = x.Permutation[i];
+                var numY = y.Permutation[i];
 
                 if(!seen[numX])
                 {
@@ -51,7 +52,7 @@ namespace Galapagos.CrossoverOperators.Permutation
                     j++;
                 }
 
-                if (j == permChromosomeX.N)
+                if (j == x.N)
                     break;
             }
 

@@ -9,23 +9,24 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// <summary>
     /// NoOp permutation crossover.
     /// </summary>
-    internal class NoOpPermutationCrossover : ICrossover
+    internal class NoOpPermutationCrossover : Crossover<PermutationChromosome>
     {
         /// <summary>
-        /// Invokes the crossover operator.
+        /// Constructs a new instance of the <see cref="NoOpPermutationCrossover"/> class.
+        /// </summary>
+        /// <param name="weigth">The crossover weight.</param>
+        public NoOpPermutationCrossover(uint weigth = 1)
+            : base(weigth) { }
+
+        /// <summary>
+        /// Internal invocation of the crossover operator.
         /// </summary>
         /// <param name="x">The mother chromosome.</param>
         /// <param name="y">The father chromosome.</param>
         /// <returns>The new DNA.</returns>
-        public IChromosome Invoke(IChromosome x, IChromosome y)
+        protected override IChromosome InternalInvoke(PermutationChromosome x, PermutationChromosome y)
         {
-            if (!(x is PermutationChromosome) || !(y is PermutationChromosome))
-                throw new ArgumentException("Error! Incompatible chromosomes.");
-
-            var permChromosomeX = x as PermutationChromosome;
-            var permChromosomeY = y as PermutationChromosome;
-
-            return Stochastic.FlipCoin() ? permChromosomeX : permChromosomeY;
+            return Stochastic.FlipCoin() ? x : y;
         }
     }
 }

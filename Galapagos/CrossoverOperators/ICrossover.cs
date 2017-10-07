@@ -9,6 +9,11 @@ namespace Galapagos.CrossoverOperators
     public interface ICrossover
     {
         /// <summary>
+        /// Gets the crossover weight.
+        /// </summary>
+        uint Weight { get; }
+
+        /// <summary>
         /// Invokes the crossover operator.
         /// </summary>
         /// <param name="x">The mother chromosome.</param>

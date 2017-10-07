@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace Galapagos.MutationOperators
 {
-    public interface IMutation
+    public interface IMutation : IOperator
     {
-        /// <summary>
-        /// Gets the mutation weight.
-        /// </summary>
-        uint Weight { get; }
-
         /// <summary>
         /// Invokes the mutation operator.
         /// </summary>

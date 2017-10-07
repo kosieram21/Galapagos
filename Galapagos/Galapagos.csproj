@@ -55,6 +55,7 @@
     <Compile Include="CreatureMetadata.cs" />
     <Compile Include="GeneticFactory.cs" />
     <Compile Include="IChromosome.cs" />
+    <Compile Include="IOperator.cs" />
     <Compile Include="MutationOperators\Binary\CyclicBitShiftMutation.cs" />
     <Compile Include="MutationOperators\Binary\FlipBitMutation.cs" />
     <Compile Include="MutationOperators\Binary\BoundaryMutation.cs" />

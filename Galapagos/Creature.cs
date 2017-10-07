@@ -73,8 +73,8 @@ namespace Galapagos
             var child = new Creature(_creatureMetadata);
             foreach(var chromosomeMetadata in _creatureMetadata)
             {
-                var mutation = chromosomeMetadata.Mutations[Stochastic.Next(chromosomeMetadata.Mutations.Count())];
-                var crossover = chromosomeMetadata.Crossovers[Stochastic.Next(chromosomeMetadata.Crossovers.Count())];
+                var crossover = chromosomeMetadata.GetCrossover();
+                var mutation = chromosomeMetadata.GetMutation();
 
                 var newDna = Stochastic.EvaluateProbability(chromosomeMetadata.CrossoverRate) ? 
                     crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : 

@@ -13,8 +13,11 @@ namespace Galapagos
     /// </summary>
     public abstract class ChromosomeMetadata
     {
-        protected IList<ICrossover> _crossovers;
-        protected IList<IMutation> _mutations;
+        protected List<ICrossover> _crossovers;
+        protected List<IMutation> _mutations;
+
+        protected double _crossoverF = 0;
+        protected double _mutationF = 0;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="ChromosomeMetadata"/> class.
@@ -43,14 +46,14 @@ namespace Galapagos
         public string Name { get; set; }
 
         /// <summary>
-        /// The number of genes in the chromosome.
-        /// </summary>
-        public uint GeneCount { get; set; }
-
-        /// <summary>
         /// The chromosome type.
         /// </summary>
         public ChromosomeType Type { get; protected set; }
+
+        /// <summary>
+        /// The number of genes in the chromosome.
+        /// </summary>
+        public uint GeneCount { get; set; }
 
         /// <summary>
         /// The crossover rate.
@@ -63,14 +66,83 @@ namespace Galapagos
         public double MutationRate { get; set; }
 
         /// <summary>
-        /// The crossover operators.
+        /// Gets a crossover from the metadata.
         /// </summary>
-        internal IList<ICrossover> Crossovers => _crossovers;
+        /// <returns>A crossover operator.</returns>
+        internal ICrossover GetCrossover()
+        {
+            if (_crossovers == null)
+            {
+                _crossovers = GetDefaultCrossovers();
+                _crossoverF = ComputeWeightedSum(_crossovers);
+            }
+
+            return SelectOperator(_crossovers, _crossoverF);
+        }
 
         /// <summary>
-        /// The mutation operators.
+        /// Selects a mutation from the metadata.
         /// </summary>
-        internal IList<IMutation> Mutations => _mutations;
+        /// <returns>A mutation operator.</returns>
+        internal IMutation GetMutation()
+        {
+            if (_mutations == null)
+            {
+                _mutations = GetDefaultMutations();
+                _mutationF = ComputeWeightedSum(_mutations);
+            }
+
+            return SelectOperator(_mutations, _mutationF);
+        }
+
+        /// <summary>
+        /// Selects an operator from the list of operators.
+        /// </summary>
+        /// <typeparam name="TOperator">The operator type.</typeparam>
+        /// <param name="operators">The operators.</param>
+        /// <param name="F">The weighted sum of the given operators.</param>
+        /// <returns>The selected operator.</returns>
+        private TOperator SelectOperator<TOperator>(IList<TOperator> operators, double F)
+            where TOperator : IOperator
+        {
+            var value = Stochastic.NextDouble() * F;
+            foreach (var op in operators)
+            {
+                value -= op.Weight;
+                if (value <= 0) return op;
+            }
+
+            return default(TOperator);
+        }
+
+        /// <summary>
+        /// Computes the weighted sum of a list of operators.
+        /// </summary>
+        /// <typeparam name="TOperator">The operator type.</typeparam>
+        /// <param name="operators">The operators.</param>
+        /// <returns>The weighted sum.</returns>
+        protected double ComputeWeightedSum<TOperator>(IList<TOperator> operators)
+            where TOperator : IOperator
+        {
+            double F = 0;
+
+            foreach (var op in operators)
+                F += op.Weight;
+
+            return F;
+        }
+
+        /// <summary>
+        /// Gets the default crossover operators.
+        /// </summary>
+        /// <returns>The default crossover operators.</returns>
+        protected abstract List<ICrossover> GetDefaultCrossovers();
+
+        /// <summary>
+        /// Gets the default mutation operators.
+        /// </summary>
+        /// <returns>The default mutation operators.</returns>
+        protected abstract List<IMutation> GetDefaultMutations();
     }
 
     /// <summary>
@@ -78,6 +150,33 @@ namespace Galapagos
     /// </summary>
     public class BinaryChromosomeMetadata : ChromosomeMetadata
     {
+        private const BinaryCrossover DEFAULT_CROSSOVER_OPTIONS = BinaryCrossover.SinglePoint;
+        private const BinaryMutation DEFAULT_MUTATION_OPTIONS = BinaryMutation.SingleBit;
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        public BinaryChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25)
+            : base(name, geneCount, crossoverRate, mutationRate) { }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        public BinaryChromosomeMetadata(string name, int geneCount, double crossoverRate = 1, double mutationRate = 0.25)
+            : this(name, (uint)geneCount, crossoverRate, mutationRate)
+        {
+            if (geneCount <= 0)
+                throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
         /// </summary>
@@ -87,15 +186,17 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
-        public BinaryChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25,
-            BinaryCrossover crossoverOptions = BinaryCrossover.SinglePoint,
-            BinaryMutation mutationOptions = BinaryMutation.FlipBit | BinaryMutation.SingleBit)
+        public BinaryChromosomeMetadata(string name, uint geneCount, double crossoverRate, double mutationRate,
+            BinaryCrossover crossoverOptions, BinaryMutation mutationOptions)
             : base(name, geneCount, crossoverRate, mutationRate)
         {
             Type = ChromosomeType.Binary;
 
             _crossovers = GeneticFactory.ConstructBinaryCrossoverOperators(crossoverOptions);
             _mutations = GeneticFactory.ConstructBinaryMutationOperators(mutationOptions);
+
+            _crossoverF = ComputeWeightedSum(_crossovers);
+            _mutationF = ComputeWeightedSum(_mutations);
         }
 
         /// <summary>
@@ -107,18 +208,86 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
-        public BinaryChromosomeMetadata(string name, int geneCount, ChromosomeType type, double crossoverRate = 1, double mutationRate = 0.25,
-            BinaryCrossover crossoverOptions = BinaryCrossover.SinglePoint,
-            BinaryMutation mutationOptions = BinaryMutation.FlipBit | BinaryMutation.SingleBit)
+        public BinaryChromosomeMetadata(string name, int geneCount, ChromosomeType type, double crossoverRate, double mutationRate,
+            BinaryCrossover crossoverOptions, BinaryMutation mutationOptions)
             : this(name, (uint)geneCount, crossoverRate, mutationRate, crossoverOptions, mutationOptions)
         {
             if (geneCount <= 0)
                 throw new ArgumentException("Error! Gene count must be a positive value.");
         }
+
+        /// <summary>
+        /// Adds new crossover operators to the metadata.
+        /// </summary>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="weight">The operator weight.</param>
+        public void AddCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
+        {
+            var crossovers = GeneticFactory.ConstructBinaryCrossoverOperators(crossoverOptions, weight);
+            _crossovers.AddRange(crossovers);
+            _crossoverF += ComputeWeightedSum(_crossovers);
+        }
+
+        /// <summary>
+        /// Adds new mutation operators to the metadata.
+        /// </summary>
+        /// <param name="mutationOptions">The mutation options.</param>
+        /// <param name="weight">The operator weight.</param>
+        public void AddMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
+        {
+            var mutations = GeneticFactory.ConstructBinaryMutationOperators(mutationOptions, weight);
+            _mutations.AddRange(mutations);
+            _mutationF += ComputeWeightedSum(_mutations);
+        }
+
+        /// <summary>
+        /// Gets the default crossover operators.
+        /// </summary>
+        /// <returns>The default crossover operators.</returns>
+        protected override List<ICrossover> GetDefaultCrossovers()
+        {
+            return GeneticFactory.ConstructBinaryCrossoverOperators(DEFAULT_CROSSOVER_OPTIONS);
+        }
+
+        /// <summary>
+        /// Gets the default mutation operators.
+        /// </summary>
+        /// <returns>The default mutation operators.</returns>
+        protected override List<IMutation> GetDefaultMutations()
+        {
+            return GeneticFactory.ConstructBinaryMutationOperators(DEFAULT_MUTATION_OPTIONS);
+        }
     }
 
     public class PermutationChromosomeMetadata : ChromosomeMetadata
     {
+        private const PermutationCrossover DEFAULT_CROSSOVER_OPTIONS = PermutationCrossover.Order;
+        private const PermutationMutation DEFAULT_MUTATION_OPTIONS = PermutationMutation.Transposition;
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        public PermutationChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25)
+            : base(name, geneCount, crossoverRate, mutationRate) { }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
+        /// </summary>
+        /// <param name="name">The chromosome name.</param>
+        /// <param name="geneCount">The gene count.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
+        public PermutationChromosomeMetadata(string name, int geneCount, double crossoverRate = 1, double mutationRate = 0.25)
+            : this(name, (uint)geneCount, crossoverRate, mutationRate)
+        {
+            if (geneCount <= 0)
+                throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
         /// <summary>
         /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
         /// </summary>
@@ -128,15 +297,17 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
-        public PermutationChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25,
-            PermutationCrossover crossoverOptions = PermutationCrossover.Order,
-            PermutationMutation mutationOptions = PermutationMutation.Transposition)
+        public PermutationChromosomeMetadata(string name, uint geneCount, double crossoverRate, double mutationRate,
+            PermutationCrossover crossoverOptions, PermutationMutation mutationOptions)
             : base(name, geneCount, crossoverRate, mutationRate)
         {
             Type = ChromosomeType.Permutation;
 
             _crossovers = GeneticFactory.ConstructPermutationCrossoverOperators(crossoverOptions);
             _mutations = GeneticFactory.ConstructPermutationMutationOperators(mutationOptions);
+
+            _crossoverF = ComputeWeightedSum(_crossovers);
+            _mutationF = ComputeWeightedSum(_mutations);
         }
 
         /// <summary>
@@ -148,13 +319,54 @@ namespace Galapagos
         /// <param name="mutationRate">The mutation rate.</param>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="mutationOptions">The mutation options.</param>
-        public PermutationChromosomeMetadata(string name, int geneCount, double crossoverRate = 1, double mutationRate = 0.25,
-            PermutationCrossover crossoverOptions = PermutationCrossover.Order,
-            PermutationMutation mutationOptions = PermutationMutation.Transposition)
+        public PermutationChromosomeMetadata(string name, int geneCount, double crossoverRate, double mutationRate,
+            PermutationCrossover crossoverOptions, PermutationMutation mutationOptions)
             : this(name, (uint)geneCount, crossoverRate, mutationRate, crossoverOptions, mutationOptions)
         {
             if (geneCount <= 0)
                 throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
+        /// <summary>
+        /// Adds new crossover operators to the metadata.
+        /// </summary>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="weight">The operator weight.</param>
+        public void AddCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
+        {
+            var crossovers = GeneticFactory.ConstructPermutationCrossoverOperators(crossoverOptions, weight);
+            _crossovers.AddRange(crossovers);
+            _crossoverF += ComputeWeightedSum(_crossovers);
+        }
+
+        /// <summary>
+        /// Adds new mutation operators to the metadata.
+        /// </summary>
+        /// <param name="mutationOptions">The mutation options.</param>
+        /// <param name="weight">The operator weight.</param>
+        public void AddMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
+        {
+            var mutations = GeneticFactory.ConstructPermutationMutationOperators(mutationOptions, weight);
+            _mutations.AddRange(mutations);
+            _mutationF += ComputeWeightedSum(_mutations);
+        }
+
+        /// <summary>
+        /// Gets the default crossover operators.
+        /// </summary>
+        /// <returns>The default crossover operators.</returns>
+        protected override List<ICrossover> GetDefaultCrossovers()
+        {
+            return GeneticFactory.ConstructPermutationCrossoverOperators(DEFAULT_CROSSOVER_OPTIONS);
+        }
+
+        /// <summary>
+        /// Gets the default mutation operators.
+        /// </summary>
+        /// <returns>The default mutation operators.</returns>
+        protected override List<IMutation> GetDefaultMutations()
+        {
+            return GeneticFactory.ConstructPermutationMutationOperators(DEFAULT_MUTATION_OPTIONS);
         }
     }
 }

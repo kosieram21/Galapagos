@@ -23,13 +23,14 @@ namespace Galapagos
         /// Constructs a list of binary crossovers operators.
         /// </summary>
         /// <param name="crossoverOptions">The binary crossover options.</param>
+        /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed binary crossovers operators.</returns>
-        internal static IList<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions)
+        internal static List<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
-            if ((crossoverOptions & BinaryCrossover.SinglePoint) == BinaryCrossover.SinglePoint) crossovers.Add(new SinglePointCrossover());
-            if ((crossoverOptions & BinaryCrossover.NoOp) == BinaryCrossover.NoOp) crossovers.Add(new NoOpBinaryCrossover());
+            if ((crossoverOptions & BinaryCrossover.SinglePoint) == BinaryCrossover.SinglePoint) crossovers.Add(new SinglePointCrossover(weight));
+            if ((crossoverOptions & BinaryCrossover.NoOp) == BinaryCrossover.NoOp) crossovers.Add(new NoOpBinaryCrossover(weight));
             if (crossovers.Count == 0) throw new ArgumentException("Error! Invalid binary crossover selection.");
 
             return crossovers;
@@ -39,14 +40,15 @@ namespace Galapagos
         /// Constructs a list of permutation crossovers operators.
         /// </summary>
         /// <param name="crossoverOptions">The permutation crossover options.</param>
+        /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed permutation crossovers operators.</returns>
-        internal static IList<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions)
+        internal static List<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
-            if ((crossoverOptions & PermutationCrossover.AlternatingPosition) == PermutationCrossover.AlternatingPosition) crossovers.Add(new AlternatingPositionCrossover());
-            if ((crossoverOptions & PermutationCrossover.Order) == PermutationCrossover.Order) crossovers.Add(new OrderCrossover());
-            if ((crossoverOptions & PermutationCrossover.NoOp) == PermutationCrossover.NoOp) crossovers.Add(new NoOpPermutationCrossover());
+            if ((crossoverOptions & PermutationCrossover.AlternatingPosition) == PermutationCrossover.AlternatingPosition) crossovers.Add(new AlternatingPositionCrossover(weight));
+            if ((crossoverOptions & PermutationCrossover.Order) == PermutationCrossover.Order) crossovers.Add(new OrderCrossover(weight));
+            if ((crossoverOptions & PermutationCrossover.NoOp) == PermutationCrossover.NoOp) crossovers.Add(new NoOpPermutationCrossover(weight));
             if (crossovers.Count == 0) throw new ArgumentException("Error! Invalid permutation selection.");
 
             return crossovers;
@@ -56,15 +58,16 @@ namespace Galapagos
         /// Constructs a list of binary mutations operators.
         /// </summary>
         /// <param name="mutationOptions">The binary mutation options.</param>
+        /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed binary mutations operators.</returns>
-        internal static IList<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions)
+        internal static List<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
         {
             var mutations = new List<IMutation>();
 
-            if ((mutationOptions & BinaryMutation.Boundary) == BinaryMutation.Boundary) mutations.Add(new BoundaryMutation());
-            if ((mutationOptions & BinaryMutation.CyclicShift) == BinaryMutation.CyclicShift) mutations.Add(new CyclicBitShiftMutation());
-            if ((mutationOptions & BinaryMutation.FlipBit) == BinaryMutation.FlipBit) mutations.Add(new FlipBitMutation());
-            if ((mutationOptions & BinaryMutation.SingleBit) == BinaryMutation.SingleBit) mutations.Add(new SingleBitMutation());
+            if ((mutationOptions & BinaryMutation.Boundary) == BinaryMutation.Boundary) mutations.Add(new BoundaryMutation(weight));
+            if ((mutationOptions & BinaryMutation.CyclicShift) == BinaryMutation.CyclicShift) mutations.Add(new CyclicBitShiftMutation(weight));
+            if ((mutationOptions & BinaryMutation.FlipBit) == BinaryMutation.FlipBit) mutations.Add(new FlipBitMutation(weight));
+            if ((mutationOptions & BinaryMutation.SingleBit) == BinaryMutation.SingleBit) mutations.Add(new SingleBitMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid binary mutation selection.");
 
             return mutations;
@@ -74,15 +77,16 @@ namespace Galapagos
         /// Constructs a list of permutation mutations operators.
         /// </summary>
         /// <param name="mutationOptions">The permutation mutation options.</param>
+        /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed permutation mutations operators.</returns>
-        internal static IList<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions)
+        internal static List<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
         {
             var mutations = new List<IMutation>();
 
-            if ((mutationOptions & PermutationMutation.CyclicShift) == PermutationMutation.CyclicShift) mutations.Add(new CyclicShiftMutation());
-            if ((mutationOptions & PermutationMutation.Randomization) == PermutationMutation.Randomization) mutations.Add(new RandomizationMutation());
-            if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReverseMutation());
-            if ((mutationOptions & PermutationMutation.Transposition) == PermutationMutation.Transposition) mutations.Add(new TranspositionMutation());
+            if ((mutationOptions & PermutationMutation.CyclicShift) == PermutationMutation.CyclicShift) mutations.Add(new CyclicShiftMutation(weight));
+            if ((mutationOptions & PermutationMutation.Randomization) == PermutationMutation.Randomization) mutations.Add(new RandomizationMutation(weight));
+            if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReverseMutation(weight));
+            if ((mutationOptions & PermutationMutation.Transposition) == PermutationMutation.Transposition) mutations.Add(new TranspositionMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid permutation mutation selection.");
 
             return mutations;

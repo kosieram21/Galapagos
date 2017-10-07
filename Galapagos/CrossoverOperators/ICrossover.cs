@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace Galapagos.CrossoverOperators
 {
-    public interface ICrossover
+    public interface ICrossover : IOperator
     {
-        /// <summary>
-        /// Gets the crossover weight.
-        /// </summary>
-        uint Weight { get; }
-
         /// <summary>
         /// Invokes the crossover operator.
         /// </summary>

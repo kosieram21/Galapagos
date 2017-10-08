@@ -36,7 +36,7 @@ namespace Galapagos.UnitTests.Problems
 
             var orderingMetadata = new PermutationChromosomeMetadata("ordering", boardSize, 1, 0.25);
             orderingMetadata.AddCrossoverOperators(PermutationCrossover.Order);
-            orderingMetadata.AddMutationOperators(PermutationMutation.Transposition, 2);
+            orderingMetadata.AddMutationOperators(PermutationMutation.Transposition | PermutationMutation.CyclicShift, 2);
             orderingMetadata.AddMutationOperators(PermutationMutation.Randomization, 1);
 
             metatdata.Add(orderingMetadata);

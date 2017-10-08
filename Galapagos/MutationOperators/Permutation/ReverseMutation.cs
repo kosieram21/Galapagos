@@ -28,7 +28,7 @@ namespace Galapagos.MutationOperators.Permutation
             var permutation = chromosome.Permutation;
 
             var start = Stochastic.Next(chromosome.N - 1);
-            var end = Stochastic.Next(start, chromosome.N);
+            var end = Stochastic.Next(start + 1, chromosome.N);
 
             for(var i = 0; i < (end - start) / 2; i++)
             {

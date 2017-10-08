@@ -27,10 +27,13 @@ namespace Galapagos.MutationOperators.Permutation
         {
             var permutation = chromosome.Permutation;
 
-            var first = permutation[0];
-            for (var i = 1; i < chromosome.N; i++)
+            var start = Stochastic.Next(chromosome.N - 1);
+            var end = Stochastic.Next(start + 1, chromosome.N);
+
+            var first = permutation[start];
+            for (var i = start + 1; i <= end; i++)
                 permutation[i - 1] = permutation[i];
-            permutation[chromosome.N - 1] = first;
+            permutation[end] = first;
 
             return new PermutationChromosome(permutation);
         }

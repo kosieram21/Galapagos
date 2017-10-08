@@ -33,7 +33,7 @@ namespace Galapagos.CrossoverOperators.Binary
 
             var point = Stochastic.Next(x.BitCount - 1);
 
-            for (var i = point + 1; i < x.BitCount; i++)
+            for (var i = point + 1; i <= x.BitCount; i++)
                 bits[i] = y.Bits[i];
 
             return new BinaryChromosome(bits);

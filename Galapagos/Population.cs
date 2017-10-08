@@ -172,7 +172,7 @@ namespace Galapagos
         /// <param name="param">The selection algorithm parameter.</param>
         /// <param name="elitism">A value indicating if elitism should be used.</param>
         /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void Evolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism, double survivalRate)
+        public void Evolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism = false, double survivalRate = 0.25)
         {
             Action evaluateFitness = () => { foreach (var creature in _creatures) { creature.EvaluateFitness(); } };
             RunEvolution(selectionAlgorithm, param, elitism, survivalRate, evaluateFitness);
@@ -196,7 +196,7 @@ namespace Galapagos
         /// <param name="param">The selection algorithm parameter.</param>
         /// <param name="elitism">A value indicating if elitism should be used.</param>
         /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism, double survivalRate)
+        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism = false, double survivalRate = 0.25)
         {
             Action evaluateFitness = () => { Parallel.ForEach(_creatures, (creature) => { creature.EvaluateFitness(); }); };
             RunEvolution(selectionAlgorithm, param, elitism, survivalRate, evaluateFitness);

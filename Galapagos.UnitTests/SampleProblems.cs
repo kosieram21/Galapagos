@@ -30,7 +30,7 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void NQueensTest()
         {
-            uint size = 13;
+            uint size = 15;
             var puzzle = new NQueens(size);
             puzzle.Solve();
 

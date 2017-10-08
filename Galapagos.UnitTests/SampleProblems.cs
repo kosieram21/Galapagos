@@ -9,6 +9,8 @@ namespace Galapagos.UnitTests
     [TestClass]
     public class SampleProblems
     {
+        private const int WAIT_TIME = 5000;
+
         [TestMethod]
         public void SudokuTest()
         {
@@ -22,7 +24,16 @@ namespace Galapagos.UnitTests
             stopwatch.Stop();
             Debug.WriteLine($"Runtime: {stopwatch.Elapsed.Minutes} minutes, {stopwatch.Elapsed.Seconds} seconds, {stopwatch.Elapsed.Milliseconds} milliseconds");
 
-            Thread.Sleep(5000);
+            Thread.Sleep(WAIT_TIME);
+        }
+
+        [TestMethod]
+        public void NQueensTest()
+        {
+            var puzzle = new NQueens(8);
+            puzzle.Solve();
+
+            Thread.Sleep(WAIT_TIME);
         }
 
         [TestMethod]
@@ -30,7 +41,7 @@ namespace Galapagos.UnitTests
         {
             Equation.Optimize();
 
-            Thread.Sleep(5000);
+            Thread.Sleep(WAIT_TIME);
         }
     }
 }

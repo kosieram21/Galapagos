@@ -161,7 +161,10 @@ namespace Galapagos
         /// <param name="crossoverRate">The crossover rate.</param>
         /// <param name="mutationRate">The mutation rate.</param>
         public BinaryChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25)
-            : base(name, geneCount, crossoverRate, mutationRate) { }
+            : base(name, geneCount, crossoverRate, mutationRate)
+        {
+            Type = ChromosomeType.Binary;
+        }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
@@ -224,8 +227,13 @@ namespace Galapagos
         public void AddCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = GeneticFactory.ConstructBinaryCrossoverOperators(crossoverOptions, weight);
-            _crossovers.AddRange(crossovers);
-            _crossoverF += ComputeWeightedSum(_crossovers);
+
+            if (_crossovers == null)
+                _crossovers = crossovers;
+            else
+                _crossovers.AddRange(crossovers);
+
+            _crossoverF += ComputeWeightedSum(crossovers);
         }
 
         /// <summary>
@@ -236,8 +244,13 @@ namespace Galapagos
         public void AddMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
         {
             var mutations = GeneticFactory.ConstructBinaryMutationOperators(mutationOptions, weight);
-            _mutations.AddRange(mutations);
-            _mutationF += ComputeWeightedSum(_mutations);
+
+            if (_mutations == null)
+                _mutations = mutations;
+            else
+                _mutations.AddRange(mutations);
+
+            _mutationF += ComputeWeightedSum(mutations);
         }
 
         /// <summary>
@@ -272,7 +285,10 @@ namespace Galapagos
         /// <param name="crossoverRate">The crossover rate.</param>
         /// <param name="mutationRate">The mutation rate.</param>
         public PermutationChromosomeMetadata(string name, uint geneCount, double crossoverRate = 1, double mutationRate = 0.25)
-            : base(name, geneCount, crossoverRate, mutationRate) { }
+            : base(name, geneCount, crossoverRate, mutationRate)
+        {
+            Type = ChromosomeType.Permutation;
+        }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
@@ -335,8 +351,13 @@ namespace Galapagos
         public void AddCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = GeneticFactory.ConstructPermutationCrossoverOperators(crossoverOptions, weight);
-            _crossovers.AddRange(crossovers);
-            _crossoverF += ComputeWeightedSum(_crossovers);
+
+            if (_crossovers == null)
+                _crossovers = crossovers;
+            else
+                _crossovers.AddRange(crossovers);
+
+            _crossoverF += ComputeWeightedSum(crossovers);
         }
 
         /// <summary>
@@ -347,8 +368,13 @@ namespace Galapagos
         public void AddMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
         {
             var mutations = GeneticFactory.ConstructPermutationMutationOperators(mutationOptions, weight);
-            _mutations.AddRange(mutations);
-            _mutationF += ComputeWeightedSum(_mutations);
+
+            if (_mutations == null)
+                _mutations = mutations;
+            else
+                _mutations.AddRange(mutations);
+
+            _mutationF += ComputeWeightedSum(mutations);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Galapagos.UnitTests.Problems
 {
     class NQueens
     {
-        public const uint POPULATION_SIZE = 10;
+        public const uint POPULATION_SIZE = 100;
 
         public readonly Population _population;
 
@@ -26,8 +26,8 @@ namespace Galapagos.UnitTests.Problems
 
                     while(index >= 0)
                     {
-                        if (ordering[i] - 1 == index)
-                            fitness--;
+                        if (ordering[i] - 1 != index) //not attacking
+                            fitness++;
 
                         index--;
                     }
@@ -36,7 +36,7 @@ namespace Galapagos.UnitTests.Problems
                 return fitness;
             });
 
-            var orderingMetadata = new PermutationChromosomeMetadata("ordering", boardSize);
+            var orderingMetadata = new PermutationChromosomeMetadata("ordering", boardSize, 1, 0.25);
             orderingMetadata.AddCrossoverOperators(PermutationCrossover.Order);
             orderingMetadata.AddMutationOperators(PermutationMutation.Transposition, 2);
             orderingMetadata.AddMutationOperators(PermutationMutation.Randomization, 1);
@@ -46,12 +46,12 @@ namespace Galapagos.UnitTests.Problems
             _population = new Population(POPULATION_SIZE, metatdata);
             _population.EnableLogging();
 
-            _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, 0);
+            _population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
         }
 
         public void Solve()
         {
-            _population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.25);
+            _population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
         }
     }
 }

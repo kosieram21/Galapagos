@@ -30,8 +30,15 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void NQueensTest()
         {
-            var puzzle = new NQueens(8);
+            uint size = 13;
+            var puzzle = new NQueens(size);
             puzzle.Solve();
+
+            var sum = 0;
+            for (var i = 1; i < size; i++)
+                sum += i;
+
+            Debug.WriteLine($"Best Possible Fitness {sum}.");
 
             Thread.Sleep(WAIT_TIME);
         }

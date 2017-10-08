@@ -27,11 +27,14 @@ namespace Galapagos.MutationOperators.Permutation
         {
             var permutation = chromosome.Permutation;
 
-            for(var i = 0; i < chromosome.N / 2; i++)
+            var start = Stochastic.Next(chromosome.N - 1);
+            var end = Stochastic.Next(start, chromosome.N);
+
+            for(var i = 0; i < (end - start) / 2; i++)
             {
-                permutation[i] = permutation[i] + permutation[chromosome.N - 1 - i];
-                permutation[chromosome.N - 1 - i] = permutation[i] - permutation[chromosome.N - 1 - i];
-                permutation[i] = permutation[i] - permutation[chromosome.N - 1 - i];
+                var temp = permutation[start + i];
+                permutation[start + i] = permutation[end - i];
+                permutation[end - i] = temp;
             }
 
             return new PermutationChromosome(permutation);

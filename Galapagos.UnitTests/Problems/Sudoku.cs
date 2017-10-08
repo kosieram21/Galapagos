@@ -100,7 +100,7 @@ namespace Galapagos.UnitTests.Problems
         private const PermutationCrossover CROSSOVER_OPERATORS = PermutationCrossover.AlternatingPosition | PermutationCrossover.Order;
 
         private const double MUTATION_RATE = 0.25;
-        private const PermutationMutation MUTATION_OPERATORS = PermutationMutation.Transposition | PermutationMutation.Randomization;
+        private const PermutationMutation MUTATION_OPERATORS = PermutationMutation.Transposition | PermutationMutation.Reverse | PermutationMutation.Randomization;
 
         public Sudoku(char[,] initialBoard)
         {

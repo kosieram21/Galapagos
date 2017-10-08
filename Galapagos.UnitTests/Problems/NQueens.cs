@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Galapagos;
 
 namespace Galapagos.UnitTests.Problems
@@ -22,14 +23,11 @@ namespace Galapagos.UnitTests.Problems
 
                 for(var i = 1; i < ordering.Count(); i++)
                 {
-                    var index = i - 1;
-
-                    while(index >= 0)
+                    for(var j = 1; j < i + 1; j++)
                     {
-                        if (ordering[i] - 1 != index) //not attacking
+                        if ((ordering[i] != (ordering[i -j] - j)) &&
+                            (ordering[i] != (ordering[i - j] + j)))
                             fitness++;
-
-                        index--;
                     }
                 }
 
@@ -49,9 +47,27 @@ namespace Galapagos.UnitTests.Problems
             _population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
         }
 
-        public void Solve()
+        public Creature Solve()
         {
             _population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
+            return _population.OptimalCreature;
+        }
+
+        public static void PrintBoard(Creature creature)
+        {
+            var ordering = creature.GetChromosome<PermutationChromosome>("ordering").Permutation;
+            for (var i = 0; i < ordering.Count(); i++)
+            {
+                var row = new StringBuilder();
+                for(var j = 0; j < ordering.Count(); j++)
+                {
+                    if (ordering[i] == j)
+                        row.Append("Q");
+                    else
+                        row.Append("*");
+                }
+                Debug.WriteLine(row.ToString());
+            }
         }
     }
 }

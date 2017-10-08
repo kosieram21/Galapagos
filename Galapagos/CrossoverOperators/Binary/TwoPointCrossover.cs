@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Galapagos.CrossoverOperators.Binary
 {
     /// <summary>
-    /// Single point crossover operator.
+    /// Two point crossover operator.
     /// </summary>
-    internal class SinglePointCrossover : Crossover<BinaryChromosome>
+    internal class TwoPointCrossover : Crossover<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="SinglePointCrossover"/> class.
+        /// Constructs a new instance of the <see cref="TwoPointCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public SinglePointCrossover(uint weigth = 1)
+        public TwoPointCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -31,9 +31,10 @@ namespace Galapagos.CrossoverOperators.Binary
 
             var bits = x.Bits;
 
-            var point = Stochastic.Next(x.BitCount - 1);
+            var start = Stochastic.Next(x.BitCount - 1);
+            var end = Stochastic.Next(start + 1, x.BitCount);
 
-            for (var i = point + 1; i < x.BitCount; i++)
+            for (var i = start; i < end; i++)
                 bits[i] = y.Bits[i];
 
             return new BinaryChromosome(bits);

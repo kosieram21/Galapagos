@@ -34,15 +34,15 @@ namespace Galapagos.UnitTests.Problems
             //* using NAME: lets you skip to specific arg
             //* can chain crossovers and mutations with bitwise or |
             //ChromosomeMetadata(NAME, size, Type, crossoverRate, mutationRate, crossoverOperators, mutationOperators)
-            creatureMetadata.Add(new BinaryChromosomeMetadata("x", 8, 1, 0.25,
+            creatureMetadata.Add(new BinaryChromosomeMetadata("x", 16, 1, 0.25,
                 BinaryCrossover.SinglePoint,
                 BinaryMutation.SingleBit | BinaryMutation.CyclicShift));
 
-            creatureMetadata.Add(new BinaryChromosomeMetadata("y", 8, 1, 0.25,
+            creatureMetadata.Add(new BinaryChromosomeMetadata("y", 16, 1, 0.25,
                 BinaryCrossover.SinglePoint,
                 BinaryMutation.All));
 
-            creatureMetadata.Add(new BinaryChromosomeMetadata("z", 8, 1, 0.25,
+            creatureMetadata.Add(new BinaryChromosomeMetadata("z", 16, 1, 0.25,
                 BinaryCrossover.NoOp,
                 BinaryMutation.CyclicShift));
 

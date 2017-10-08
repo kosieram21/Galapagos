@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.MutationOperators.Shared;
 
 namespace Galapagos.MutationOperators.Permutation
 {
     /// <summary>
-    /// Randomization mutation operator.
+    /// Cyclic shift mutation operator.
     /// </summary>
-    internal class RandomizationMutation : Mutation<PermutationChromosome>
+    internal class CyclicShiftPermutationMutation : CyclicShiftMutation<PermutationChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="RandomizationMutation"/> class.
+        /// Constructs a new instance of the <see cref="CyclicShiftPermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public RandomizationMutation(uint weigth = 1)
+        public CyclicShiftPermutationMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -25,7 +26,9 @@ namespace Galapagos.MutationOperators.Permutation
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            return new PermutationChromosome(chromosome.N);
+            var permutation = CyclicShift(chromosome.Permutation);
+
+            return new PermutationChromosome(permutation);
         }
     }
 }

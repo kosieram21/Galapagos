@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Galapagos.MutationOperators.Permutation
 {
     /// <summary>
-    /// Cyclic shift mutation operator.
+    /// Randomization mutation operator.
     /// </summary>
-    internal class CyclicShiftMutation : Mutation<PermutationChromosome>
+    internal class RandomizationPermutationMutation : Mutation<PermutationChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="CyclicShiftMutation"/> class.
+        /// Constructs a new instance of the <see cref="RandomizationPermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public CyclicShiftMutation(uint weigth = 1)
+        public RandomizationPermutationMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -25,17 +25,7 @@ namespace Galapagos.MutationOperators.Permutation
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            var permutation = chromosome.Permutation;
-
-            var start = Stochastic.Next(chromosome.N - 1);
-            var end = Stochastic.Next(start + 1, chromosome.N);
-
-            var first = permutation[start];
-            for (var i = start + 1; i <= end; i++)
-                permutation[i - 1] = permutation[i];
-            permutation[end] = first;
-
-            return new PermutationChromosome(permutation);
+            return new PermutationChromosome(chromosome.N);
         }
     }
 }

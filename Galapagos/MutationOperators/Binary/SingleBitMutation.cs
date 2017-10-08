@@ -25,11 +25,12 @@ namespace Galapagos.MutationOperators.Binary
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            var bits = chromosome.Bits;
-            var power = Stochastic.Next(chromosome.BitCount);
-            var mask = (uint)Math.Pow(2, power);
+            var bits = new bool[chromosome.BitCount];
+            for (var i = 0; i < chromosome.BitCount; i++)
+                bits[i] = Stochastic.EvaluateProbability(1 / chromosome.BitCount) ? 
+                    !chromosome.Bits[i] : chromosome.Bits[i];
 
-            return new BinaryChromosome(bits ^ mask, chromosome.BitCount);
+            return new BinaryChromosome(bits);
         }
     }
 }

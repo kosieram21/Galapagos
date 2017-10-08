@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.MutationOperators.Shared;
 
 namespace Galapagos.MutationOperators.Binary
 {
     /// <summary>
-    /// Flip bit mutation operator.
+    /// Cyclic shift mutation operator.
     /// </summary>
-    internal class FlipBitMutation : Mutation<BinaryChromosome>
+    internal class CyclicShiftBinaryMutation : CyclicShiftMutation<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="FlipBitMutation"/> class.
+        /// Constructs a new instance of the <see cref="CyclicShiftBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public FlipBitMutation(uint weigth = 1)
+        public CyclicShiftBinaryMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -25,9 +26,7 @@ namespace Galapagos.MutationOperators.Binary
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            var bits = new bool[chromosome.BitCount];
-            for (var i = 0; i < chromosome.BitCount; i++)
-                bits[i] = !chromosome.Bits[i];
+            var bits = CyclicShift(chromosome.Bits);
 
             return new BinaryChromosome(bits);
         }

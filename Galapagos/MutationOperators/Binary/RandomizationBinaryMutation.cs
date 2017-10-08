@@ -6,16 +6,13 @@ using System.Threading.Tasks;
 
 namespace Galapagos.MutationOperators.Binary
 {
-    /// <summary>
-    /// Boundary mutation operator.
-    /// </summary>
-    internal class BoundaryMutation : Mutation<BinaryChromosome>
+    internal class RandomizationBinaryMutation : Mutation<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="BoundaryMutation"/> class.
+        /// Constructs a new instance of the <see cref="RandomizationBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public BoundaryMutation(uint weigth = 1)
+        public RandomizationBinaryMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -25,9 +22,7 @@ namespace Galapagos.MutationOperators.Binary
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            return Stochastic.FlipCoin() ? 
-                new BinaryChromosome(uint.MaxValue, chromosome.BitCount) : 
-                new BinaryChromosome(0, chromosome.BitCount);
+            return new BinaryChromosome(chromosome.BitCount);
         }
     }
 }

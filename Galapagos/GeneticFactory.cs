@@ -30,6 +30,8 @@ namespace Galapagos
             var crossovers = new List<ICrossover>();
 
             if ((crossoverOptions & BinaryCrossover.SinglePoint) == BinaryCrossover.SinglePoint) crossovers.Add(new SinglePointCrossover(weight));
+            if ((crossoverOptions & BinaryCrossover.TwoPoint) == BinaryCrossover.TwoPoint) crossovers.Add(new TwoPointCrossover(weight));
+            if ((crossoverOptions & BinaryCrossover.Uniform) == BinaryCrossover.Uniform) crossovers.Add(new UniformCrossover(weight));
             if ((crossoverOptions & BinaryCrossover.NoOp) == BinaryCrossover.NoOp) crossovers.Add(new NoOpBinaryCrossover(weight));
             if (crossovers.Count == 0) throw new ArgumentException("Error! Invalid binary crossover selection.");
 
@@ -65,8 +67,9 @@ namespace Galapagos
         {
             var mutations = new List<IMutation>();
 
-            if ((mutationOptions & BinaryMutation.Boundary) == BinaryMutation.Boundary) mutations.Add(new BoundaryMutation(weight));
-            if ((mutationOptions & BinaryMutation.CyclicShift) == BinaryMutation.CyclicShift) mutations.Add(new CyclicBitShiftMutation(weight));
+            if ((mutationOptions & BinaryMutation.CyclicShift) == BinaryMutation.CyclicShift) mutations.Add(new CyclicShiftBinaryMutation(weight));
+            if ((mutationOptions & BinaryMutation.Randomization) == BinaryMutation.Randomization) mutations.Add(new RandomizationBinaryMutation(weight));
+            if ((mutationOptions & BinaryMutation.Reverse) == BinaryMutation.Reverse) mutations.Add(new ReverseBinaryMutation(weight));
             if ((mutationOptions & BinaryMutation.FlipBit) == BinaryMutation.FlipBit) mutations.Add(new FlipBitMutation(weight));
             if ((mutationOptions & BinaryMutation.SingleBit) == BinaryMutation.SingleBit) mutations.Add(new SingleBitMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid binary mutation selection.");
@@ -84,9 +87,9 @@ namespace Galapagos
         {
             var mutations = new List<IMutation>();
 
-            if ((mutationOptions & PermutationMutation.CyclicShift) == PermutationMutation.CyclicShift) mutations.Add(new CyclicShiftMutation(weight));
-            if ((mutationOptions & PermutationMutation.Randomization) == PermutationMutation.Randomization) mutations.Add(new RandomizationMutation(weight));
-            if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReverseMutation(weight));
+            if ((mutationOptions & PermutationMutation.CyclicShift) == PermutationMutation.CyclicShift) mutations.Add(new CyclicShiftPermutationMutation(weight));
+            if ((mutationOptions & PermutationMutation.Randomization) == PermutationMutation.Randomization) mutations.Add(new RandomizationPermutationMutation(weight));
+            if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReversePermutationMutation(weight));
             if ((mutationOptions & PermutationMutation.Transposition) == PermutationMutation.Transposition) mutations.Add(new TranspositionMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid permutation mutation selection.");
 

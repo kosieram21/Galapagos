@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Galapagos.CrossoverOperators.Binary
 {
     /// <summary>
-    /// Single point crossover operator.
+    /// Uniform crossover operator.
     /// </summary>
-    internal class SinglePointCrossover : Crossover<BinaryChromosome>
+    internal class UniformCrossover : Crossover<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="SinglePointCrossover"/> class.
+        /// Constructs a new instance of the <see cref="UniformCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public SinglePointCrossover(uint weigth = 1)
+        public UniformCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -29,12 +29,11 @@ namespace Galapagos.CrossoverOperators.Binary
             if (x.BitCount != y.BitCount)
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
-            var bits = x.Bits;
+            var bits = new bool[x.BitCount];
 
-            var point = Stochastic.Next(x.BitCount - 1);
-
-            for (var i = point + 1; i < x.BitCount; i++)
-                bits[i] = y.Bits[i];
+            for (var i = 0; i < x.BitCount; i++)
+                bits[i] = Stochastic.FlipCoin() ?
+                    x.Bits[i] : y.Bits[i];
 
             return new BinaryChromosome(bits);
         }

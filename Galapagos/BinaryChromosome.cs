@@ -11,9 +11,8 @@ namespace Galapagos
     /// </summary>
     public class BinaryChromosome : IChromosome
     {
-        private readonly uint _bits;
+        private readonly bool[] _bits;
         private readonly uint _bitCount;
-        private readonly uint _mask;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosome"/> class.
@@ -21,10 +20,10 @@ namespace Galapagos
         /// <param name="bitCount">The bit count.</param>
         internal BinaryChromosome(uint bitCount = 32)
         {
-            var bits = (uint)Stochastic.Next();
             _bitCount = bitCount;
-            _mask = ComputeMask(_bitCount);
-            _bits = bits % (_mask >> 1);
+            _bits = new bool[bitCount];
+            for (var i = 0; i < bitCount; i++)
+                _bits[i] = Stochastic.FlipCoin();
         }
 
         /// <summary>
@@ -32,43 +31,21 @@ namespace Galapagos
         /// </summary>
         /// <param name="bits">The bits.</param>
         /// <param name="bitCount">The bit count.</param>
-        internal BinaryChromosome(uint bits, uint bitCount)
+        internal BinaryChromosome(bool[] bits)
         {
-            _bitCount = bitCount;
-            _mask = ComputeMask(_bitCount);
-            _bits = bits & _mask;
-        }
-
-        /// <summary>
-        /// Computes the mask.
-        /// </summary>
-        /// <param name="bitCount">The bit count.</param>
-        /// <returns>The mask.</returns>
-        private uint ComputeMask(uint bitCount)
-        {
-            uint mask = 0;
-            for (var i = 0; i < bitCount; i++)
-            {
-                mask <<= 1;
-                mask++;
-            }
-            return mask;
+            _bitCount = (uint)bits.Length;
+            _bits = bits;
         }
 
         /// <summary>
         /// Gets the bits.
         /// </summary>
-        public uint Bits => _bits;
+        public bool[] Bits => _bits;
 
         /// <summary>
         /// Gets the bitCount.
         /// </summary>
         public uint BitCount => _bitCount;
-
-        /// <summary>
-        /// Gets the mask.
-        /// </summary>
-        internal uint Mask => _mask;
 
         /// <summary>
         /// Converts the binary chromosome to an uint.
@@ -78,7 +55,7 @@ namespace Galapagos
         /// <returns>The uint.</returns>
         public uint ToUInt(uint lower = uint.MinValue, uint upper = uint.MaxValue)
         {
-            var num = Convert.ToUInt32(_bits);
+            var num = Convert.ToUInt32(GetBinaryData());
             if (num <= lower) return lower;
             else if (num >= upper) return upper;
             else return num;
@@ -92,7 +69,7 @@ namespace Galapagos
         /// <returns>The int.</returns>
         public int ToInt(int lower = int.MinValue, int upper = int.MaxValue)
         {
-            var num = Convert.ToInt32(_bits);
+            var num = Convert.ToInt32(GetBinaryData());
             if (num <= lower) return lower;
             else if (num >= upper) return upper;
             else return num;
@@ -106,10 +83,32 @@ namespace Galapagos
         /// <returns>The double.</returns>
         public double ToDouble(double lower = double.MinValue, double upper = double.MaxValue)
         {
-            var num = Convert.ToDouble(_bits);
+            var num = Convert.ToDouble(GetBinaryData());
             if (num <= lower) return lower;
             else if (num >= upper) return upper;
             else return num;
+        }
+
+        /// <summary>
+        /// Gets the raw binary data from the bits collection.
+        /// </summary>
+        /// <returns>The raw binary data.</returns>
+        private uint GetBinaryData()
+        {
+            uint bin = 0;
+
+            for (var i = 0; i < 32; i++)
+            {
+                if (i >= _bitCount)
+                    break;
+
+                bin <<= 1;
+
+                if (_bits[i])
+                    bin ^= 0x01;
+            }
+
+            return bin;
         }
     }
 }

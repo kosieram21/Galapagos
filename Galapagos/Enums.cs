@@ -13,8 +13,10 @@ namespace Galapagos
     public enum BinaryCrossover
     {
         SinglePoint = 1,
-        NoOp = 1 << 1,
-        All = SinglePoint | NoOp
+        TwoPoint = 1 << 1,
+        Uniform = 1 << 2,
+        NoOp = 1 << 3,
+        All = SinglePoint | TwoPoint | Uniform | NoOp
     }
 
     /// <summary>
@@ -36,11 +38,12 @@ namespace Galapagos
     [Flags]
     public enum BinaryMutation
     {
-        Boundary = 1,
-        CyclicShift = 1 << 1,
-        FlipBit = 1 << 2,
-        SingleBit = 1 << 3,
-        All = Boundary | CyclicShift | FlipBit | SingleBit
+        CyclicShift = 1,
+        Randomization = 1 << 1,
+        Reverse = 1 << 2,
+        FlipBit = 1 << 3,
+        SingleBit = 1 << 4,
+        All = CyclicShift | Randomization | Reverse | FlipBit | SingleBit
     }
 
     /// <summary>

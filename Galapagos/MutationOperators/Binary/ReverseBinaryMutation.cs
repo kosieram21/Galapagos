@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.MutationOperators.Shared;
 
 namespace Galapagos.MutationOperators.Binary
 {
-    /// <summary>
-    /// Cyclic shift mutation operator.
-    /// </summary>
-    internal class CyclicBitShiftMutation : Mutation<BinaryChromosome>
+    internal class ReverseBinaryMutation : ReverseMutation<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="CyclicBitShiftMutation"/> class.
+        /// Constructs a new instance of the <see cref="ReverseBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public CyclicBitShiftMutation(uint weigth = 1)
+        public ReverseBinaryMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -25,11 +23,9 @@ namespace Galapagos.MutationOperators.Binary
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            var bits = chromosome.Bits;
-            var lsb = bits & 1;
-            bits >>= 1;
-            bits |= (lsb == 1 ? 0x80000000 : 0);
-            return new BinaryChromosome(bits, chromosome.BitCount);
+            var bits = Reverse(chromosome.Bits);
+
+            return new BinaryChromosome(bits);
         }
     }
 }

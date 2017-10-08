@@ -30,7 +30,7 @@ namespace Galapagos.MutationOperators.Permutation
             var start = Stochastic.Next(chromosome.N - 1);
             var end = Stochastic.Next(start + 1, chromosome.N);
 
-            for(var i = 0; i < (end - start) / 2; i++)
+            for(var i = 0; i <= (end - start) / 2; i++)
             {
                 var temp = permutation[start + i];
                 permutation[start + i] = permutation[end - i];

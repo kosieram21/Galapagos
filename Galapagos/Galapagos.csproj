@@ -48,6 +48,7 @@
     <Compile Include="CrossoverOperators\Crossover.cs" />
     <Compile Include="CrossoverOperators\ICrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\AlternatingPositionCrossover.cs" />
+    <Compile Include="CrossoverOperators\Permutation\MidpointCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\OrderCrossover.cs" />
     <Compile Include="DataLogger.cs" />

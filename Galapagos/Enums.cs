@@ -25,8 +25,9 @@ namespace Galapagos
     {
         AlternatingPosition = 1,
         Order = 1 << 1,
-        NoOp = 1 << 2,
-        All = AlternatingPosition | Order | NoOp
+        Midpoint = 1 << 2,
+        NoOp = 1 << 3,
+        All = AlternatingPosition | Order | Midpoint | NoOp
     }
 
     /// <summary>

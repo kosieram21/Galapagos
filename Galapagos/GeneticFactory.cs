@@ -48,6 +48,7 @@ namespace Galapagos
 
             if ((crossoverOptions & PermutationCrossover.AlternatingPosition) == PermutationCrossover.AlternatingPosition) crossovers.Add(new AlternatingPositionCrossover(weight));
             if ((crossoverOptions & PermutationCrossover.Order) == PermutationCrossover.Order) crossovers.Add(new OrderCrossover(weight));
+            if ((crossoverOptions & PermutationCrossover.Midpoint) == PermutationCrossover.Midpoint) crossovers.Add(new MidpointCrossover(weight));
             if ((crossoverOptions & PermutationCrossover.NoOp) == PermutationCrossover.NoOp) crossovers.Add(new NoOpPermutationCrossover(weight));
             if (crossovers.Count == 0) throw new ArgumentException("Error! Invalid permutation selection.");
 

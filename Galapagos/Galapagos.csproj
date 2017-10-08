@@ -51,6 +51,7 @@
     <Compile Include="CrossoverOperators\Permutation\MidpointCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\OrderCrossover.cs" />
+    <Compile Include="CrossoverOperators\Shared\NoOpCrossover.cs" />
     <Compile Include="DataLogger.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="CreatureMetadata.cs" />

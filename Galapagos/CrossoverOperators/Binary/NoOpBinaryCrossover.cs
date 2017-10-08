@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.CrossoverOperators.Shared;
 
 namespace Galapagos.CrossoverOperators.Binary
 {
     /// <summary>
     /// NoOp binary crossover.
     /// </summary>
-    internal class NoOpBinaryCrossover : Crossover<BinaryChromosome>
+    internal class NoOpBinaryCrossover : NoOpCrossover<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="NoOpBinaryCrossover"/> class.
@@ -17,16 +18,5 @@ namespace Galapagos.CrossoverOperators.Binary
         /// <param name="weigth">The crossover weight.</param>
         public NoOpBinaryCrossover(uint weigth = 1)
             : base(weigth) { }
-
-        /// <summary>
-        /// Internal invocation of the crossover operator.
-        /// </summary>
-        /// <param name="x">The mother chromosome.</param>
-        /// <param name="y">The father chromosome.</param>
-        /// <returns>The new DNA.</returns>
-        protected override IChromosome InternalInvoke(BinaryChromosome x, BinaryChromosome y)
-        {
-            return Stochastic.FlipCoin() ? x : y;
-        }
     }
 }

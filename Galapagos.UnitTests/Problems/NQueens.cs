@@ -11,14 +11,13 @@ namespace Galapagos.UnitTests.Problems
     class NQueens
     {
         public const uint POPULATION_SIZE = 100;
-
-        public readonly Population _population;
+        private readonly CreatureMetadata CREATURE_METADATA;
 
         public NQueens(uint boardSize)
         {
             FitnessThreshold = GetFitnessThreshold(boardSize);
 
-            var metatdata = new CreatureMetadata(creature => 
+            CREATURE_METADATA = new CreatureMetadata(creature => 
             {
                 var ordering = creature.GetChromosome<PermutationChromosome>("ordering").Permutation;
                 double fitness = 0;
@@ -41,23 +40,34 @@ namespace Galapagos.UnitTests.Problems
             orderingMetadata.AddMutationOperators(PermutationMutation.Transposition | PermutationMutation.CyclicShift, 2);
             orderingMetadata.AddMutationOperators(PermutationMutation.Randomization, 1);
 
-            metatdata.Add(orderingMetadata);
-
-            _population = new Population(POPULATION_SIZE, metatdata);
-            _population.EnableLogging();
-
-            //_population.EnableNiches(50);
-
-            _population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
-            _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FitnessThreshold);
+            CREATURE_METADATA.Add(orderingMetadata);
         }
 
         public int FitnessThreshold { get; private set; }
 
         public Creature Solve()
         {
-            _population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
-            return _population.OptimalCreature;
+            while (true)
+            {
+                var solution = Evolve();
+                if (solution.Fitness >= FitnessThreshold)
+                    return solution;
+            }
+        }
+
+        private Creature Evolve()
+        {
+            var population = new Population(POPULATION_SIZE, CREATURE_METADATA);
+            population.EnableLogging();
+
+            //population.EnableNiches(50);
+
+            population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
+            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FitnessThreshold);
+
+            population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
+
+            return population.OptimalCreature;
         }
 
         public static void PrintBoard(Creature creature)

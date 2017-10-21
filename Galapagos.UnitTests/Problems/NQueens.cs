@@ -10,12 +10,14 @@ namespace Galapagos.UnitTests.Problems
 {
     class NQueens
     {
-        public const uint POPULATION_SIZE = 100;
+        private const uint POPULATION_SIZE = 100;
+        private const uint GENERATION_THRESHOLD = 1000;
+        private readonly int FITNESS_THRESHOLD;
         private readonly CreatureMetadata CREATURE_METADATA;
 
         public NQueens(uint boardSize)
         {
-            FitnessThreshold = GetFitnessThreshold(boardSize);
+            FITNESS_THRESHOLD = GetFitnessThreshold(boardSize);
 
             CREATURE_METADATA = new CreatureMetadata(creature => 
             {
@@ -43,14 +45,12 @@ namespace Galapagos.UnitTests.Problems
             CREATURE_METADATA.Add(orderingMetadata);
         }
 
-        public int FitnessThreshold { get; private set; }
-
         public Creature Solve()
         {
             while (true)
             {
                 var solution = Evolve();
-                if (solution.Fitness >= FitnessThreshold)
+                if (solution.Fitness >= FITNESS_THRESHOLD)
                     return solution;
             }
         }
@@ -62,8 +62,8 @@ namespace Galapagos.UnitTests.Problems
 
             //population.EnableNiches(50);
 
-            population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
-            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FitnessThreshold);
+            population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, GENERATION_THRESHOLD);
+            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
 
             population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
 

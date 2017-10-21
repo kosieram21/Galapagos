@@ -60,7 +60,7 @@
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
-    <Compile Include="SampleProblems.cs" />
+    <Compile Include="SampleProblemIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -251,7 +251,7 @@ namespace Galapagos.UnitTests.Problems
             return seen.All(o => o);
         }
 
-        public static void LogSolution(uint[,] board)
+        public static void PrintBoard(uint[,] board)
         {
             for (var i = 0; i < 9; i++)
             {

@@ -30,7 +30,6 @@ namespace Galapagos.CrossoverOperators.Permutation
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
             var seen = new bool[x.N];
-            var midPoint = x.N / 2;
             var permutation = new uint[x.N];
 
             var start = Stochastic.Next(x.N - 1);

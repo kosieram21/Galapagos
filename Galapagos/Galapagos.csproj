@@ -73,6 +73,7 @@
     <Compile Include="MutationOperators\Permutation\TranspositionMutation.cs" />
     <Compile Include="MutationOperators\Shared\CyclicShiftMutation.cs" />
     <Compile Include="MutationOperators\Shared\ReverseMutation.cs" />
+    <Compile Include="Niche.cs" />
     <Compile Include="PermutationChromosome.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

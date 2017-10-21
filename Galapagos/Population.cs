@@ -14,8 +14,6 @@ namespace Galapagos
     /// </summary>
     public class Population : IEnumerable<Creature>
     {
-        private DataLogger _logger = null;
-
         private Creature _optimalCreature;
         private readonly Creature[] _creatures;
 
@@ -24,6 +22,11 @@ namespace Galapagos
         private readonly IDictionary<string, ITerminationCondition> _terminationConditions = new Dictionary<string, ITerminationCondition>();
 
         private bool _loggingEnabled = false;
+        private DataLogger _logger = null;
+
+        private bool _nichesEnabled = false;
+        private IList<Niche> _niches = new List<Niche>();
+        private uint _distanceThreshold;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
@@ -123,7 +126,8 @@ namespace Galapagos
         /// <param name="param">The termination condition parameter.</param>
         public void RegisterTerminationCondition(TerminationCondition condition, object param)
         {
-            _terminationConditions[$"{condition}"] = GeneticFactory.ConstructTerminationCondition(this, condition, param);
+            if (!_terminationConditions.ContainsKey($"{condition}"))
+                _terminationConditions[$"{condition}"] = GeneticFactory.ConstructTerminationCondition(this, condition, param);
         }
 
         /// <summary>
@@ -153,6 +157,26 @@ namespace Galapagos
         {
             if (_logger != null) _logger = null;
             _loggingEnabled = false;
+        }
+
+        /// <summary>
+        /// Enables niches in the population.
+        /// </summary>
+        /// <param name="distanceThreshold">The distance threshold for the niches.</param>
+        public void EnableNiches(int distanceThreshold)
+        {
+            if (!_nichesEnabled)
+                _nichesEnabled = true;
+            _distanceThreshold = (uint)distanceThreshold;
+        }
+
+        /// <summary>
+        /// Disables niches in the population.
+        /// </summary>
+        public void DisableNiches()
+        {
+            if (_nichesEnabled)
+                _nichesEnabled = false;
         }
 
         /// <summary>
@@ -222,6 +246,9 @@ namespace Galapagos
             while (true)
             {
                 evaluateFitness();
+                if (_nichesEnabled)
+                    ClearNiches();
+
                 var selection = GeneticFactory.ConstructSelectionAlgorithm(_creatures, selectionAlgorithm, param);
                 BreedNewGeneration(selection, elitism, survivalRate);
 
@@ -272,6 +299,42 @@ namespace Galapagos
             }
 
             Array.Copy(newGeneration, _creatures, Size);
+
+            if (_nichesEnabled)
+                AssignNiches();
+        }
+
+        /// <summary>
+        /// Assigns each creature in the population to a niche.
+        /// </summary>
+        private void AssignNiches()
+        {
+            foreach (var creature in _creatures)
+            {
+                var candidate = _niches.FirstOrDefault(niche => niche.Compatible(creature));
+                if (candidate != null)
+                    candidate.Add(creature);
+                else
+                    _niches.Add(new Niche(creature, _distanceThreshold));
+            }
+
+            var activeNiches = new List<Niche>();
+            foreach(var niche in _niches)
+            {
+                if (niche.Size > 0)
+                    activeNiches.Add(niche);
+            }
+
+            _niches = activeNiches;
+        }
+
+        /// <summary>
+        /// Clears all niches of creatures.
+        /// </summary>
+        private void ClearNiches()
+        {
+            foreach (var niche in _niches)
+                niche.Clear();
         }
 
         #region IEnumerable Members

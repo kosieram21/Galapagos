@@ -16,6 +16,8 @@ namespace Galapagos
 
         private double _fitness = 0;
 
+        private Niche _niche = null;
+
         /// <summary>
         /// Constructs a new instance of the <see cref="Creature"/> class.
         /// </summary>
@@ -60,7 +62,40 @@ namespace Galapagos
         internal void EvaluateFitness()
         {
             if (_fitness == 0)
+            {
                 _fitness = _creatureMetadata.FitnessFunction(this);
+                if (_niche != null)
+                    _fitness = _fitness / _niche.Size;
+            }
+        }
+
+        /// <summary>
+        /// Measures the distance between two creatures.
+        /// </summary>
+        /// <param name="other">The other creature.</param>
+        /// <returns>The distance between the creatures.</returns>
+        internal uint Distance(Creature other)
+        {
+            uint sum = 0;
+
+            foreach(var chromosomeMetadata in _creatureMetadata)
+            {
+                var x = GetChromosome(chromosomeMetadata.Name);
+                var y = other.GetChromosome(chromosomeMetadata.Name);
+
+                sum += x.Distance(y);
+            }
+
+            return sum;
+        }
+
+        /// <summary>
+        /// Registers the creature to the given niche.
+        /// </summary>
+        /// <param name="niche">The niche.</param>
+        internal void RegisterNiche(Niche niche)
+        {
+            _niche = niche;
         }
 
         /// <summary>

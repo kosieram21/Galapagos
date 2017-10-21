@@ -179,12 +179,32 @@ namespace Galapagos
         /// <returns>The chromosome.</returns>
         public static IChromosome ConstructChromosome(ChromosomeMetadata chromosomeMetadata)
         {
-            switch(chromosomeMetadata.Type)
+            switch (chromosomeMetadata.Type)
             {
                 case ChromosomeType.Binary:
                     return new BinaryChromosome(chromosomeMetadata.GeneCount);
                 case ChromosomeType.Permutation:
                     return new PermutationChromosome(chromosomeMetadata.GeneCount);
+                default:
+                    throw new ArgumentException($"Error! Invalid chromosome type.");
+            }
+        }
+
+        /// <summary>
+        /// Constructs a chromosome from metadata.
+        /// </summary>
+        /// <typeparam name="T">The array data type.</typeparam>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="genes">The chromosome genes genes.</param>
+        /// <returns>The chromosome.</returns>
+        public static IChromosome ConstructChromosome<T>(ChromosomeMetadata chromosomeMetadata, T[] genes)
+        {
+            switch(chromosomeMetadata.Type)
+            {
+                case ChromosomeType.Binary:
+                    return new BinaryChromosome(genes as bool[]);
+                case ChromosomeType.Permutation:
+                    return new PermutationChromosome(genes as uint[]);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }

@@ -29,7 +29,8 @@ namespace Galapagos.CrossoverOperators.Binary
             if (x.BitCount != y.BitCount)
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
-            var bits = x.Bits;
+            var bits = new bool[x.BitCount];
+            Array.Copy(x.Bits, bits, x.BitCount);
 
             var point = Stochastic.Next(x.BitCount - 1);
 

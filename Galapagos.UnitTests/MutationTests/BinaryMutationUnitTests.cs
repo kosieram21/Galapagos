@@ -11,7 +11,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private BinaryChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(new BinaryChromosomeMetadata("test", GENE_COUNT)) 
+            return GeneticFactory.ConstructChromosome(new BinaryChromosomeMetadata("NULL", GENE_COUNT)) 
                 as BinaryChromosome;
         }
 
@@ -66,8 +66,8 @@ namespace Galapagos.UnitTests.MutationTests
             var range = GetDifferenceRange(chromosome, mutation);
 
             for (var i = range.Item1; i < range.Item2; i++)
-                Assert.IsTrue(mutation.Bits[i] == chromosome.Bits[i + 1], "Inccorrect implementation");
-            Assert.IsTrue(mutation.Bits[range.Item2] == chromosome.Bits[range.Item1], "Incorrect implementation");
+                Assert.IsTrue(mutation.Bits[i] == chromosome.Bits[i + 1], "Inccorrect implementation.");
+            Assert.IsTrue(mutation.Bits[range.Item2] == chromosome.Bits[range.Item1], "Incorrect implementation.");
         }
 
         [TestMethod]

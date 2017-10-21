@@ -11,7 +11,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private PermutationChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(new PermutationChromosomeMetadata("test", GENE_COUNT))
+            return GeneticFactory.ConstructChromosome(new PermutationChromosomeMetadata("NULL", GENE_COUNT))
                 as PermutationChromosome;
         }
 
@@ -66,8 +66,8 @@ namespace Galapagos.UnitTests.MutationTests
             var range = GetDifferenceRange(chromosome, mutation);
 
             for (var i = range.Item1; i < range.Item2; i++)
-                Assert.IsTrue(mutation.Permutation[i] == chromosome.Permutation[i + 1], "Inccorrect implementation");
-            Assert.IsTrue(mutation.Permutation[range.Item2] == chromosome.Permutation[range.Item1], "Incorrect implementation");
+                Assert.IsTrue(mutation.Permutation[i] == chromosome.Permutation[i + 1], "Inccorrect implementation.");
+            Assert.IsTrue(mutation.Permutation[range.Item2] == chromosome.Permutation[range.Item1], "Incorrect implementation.");
         }
 
         [TestMethod]

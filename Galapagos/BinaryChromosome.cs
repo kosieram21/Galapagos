@@ -45,7 +45,7 @@ namespace Galapagos
         /// <returns>The distance between the chromosomes.</returns>
         public uint Distance(IChromosome other)
         {
-            if((other is BinaryChromosome) || (((BinaryChromosome)other).BitCount != BitCount))
+            if(!(other is BinaryChromosome) || (((BinaryChromosome)other).BitCount != BitCount))
                 throw new ArgumentException("Error! Incompatible chromosomes.");
 
             var otherBits = ((BinaryChromosome)other).Bits;

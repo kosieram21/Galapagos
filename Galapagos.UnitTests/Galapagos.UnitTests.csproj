@@ -53,6 +53,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ChromosomeTests\PermutationChromosomeUnitTests.cs" />
+    <Compile Include="ChromosomeTests\BinaryChromosomeUnitTests.cs" />
     <Compile Include="CrossoverTests\BinaryCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />

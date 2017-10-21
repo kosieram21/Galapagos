@@ -246,9 +246,6 @@ namespace Galapagos
             while (true)
             {
                 evaluateFitness();
-                if (_nichesEnabled)
-                    ClearNiches();
-
                 var selection = GeneticFactory.ConstructSelectionAlgorithm(_creatures, selectionAlgorithm, param);
                 BreedNewGeneration(selection, elitism, survivalRate);
 
@@ -265,7 +262,11 @@ namespace Galapagos
                 }
 
                 if (_terminationConditions.Any(kvp => kvp.Value.Check()))
+                {
+                    foreach (var creature in _creatures)
+                        creature.UnregisterNiche();
                     break;
+                }
             }
         }
 
@@ -301,7 +302,10 @@ namespace Galapagos
             Array.Copy(newGeneration, _creatures, Size);
 
             if (_nichesEnabled)
+            {
+                ClearNiches();
                 AssignNiches();
+            }
         }
 
         /// <summary>

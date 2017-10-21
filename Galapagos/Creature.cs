@@ -47,7 +47,12 @@ namespace Galapagos
         /// <summary>
         /// Gets the creature's fitness.
         /// </summary>
-        public double Fitness
+        public double Fitness => _niche == null ? TrueFitness : TrueFitness / _niche.Size;
+
+        /// <summary>
+        /// Gets the true fitness of the creature.
+        /// </summary>
+        internal double TrueFitness
         {
             get
             {
@@ -62,11 +67,7 @@ namespace Galapagos
         internal void EvaluateFitness()
         {
             if (_fitness == 0)
-            {
                 _fitness = _creatureMetadata.FitnessFunction(this);
-                if (_niche != null)
-                    _fitness = _fitness / _niche.Size;
-            }
         }
 
         /// <summary>
@@ -96,6 +97,14 @@ namespace Galapagos
         internal void RegisterNiche(Niche niche)
         {
             _niche = niche;
+        }
+
+        /// <summary>
+        /// Unregisters the creature from it's niche.
+        /// </summary>
+        internal void UnregisterNiche()
+        {
+            _niche = null;
         }
 
         /// <summary>

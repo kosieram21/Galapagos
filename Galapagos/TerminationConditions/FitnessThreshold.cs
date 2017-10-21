@@ -31,7 +31,7 @@ namespace Galapagos.TerminationConditions
         /// <returns>A value indicating if evolution should terminate.</returns>
         public bool Check()
         {
-            return _population.OptimalCreature.Fitness >= _fitnessThreshold;
+            return _population.OptimalCreature.TrueFitness >= _fitnessThreshold;
         }
     }
 }

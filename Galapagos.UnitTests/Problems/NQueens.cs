@@ -46,7 +46,7 @@ namespace Galapagos.UnitTests.Problems
             _population = new Population(POPULATION_SIZE, metatdata);
             _population.EnableLogging();
 
-            _population.EnableNiches(5);
+            //_population.EnableNiches(50);
 
             _population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
             _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FitnessThreshold);

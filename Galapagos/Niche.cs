@@ -26,7 +26,7 @@ namespace Galapagos
             _representative = creature;
             Add(creature);
 
-            _distanceThreshold = 0;
+            _distanceThreshold = distanceThreshold;
         }
 
         /// <summary>
@@ -39,6 +39,20 @@ namespace Galapagos
         {
             if (distanceThreshold <= 0)
                 throw new ArgumentException("Error! Distance threshold must be a positive value.");
+        }
+
+        /// <summary>
+        /// Gets the adjusted fitness for the niche.
+        /// </summary>
+        public double AdjustedFitness
+        {
+            get
+            {
+                double fitness = 0;
+                foreach (var creature in _creatures)
+                    fitness += creature.Fitness;
+                return fitness;
+            }
         }
 
         /// <summary>

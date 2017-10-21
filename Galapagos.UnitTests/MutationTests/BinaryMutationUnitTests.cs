@@ -45,5 +45,42 @@ namespace Galapagos.UnitTests.MutationTests
                 }
             }
         }
+
+        [TestMethod]
+        public void FlipBitMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, BinaryMutation.FlipBit);
+
+            for (var i = 0; i < GENE_COUNT; i++)
+                Assert.IsTrue(mutation.Bits[i] != chromosome.Bits[i]);
+        }
+
+        [TestMethod]
+        public void ReverseMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, BinaryMutation.Reverse);
+
+            var start = 0;
+            var end = 0;
+
+            for(var i = 0; i < GENE_COUNT; i++)
+            {
+                if(mutation.Bits[i] != chromosome.Bits[i])
+                {
+                    start = i;
+                    while(i < GENE_COUNT)
+                    {
+                        if (mutation.Bits[i] != chromosome.Bits[i])
+                            end = i;
+                        i++;
+                    }
+                }
+            }
+
+            for (var i = 0; i < (end - start); i++)
+                Assert.IsTrue(mutation.Bits[start + i] == chromosome.Bits[end - i]);
+        }
     }
 }

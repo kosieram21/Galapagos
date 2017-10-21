@@ -68,6 +68,93 @@ namespace Galapagos
         }
 
         /// <summary>
+        /// Measures the distance between two chromosome.
+        /// </summary>
+        /// <remarks>Kendall Tau distance.</remarks>
+        /// <param name="other">The other chromosome.</param>
+        /// <returns>The distance between the chromosomes.</returns>
+        public uint Distance(IChromosome other)
+        {
+            if ((other is PermutationChromosome) || (((PermutationChromosome)other).N != N))
+                throw new ArgumentException("Error! Incompatible chromosomes.");
+
+            var map = new int[N];
+            for (var i = 0; i < N; i++)
+                map[Permutation[i]] = i;
+
+            var otherPermutation = ((PermutationChromosome)other).Permutation;
+
+            var arry = new int[N];
+            var temp = new int[N];
+
+            Array.Copy(otherPermutation, arry, N);
+
+            var distance = MergerSort(map, arry, temp, 0, (int)(N - 1));
+            return distance;
+        }
+
+        /// <summary>
+        /// Enhanced merge sort implementation for computing Kendall Tau distance.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="arry">The array to sort.</param>
+        /// <param name="temp">The temporary buffer.</param>
+        /// <param name="left">The left sub array index.</param>
+        /// <param name="right">The right sub array index.</param>
+        /// <returns>The number of inversions in the array.</returns>
+        private uint MergerSort(int[] map, int[] arry, int[] temp, int left, int right)
+        {
+            if(right > left)
+            {
+                var mid = (right + left) / 2;
+                var invCount =
+                    MergerSort(map, arry, temp, left, mid) +
+                    MergerSort(map, arry, temp, mid + 1, right) +
+                    Merge(map, arry, temp, left, mid, right);
+
+                return invCount;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Enhanced merge subroutine for merge sort.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="arry">The array to sort.</param>
+        /// <param name="temp">The temporary buffer.</param>
+        /// <param name="left">The left sub array index.</param>
+        /// <param name="mid">The mid point index.</param>
+        /// <param name="right">The right sub array index.</param>
+        /// <returns>The number of inversions in the array.</returns>
+        private uint Merge(int[] map, int[] arry, int[] temp, int left, int mid, int right)
+        {
+            uint invCount = 0;
+
+            var i = left;
+            var j = mid;
+            var k = right;
+
+            while((i <= mid - 1) && (j <= right))
+            {
+                temp[k++] = map[arry[i]] <= map[arry[j]] ? arry[i++] : arry[j++];
+                invCount += (uint)(mid - i);
+            }
+
+            while (i <= mid - 1)
+                temp[k++] = arry[i++];
+
+            while (j <= right)
+                temp[k++] = arry[j++];
+
+            for (i = left; i <= right; i++)
+                arry[i] = temp[i];
+
+            return invCount;
+        }
+
+        /// <summary>
         /// Gets the permutation.
         /// </summary>
         public uint[] Permutation => _permutation;

@@ -38,6 +38,29 @@ namespace Galapagos
         }
 
         /// <summary>
+        /// Measures the distance between two chromosome.
+        /// </summary>
+        /// <remarks>Hamming distance.</remarks>
+        /// <param name="other">The other chromosome.</param>
+        /// <returns>The distance between the chromosomes.</returns>
+        public uint Distance(IChromosome other)
+        {
+            if((other is BinaryChromosome) || (((BinaryChromosome)other).BitCount != BitCount))
+                throw new ArgumentException("Error! Incompatible chromosomes.");
+
+            var otherBits = ((BinaryChromosome)other).Bits;
+
+            uint distance = 0;
+            for(var i = 0; i < BitCount; i++)
+            {
+                if (Bits[i] != otherBits[i])
+                    distance++;
+            }
+
+            return distance;
+        }
+
+        /// <summary>
         /// Gets the bits.
         /// </summary>
         public bool[] Bits => _bits;

@@ -28,15 +28,18 @@ namespace Galapagos.MutationOperators.Shared
         /// <returns>The shifted array.</returns>
         protected T[] CyclicShift<T>(T[] arry)
         {
-            var start = Stochastic.Next(arry.Length - 1);
-            var end = Stochastic.Next(start + 1, arry.Length);
+            var newArry = new T[arry.Count()];
+            Array.Copy(arry, newArry, arry.Count());
 
-            var first = arry[start];
+            var start = Stochastic.Next(newArry.Length - 1);
+            var end = Stochastic.Next(start + 1, newArry.Length);
+
+            var first = newArry[start];
             for (var i = start + 1; i <= end; i++)
-                arry[i - 1] = arry[i];
-            arry[end] = first;
+                newArry[i - 1] = newArry[i];
+            newArry[end] = first;
 
-            return arry;
+            return newArry;
         }
     }
 }

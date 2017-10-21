@@ -28,17 +28,20 @@ namespace Galapagos.MutationOperators.Shared
         /// <returns>The reversed array.</returns>
         protected T[] Reverse<T>(T[] arry)
         {
-            var start = Stochastic.Next(arry.Length - 1);
-            var end = Stochastic.Next(start + 1, arry.Length);
+            var newArry = new T[arry.Count()];
+            Array.Copy(arry, newArry, arry.Count());
+
+            var start = Stochastic.Next(newArry.Length - 1);
+            var end = Stochastic.Next(start + 1, newArry.Length);
 
             for (var i = 0; i <= (end - start) / 2; i++)
             {
-                var temp = arry[start + i];
-                arry[start + i] = arry[end - i];
-                arry[end - i] = temp;
+                var temp = newArry[start + i];
+                newArry[start + i] = newArry[end - i];
+                newArry[end - i] = temp;
             }
 
-            return arry;
+            return newArry;
         }
     }
 }

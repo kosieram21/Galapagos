@@ -35,9 +35,9 @@ namespace Galapagos.MutationOperators.Permutation
                 j = Stochastic.Next(chromosome.N);
             } while (i == j);
 
-            permutation[i] = permutation[i] + permutation[j];
-            permutation[j] = permutation[i] - permutation[j];
-            permutation[i] = permutation[i] - permutation[j];
+            var temp = permutation[j];
+            permutation[j] = permutation[i];
+            permutation[i] = temp;
 
             return new PermutationChromosome(permutation);
         }

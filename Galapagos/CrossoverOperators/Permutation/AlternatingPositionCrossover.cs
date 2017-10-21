@@ -9,13 +9,13 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// <summary>
     /// Alternating position crossover operator.
     /// </summary>
-    internal class AlternatingPositionCrossover : Crossover<PermutationChromosome>
+    public class AlternatingPositionCrossover : Crossover<PermutationChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="AlternatingPositionCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public AlternatingPositionCrossover(uint weigth = 1)
+        internal AlternatingPositionCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

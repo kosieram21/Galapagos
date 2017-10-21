@@ -9,7 +9,7 @@ namespace Galapagos.TerminationConditions
     /// <summary>
     /// A termination condition based on a creature generation limit.
     /// </summary>
-    internal class GenerationThreshold : ITerminationCondition
+    public class GenerationThreshold : ITerminationCondition
     {
         private readonly Population _population;
         private readonly int _generationThreshold;
@@ -19,7 +19,7 @@ namespace Galapagos.TerminationConditions
         /// </summary>
         /// <param name="population">The creature population.</param>
         /// <param name="generationThreshold">The generation threshold.</param>
-        public GenerationThreshold(Population population, int generationThreshold)
+        internal GenerationThreshold(Population population, int generationThreshold)
         {
             _population = population;
             _generationThreshold = generationThreshold;

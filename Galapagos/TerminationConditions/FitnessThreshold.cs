@@ -9,7 +9,7 @@ namespace Galapagos.TerminationConditions
     /// <summary>
     /// A termination condition based on a minimum fitness threshold.
     /// </summary>
-    internal class FitnessThreshold : ITerminationCondition
+    public class FitnessThreshold : ITerminationCondition
     {
         private readonly Population _population;
         private readonly double _fitnessThreshold;
@@ -19,7 +19,7 @@ namespace Galapagos.TerminationConditions
         /// </summary>
         /// <param name="population">The creature population.</param>
         /// <param name="fitnessThreshold">The fitness threshold.</param>
-        public FitnessThreshold(Population population, double fitnessThreshold)
+        internal FitnessThreshold(Population population, double fitnessThreshold)
         {
             _population = population;
             _fitnessThreshold = fitnessThreshold;

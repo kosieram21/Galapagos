@@ -9,13 +9,13 @@ namespace Galapagos.MutationOperators.Binary
     /// <summary>
     /// Flip bit mutation operator.
     /// </summary>
-    internal class FlipBitMutation : Mutation<BinaryChromosome>
+    public class FlipBitMutation : Mutation<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="FlipBitMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public FlipBitMutation(uint weigth = 1)
+        internal FlipBitMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

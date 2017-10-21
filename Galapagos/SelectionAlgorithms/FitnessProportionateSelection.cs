@@ -9,7 +9,7 @@ namespace Galapagos.SelectionAlgorithms
     /// <summary>
     /// Fitness proportionate selection algorithm.
     /// </summary>
-    internal class FitnessProportionateSelection : ISelectionAlgorithm
+    public class FitnessProportionateSelection : ISelectionAlgorithm
     {
         protected readonly Creature[] _creatures;
         protected readonly double F = 0;
@@ -18,7 +18,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
         /// <param name="creatures">The creature population.</param>
-        public FitnessProportionateSelection(Creature[] creatures)
+        internal FitnessProportionateSelection(Creature[] creatures)
         {
             _creatures = creatures.OrderByDescending(creature => creature.Fitness).ToArray();
             foreach (var creature in creatures)

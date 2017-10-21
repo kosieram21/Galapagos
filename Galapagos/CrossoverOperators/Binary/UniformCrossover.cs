@@ -9,13 +9,13 @@ namespace Galapagos.CrossoverOperators.Binary
     /// <summary>
     /// Uniform crossover operator.
     /// </summary>
-    internal class UniformCrossover : Crossover<BinaryChromosome>
+    public class UniformCrossover : Crossover<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="UniformCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public UniformCrossover(uint weigth = 1)
+        internal UniformCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

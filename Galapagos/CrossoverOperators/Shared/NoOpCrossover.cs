@@ -10,7 +10,7 @@ namespace Galapagos.CrossoverOperators.Shared
     /// NoOp crossover.
     /// </summary>
     /// <typeparam name="TChromosome">The chromosome type of this crossover.</typeparam>
-    internal abstract class NoOpCrossover<TChromosome> : Crossover<TChromosome>
+    public abstract class NoOpCrossover<TChromosome> : Crossover<TChromosome>
         where TChromosome : class, IChromosome
     {
         /// <summary>

@@ -16,6 +16,8 @@ namespace Galapagos.UnitTests.Problems
 
         public NQueens(uint boardSize)
         {
+            FitnessThreshold = GetFitnessThreshold(boardSize);
+
             var metatdata = new CreatureMetadata(creature => 
             {
                 var ordering = creature.GetChromosome<PermutationChromosome>("ordering").Permutation;
@@ -45,7 +47,10 @@ namespace Galapagos.UnitTests.Problems
             _population.EnableLogging();
 
             _population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, 1000);
+            _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FitnessThreshold);
         }
+
+        public int FitnessThreshold { get; private set; }
 
         public Creature Solve()
         {
@@ -68,6 +73,14 @@ namespace Galapagos.UnitTests.Problems
                 }
                 Debug.WriteLine(row.ToString());
             }
+        }
+
+        private int GetFitnessThreshold(uint size)
+        {
+            var sum = 0;
+            for (var i = 1; i < size; i++)
+                sum += i;
+            return sum;
         }
     }
 }

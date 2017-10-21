@@ -34,13 +34,9 @@ namespace Galapagos.UnitTests
             var puzzle = new NQueens(size);
             var solution = puzzle.Solve();
 
-            var sum = 0;
-            for (var i = 1; i < size; i++)
-                sum += i;
-
             NQueens.PrintBoard(solution);
             Debug.WriteLine($"Achieved Fitness: {solution.Fitness}");
-            Debug.WriteLine($"Fitness Threshold: {sum}");
+            Debug.WriteLine($"Fitness Threshold: {puzzle.FitnessThreshold}");
 
             Thread.Sleep(WAIT_TIME);
         }

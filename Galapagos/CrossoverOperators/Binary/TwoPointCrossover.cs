@@ -9,13 +9,13 @@ namespace Galapagos.CrossoverOperators.Binary
     /// <summary>
     /// Two point crossover operator.
     /// </summary>
-    internal class TwoPointCrossover : Crossover<BinaryChromosome>
+    public class TwoPointCrossover : Crossover<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="TwoPointCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public TwoPointCrossover(uint weigth = 1)
+        internal TwoPointCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

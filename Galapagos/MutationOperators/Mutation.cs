@@ -10,7 +10,7 @@ namespace Galapagos.MutationOperators
     /// Mutation base class.
     /// </summary>
     /// <typeparam name="TChromosome">The chromosome type of this mutation.</typeparam>
-    internal abstract class Mutation<TChromosome> : IMutation
+    public abstract class Mutation<TChromosome> : IMutation
         where TChromosome : class, IChromosome
     {
         /// <summary>

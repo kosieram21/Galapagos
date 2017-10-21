@@ -10,7 +10,7 @@ namespace Galapagos.MutationOperators.Shared
     /// Reverse mutation.
     /// </summary>
     /// <typeparam name="TChromosome">The chromosome type of this mutation.</typeparam>
-    internal abstract class ReverseMutation<TChromosome> : Mutation<TChromosome>
+    public abstract class ReverseMutation<TChromosome> : Mutation<TChromosome>
         where TChromosome : class, IChromosome
     {
         /// <summary>

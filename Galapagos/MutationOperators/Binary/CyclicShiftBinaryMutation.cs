@@ -10,13 +10,13 @@ namespace Galapagos.MutationOperators.Binary
     /// <summary>
     /// Cyclic shift mutation operator.
     /// </summary>
-    internal class CyclicShiftBinaryMutation : CyclicShiftMutation<BinaryChromosome>
+    public class CyclicShiftBinaryMutation : CyclicShiftMutation<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="CyclicShiftBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public CyclicShiftBinaryMutation(uint weigth = 1)
+        internal CyclicShiftBinaryMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

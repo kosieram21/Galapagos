@@ -10,7 +10,7 @@ namespace Galapagos.MutationOperators.Shared
     /// Cyclic shift mutation.
     /// </summary>
     /// <typeparam name="TChromosome">The chromosome type of this mutation.</typeparam>
-    internal abstract class CyclicShiftMutation<TChromosome> : Mutation<TChromosome>
+    public abstract class CyclicShiftMutation<TChromosome> : Mutation<TChromosome>
         where TChromosome : class, IChromosome
     {
         /// <summary>

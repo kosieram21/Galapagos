@@ -9,13 +9,13 @@ namespace Galapagos.MutationOperators.Permutation
     /// <summary>
     /// Randomization mutation operator.
     /// </summary>
-    internal class RandomizationPermutationMutation : Mutation<PermutationChromosome>
+    public class RandomizationPermutationMutation : Mutation<PermutationChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="RandomizationPermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public RandomizationPermutationMutation(uint weigth = 1)
+        internal RandomizationPermutationMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

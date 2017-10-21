@@ -9,7 +9,7 @@ namespace Galapagos.SelectionAlgorithms
     /// <summary>
     /// Tournament selection algorithm.
     /// </summary>
-    internal class TournamentSelection : ISelectionAlgorithm
+    public class TournamentSelection : ISelectionAlgorithm
     {
         private readonly Creature[] _creatures;
         private readonly int K = 2;
@@ -18,7 +18,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
         /// <param name="creatures">The creature population.</param>
-        public TournamentSelection(Creature[] creatures)
+        internal TournamentSelection(Creature[] creatures)
             : this(creatures, null) { }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Galapagos.SelectionAlgorithms
         /// </summary>
         /// <param name="creatures">The creature population.</param>
         /// <param name="k">The tournament size.</param>
-        public TournamentSelection(Creature[] creatures, int? k)
+        internal TournamentSelection(Creature[] creatures, int? k)
         {
             if (k != null) K = (int)k;
             _creatures = creatures;

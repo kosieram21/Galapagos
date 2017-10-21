@@ -10,13 +10,13 @@ namespace Galapagos.CrossoverOperators.Binary
     /// <summary>
     /// NoOp binary crossover.
     /// </summary>
-    internal class NoOpBinaryCrossover : NoOpCrossover<BinaryChromosome>
+    public class NoOpBinaryCrossover : NoOpCrossover<BinaryChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="NoOpBinaryCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public NoOpBinaryCrossover(uint weigth = 1)
+        internal NoOpBinaryCrossover(uint weigth = 1)
             : base(weigth) { }
     }
 }

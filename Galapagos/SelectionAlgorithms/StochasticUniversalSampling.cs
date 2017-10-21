@@ -9,7 +9,7 @@ namespace Galapagos.SelectionAlgorithms
     /// <summary>
     /// Stochastic universal sampling selection algorithm.
     /// </summary>
-    internal class StochasticUniversalSampling : FitnessProportionateSelection, ISelectionAlgorithm
+    public class StochasticUniversalSampling : FitnessProportionateSelection, ISelectionAlgorithm
     {
         private readonly IList<Creature> _selection = new List<Creature>();
         private readonly int N = 100;
@@ -18,7 +18,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
         /// <param name="creatures">The creature population.</param>
-        public StochasticUniversalSampling(Creature[] creatures) 
+        internal StochasticUniversalSampling(Creature[] creatures) 
             : this(creatures, null) { }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Galapagos.SelectionAlgorithms
         /// </summary>
         /// <param name="creatures">The creature population.</param>
         /// <param name="n">The number of creatures to select.</param>
-        public StochasticUniversalSampling(Creature[] creatures, int? n)
+        internal StochasticUniversalSampling(Creature[] creatures, int? n)
             : base(creatures)
         {
             if (n != null) N = (int)n;

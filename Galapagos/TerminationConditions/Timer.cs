@@ -10,7 +10,7 @@ namespace Galapagos.TerminationConditions
     /// <summary>
     /// Timer termination condition.
     /// </summary>
-    internal class Timer : ITerminationCondition
+    public class Timer : ITerminationCondition
     {
         private readonly Stopwatch _stopWatch = new Stopwatch();
         private readonly TimeSpan _stopTime;
@@ -19,7 +19,7 @@ namespace Galapagos.TerminationConditions
         /// Constructs a new instance of the <see cref="Timer"/> class.
         /// </summary>
         /// <param name="stopTime">The stop time.</param>
-        public Timer(TimeSpan stopTime)
+        internal Timer(TimeSpan stopTime)
         {
             _stopTime = stopTime;
         }

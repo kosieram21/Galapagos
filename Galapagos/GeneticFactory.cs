@@ -17,7 +17,7 @@ namespace Galapagos
     /// <summary>
     /// Utility class for creating pieces of a genetic algorithm.
     /// </summary>
-    internal static class GeneticFactory
+    public static class GeneticFactory
     {
         /// <summary>
         /// Constructs a list of binary crossovers operators.
@@ -25,7 +25,7 @@ namespace Galapagos
         /// <param name="crossoverOptions">The binary crossover options.</param>
         /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed binary crossovers operators.</returns>
-        internal static List<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
+        public static List<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
@@ -44,7 +44,7 @@ namespace Galapagos
         /// <param name="crossoverOptions">The permutation crossover options.</param>
         /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed permutation crossovers operators.</returns>
-        internal static List<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
+        public static List<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
@@ -63,7 +63,7 @@ namespace Galapagos
         /// <param name="mutationOptions">The binary mutation options.</param>
         /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed binary mutations operators.</returns>
-        internal static List<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
+        public static List<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
         {
             var mutations = new List<IMutation>();
 
@@ -83,7 +83,7 @@ namespace Galapagos
         /// <param name="mutationOptions">The permutation mutation options.</param>
         /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed permutation mutations operators.</returns>
-        internal static List<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
+        public static List<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
         {
             var mutations = new List<IMutation>();
 
@@ -103,7 +103,7 @@ namespace Galapagos
         /// <param name="algorithm">The selection algorithm to construct.</param>
         /// <param name="param">The selection algorithm parameter.</param>
         /// <returns>The selection algorithm.</returns>
-        internal static ISelectionAlgorithm ConstructSelectionAlgorithm(Creature[] creatures, SelectionAlgorithm algorithm, object param)
+        public static ISelectionAlgorithm ConstructSelectionAlgorithm(Creature[] creatures, SelectionAlgorithm algorithm, object param)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace Galapagos
         /// <param name="condition">The termination condition to construct.</param>
         /// <param name="param">The termination condition parameter.</param>
         /// <returns>The constructed termination condition.</returns>
-        internal static ITerminationCondition ConstructTerminationCondition(Population population, TerminationCondition condition, object param)
+        public static ITerminationCondition ConstructTerminationCondition(Population population, TerminationCondition condition, object param)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace Galapagos
         /// </summary>
         /// <param name="chromosomeMetadata">The chromosome metadata.</param>
         /// <returns>The chromosome.</returns>
-        internal static IChromosome ConstructChromosome(ChromosomeMetadata chromosomeMetadata)
+        public static IChromosome ConstructChromosome(ChromosomeMetadata chromosomeMetadata)
         {
             switch(chromosomeMetadata.Type)
             {
@@ -195,7 +195,7 @@ namespace Galapagos
         /// </summary>
         /// <param name="expected">The expected type.</param>
         /// <param name="received">The recieved type.</param>
-        private static void ValidateParameterType(Type expected, Type received)
+        public static void ValidateParameterType(Type expected, Type received)
         {
             if(expected != received) throw new ArgumentException($"Error! Expected an {expected} but received a {received}");
         }

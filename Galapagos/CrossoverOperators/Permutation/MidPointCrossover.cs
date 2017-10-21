@@ -9,13 +9,13 @@ namespace Galapagos.CrossoverOperators.Permutation
     /// <summary>
     /// Midpoint crossover operator
     /// </summary>
-    internal class MidpointCrossover : Crossover<PermutationChromosome>
+    public class MidpointCrossover : Crossover<PermutationChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="MidpointCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public MidpointCrossover(uint weigth = 1)
+        internal MidpointCrossover(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

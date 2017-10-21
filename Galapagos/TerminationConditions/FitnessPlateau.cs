@@ -9,7 +9,7 @@ namespace Galapagos.TerminationConditions
     /// <summary>
     /// Fitness plateau termination condition.
     /// </summary>
-    internal class FitnessPlateau : ITerminationCondition
+    public class FitnessPlateau : ITerminationCondition
     {
         private readonly Population _population;
         private readonly int _plateauLength;
@@ -22,7 +22,7 @@ namespace Galapagos.TerminationConditions
         /// </summary>
         /// <param name="population">The creature population.</param>
         /// <param name="plateauLength">The fitness plateau length.</param>
-        public FitnessPlateau(Population population, int plateauLength)
+        internal FitnessPlateau(Population population, int plateauLength)
         {
             _population = population;
             _plateauLength = plateauLength;

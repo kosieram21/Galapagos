@@ -9,7 +9,7 @@ namespace Galapagos.SelectionAlgorithms
     /// <summary>
     /// Truncation selection algorithm.
     /// </summary>
-    internal class TruncationSelection : ISelectionAlgorithm
+    public class TruncationSelection : ISelectionAlgorithm
     {
         private readonly Random _rng = new Random(DateTime.Now.Millisecond);
 
@@ -21,7 +21,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
         /// <param name="creatures">The creature population.</param>
-        public TruncationSelection(Creature[] creatures)
+        internal TruncationSelection(Creature[] creatures)
             : this(creatures, null) { }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Galapagos.SelectionAlgorithms
         /// </summary>
         /// <param name="creatures">The creature population.</param>
         /// <param name="truncationRate">The truncation rate.</param>
-        public TruncationSelection(Creature[] creatures, double? truncationRate)
+        internal TruncationSelection(Creature[] creatures, double? truncationRate)
         {
             if (truncationRate != null) _truncationRate = (double)truncationRate;
             _creatures = creatures;

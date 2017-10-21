@@ -10,13 +10,13 @@ namespace Galapagos.MutationOperators.Permutation
     /// <summary>
     /// Cyclic shift mutation operator.
     /// </summary>
-    internal class CyclicShiftPermutationMutation : CyclicShiftMutation<PermutationChromosome>
+    public class CyclicShiftPermutationMutation : CyclicShiftMutation<PermutationChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="CyclicShiftPermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public CyclicShiftPermutationMutation(uint weigth = 1)
+        internal CyclicShiftPermutationMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

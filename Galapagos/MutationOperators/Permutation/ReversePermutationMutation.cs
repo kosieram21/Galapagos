@@ -10,13 +10,13 @@ namespace Galapagos.MutationOperators.Permutation
     /// <summary>
     /// Reverse mutation operator.
     /// </summary>
-    internal class ReversePermutationMutation : ReverseMutation<PermutationChromosome>
+    public class ReversePermutationMutation : ReverseMutation<PermutationChromosome>
     {
         /// <summary>
         /// Constructs a new instance of the <see cref="ReversePermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public ReversePermutationMutation(uint weigth = 1)
+        internal ReversePermutationMutation(uint weigth = 1)
             : base(weigth) { }
 
         /// <summary>

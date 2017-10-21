@@ -7,7 +7,7 @@ namespace Galapagos.UnitTests.MutationTests
     [TestClass]
     public class PermutationMutationUnitTests
     {
-        private const int GENE_COUNT = 10;
+        private const int GENE_COUNT = 5000;
 
         private PermutationChromosome GetChromosome()
         {
@@ -21,35 +21,20 @@ namespace Galapagos.UnitTests.MutationTests
             return rator.Invoke(chromosome) as PermutationChromosome;
         }
 
-        [TestMethod]
-        public void CyclicShiftMutationTest()
+        private void VerifyChangeOccured(PermutationChromosome x, PermutationChromosome y)
         {
-            var chromosome = GetChromosome();
-            var mutation = GetMutation(chromosome, PermutationMutation.CyclicShift);
-
+            var diff = 0;
             for (var i = 0; i < GENE_COUNT; i++)
             {
-                if (mutation.Permutation[i] != chromosome.Permutation[i])
-                {
-                    while (mutation.Permutation[i] != chromosome.Permutation[i])
-                    {
-                        if (i >= GENE_COUNT)
-                            break;
-
-                        Assert.IsTrue(mutation.Permutation[i] == chromosome.Permutation[i + 1]);
-
-                        i++;
-                    }
-                }
+                if (x.Permutation[i] != y.Permutation[i])
+                    diff++;
             }
+
+            Assert.IsTrue(diff > 0, "Mutation failed to change chromosome data.");
         }
 
-        [TestMethod]
-        public void ReverseMutationTest()
+        private Tuple<int, int> GetDifferenceRange(PermutationChromosome chromosome, PermutationChromosome mutation)
         {
-            var chromosome = GetChromosome();
-            var mutation = GetMutation(chromosome, PermutationMutation.Reverse);
-
             var start = 0;
             var end = 0;
 
@@ -67,8 +52,45 @@ namespace Galapagos.UnitTests.MutationTests
                 }
             }
 
-            for (var i = 0; i < (end - start); i++)
-                Assert.IsTrue(mutation.Permutation[start + i] == chromosome.Permutation[end - i]);
+            return new Tuple<int, int>(start, end);
+        }
+
+        [TestMethod]
+        public void CyclicShiftMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, PermutationMutation.CyclicShift);
+
+            VerifyChangeOccured(chromosome, mutation);
+
+            var range = GetDifferenceRange(chromosome, mutation);
+
+            for (var i = range.Item1; i < range.Item2; i++)
+                Assert.IsTrue(mutation.Permutation[i] == chromosome.Permutation[i + 1], "Inccorrect implementation");
+            Assert.IsTrue(mutation.Permutation[range.Item2] == chromosome.Permutation[range.Item1], "Incorrect implementation");
+        }
+
+        [TestMethod]
+        public void RandomizationMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, PermutationMutation.Randomization);
+
+            VerifyChangeOccured(chromosome, mutation);
+        }
+
+        [TestMethod]
+        public void ReverseMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, PermutationMutation.Reverse);
+
+            VerifyChangeOccured(chromosome, mutation);
+
+            var range = GetDifferenceRange(chromosome, mutation);
+
+            for (var i = 0; i < (range.Item2 - range.Item1); i++)
+                Assert.IsTrue(mutation.Permutation[range.Item1 + i] == chromosome.Permutation[range.Item2 - i], "Incorrect implementation.");
         }
 
         [TestMethod]
@@ -76,6 +98,8 @@ namespace Galapagos.UnitTests.MutationTests
         {
             var chromosome = GetChromosome();
             var mutation = GetMutation(chromosome, PermutationMutation.Transposition);
+
+            VerifyChangeOccured(chromosome, mutation);
 
             var different = 0;
             for(var i = 0; i < GENE_COUNT; i++)

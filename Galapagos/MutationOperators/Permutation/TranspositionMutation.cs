@@ -25,7 +25,9 @@ namespace Galapagos.MutationOperators.Permutation
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            var permutation = chromosome.Permutation;
+            var permutation = new uint[chromosome.N];
+            Array.Copy(chromosome.Permutation, permutation, chromosome.N);
+
             long i = 0;
             long j = 0;
 

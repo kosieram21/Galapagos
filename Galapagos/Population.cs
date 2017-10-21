@@ -47,6 +47,7 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
         /// </summary>
+        /// <remarks>Python friendly constructor.</remarks>
         /// <param name="size">The population size.</param>
         /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
         public Population(int size, CreatureMetadata creatureMetadata)

@@ -169,6 +169,7 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
         /// </summary>
+        /// <remarks>Python friendly constructor.</remarks>
         /// <param name="name">The chromosome name.</param>
         /// <param name="geneCount">The gene count.</param>
         /// <param name="crossoverRate">The crossover rate.</param>
@@ -205,6 +206,7 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosomeMetadata"/> class.
         /// </summary>
+        /// <remarks>Python friendly constructor.</remarks>
         /// <param name="name">The chromosome name.</param>
         /// <param name="geneCount">The gene count.</param>
         /// <param name="crossoverRate">The crossover rate.</param>
@@ -293,6 +295,7 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
         /// </summary>
+        /// <remarks>Python friendly constructor.</remarks>
         /// <param name="name">The chromosome name.</param>
         /// <param name="geneCount">The gene count.</param>
         /// <param name="crossoverRate">The crossover rate.</param>
@@ -329,6 +332,7 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="PermutationChromosomeMetadata"/> class.
         /// </summary>
+        /// <remarks>Python friendly constructor.</remarks>
         /// <param name="name">The chromosome name.</param>
         /// <param name="geneCount">The gene count.</param>
         /// <param name="crossoverRate">The crossover rate.</param>

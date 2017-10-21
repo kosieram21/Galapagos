@@ -124,10 +124,10 @@ namespace Galapagos
                     crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : 
                     GetChromosome(chromosomeMetadata.Name);
 
-                if (Stochastic.EvaluateProbability(chromosomeMetadata.MutationRate))
-                    child.SetChromosome(chromosomeMetadata.Name, mutation.Invoke(newDna));
-                else
-                    child.SetChromosome(chromosomeMetadata.Name, newDna);
+                newDna = Stochastic.EvaluateProbability(chromosomeMetadata.MutationRate) ?
+                    mutation.Invoke(newDna) : newDna;
+
+                child.SetChromosome(chromosomeMetadata.Name, newDna);
             }
 
             return child;

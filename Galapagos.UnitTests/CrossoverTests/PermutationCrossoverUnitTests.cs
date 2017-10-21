@@ -79,7 +79,6 @@ namespace Galapagos.UnitTests.CrossoverTests
 
             var consistent = false;
             var regions = FindIdenticalRegions(x, crossover);
-            var range = regions[0];
             foreach(var region in regions)
             {
                 if(TestRegion(y, crossover, region))

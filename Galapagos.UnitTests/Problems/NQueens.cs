@@ -45,13 +45,13 @@ namespace Galapagos.UnitTests.Problems
             CREATURE_METADATA.Add(orderingMetadata);
         }
 
-        public Creature Solve()
+        public uint[] Solve()
         {
             while (true)
             {
                 var solution = Evolve();
                 if (solution.Fitness >= FITNESS_THRESHOLD)
-                    return solution;
+                    return solution.GetChromosome<PermutationChromosome>("ordering").Permutation;
             }
         }
 
@@ -70,15 +70,14 @@ namespace Galapagos.UnitTests.Problems
             return population.OptimalCreature;
         }
 
-        public static void PrintBoard(Creature creature)
+        public static void PrintBoard(uint[] board)
         {
-            var ordering = creature.GetChromosome<PermutationChromosome>("ordering").Permutation;
-            for (var i = 0; i < ordering.Count(); i++)
+            for (var i = 0; i < board.Count(); i++)
             {
                 var row = new StringBuilder();
-                for(var j = 0; j < ordering.Count(); j++)
+                for(var j = 0; j < board.Count(); j++)
                 {
-                    if (ordering[i] == j)
+                    if (board[i] == j)
                         row.Append("Q");
                     else
                         row.Append("*");

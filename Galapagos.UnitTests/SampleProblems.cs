@@ -40,13 +40,5 @@ namespace Galapagos.UnitTests
 
             Thread.Sleep(WAIT_TIME);
         }
-
-        [TestMethod]
-        public void EquationTest()
-        {
-            Equation.Optimize();
-
-            Thread.Sleep(WAIT_TIME);
-        }
     }
 }

@@ -58,7 +58,6 @@
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
-    <Compile Include="Problems\Equation.cs" />
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
     <Compile Include="SampleProblems.cs" />

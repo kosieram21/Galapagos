@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Galapagos.API;
 
-namespace Galapagos
+namespace Galapagos.Chromosomes
 {
     /// <summary>
     /// A permutation genetic property of a creature.

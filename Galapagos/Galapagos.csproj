@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="API\ICreature.cs" />
     <Compile Include="API\IPopulation.cs" />
-    <Compile Include="BinaryChromosome.cs" />
+    <Compile Include="Chromosomes\BinaryChromosome.cs" />
     <Compile Include="ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="MutationOperators\Shared\CyclicShiftMutation.cs" />
     <Compile Include="MutationOperators\Shared\ReverseMutation.cs" />
     <Compile Include="Niche.cs" />
-    <Compile Include="PermutationChromosome.cs" />
+    <Compile Include="Chromosomes\PermutationChromosome.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionAlgorithms\FitnessProportionateSelection.cs" />

@@ -6,13 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Galapagos.SelectionAlgorithms;
 using Galapagos.TerminationConditions;
+using Galapagos.API;
+using Galapagos.API.Factory;
 
 namespace Galapagos
 {
     /// <summary>
     /// A population of creatures.
     /// </summary>
-    public class Population : IEnumerable<Creature>
+    public class Population : IPopulation
     {
         private Creature _optimalCreature;
         private readonly Creature[] _creatures;
@@ -28,11 +30,13 @@ namespace Galapagos
         private IList<Niche> _niches = new List<Niche>();
         private uint _distanceThreshold;
 
+        private double _survivalRate = 0;
+
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
         /// </summary>
         /// <param name="creatureMetadata">The gmetadata of creatures belonging to the population.</param>
-        public Population(CreatureMetadata creatureMetadata)
+        internal Population(CreatureMetadata creatureMetadata)
             : this(1000, creatureMetadata) { }
 
         /// <summary>
@@ -40,7 +44,7 @@ namespace Galapagos
         /// </summary>
         /// <param name="size">The population size.</param>
         /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
-        public Population(uint size, CreatureMetadata creatureMetadata)
+        internal Population(uint size, CreatureMetadata creatureMetadata)
         {
             _creatures = new Creature[size];
             for (var i = 0; i < _creatures.Count(); i++)
@@ -53,11 +57,30 @@ namespace Galapagos
         /// <remarks>Python friendly constructor.</remarks>
         /// <param name="size">The population size.</param>
         /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
-        public Population(int size, CreatureMetadata creatureMetadata)
+        internal Population(int size, CreatureMetadata creatureMetadata)
             : this((uint)size, creatureMetadata)
         {
             if (size <= 0)
                 throw new ArgumentException("Error! Gene count must be a positive value.");
+        }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="Population"/> class.
+        /// </summary>
+        /// <param name="creatureMetadata">The gmetadata of creatures belonging to the population.</param>
+        public static IPopulation Create(CreatureMetadata creatureMetadata)
+        {
+            return new Population(creatureMetadata) as IPopulation;
+        }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="Population"/> class.
+        /// </summary>
+        /// <param name="size">The population size.</param>
+        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
+        public static IPopulation Create(uint size, CreatureMetadata creatureMetadata)
+        {
+            return new Population(size, creatureMetadata) as IPopulation;
         }
 
         /// <summary>
@@ -75,20 +98,21 @@ namespace Galapagos
         /// </summary>
         /// <param name="index">The creature index.</param>
         /// <returns>The creature.</returns>
-        public Creature this[int index]
+        public ICreature this[int index]
         {
             get
             {
                 if (index >= Size)
                     throw new Exception($"Error! {index} is larger than the population size.");
-                return _creatures[index];
+                return _creatures[index] as ICreature;
             }
         }
 
         /// <summary>
         /// Gets or sets the creature best suited to solve the propblem.
         /// </summary>
-        public Creature OptimalCreature
+        ICreature IPopulation.OptimalCreature => OptimalCreature as ICreature;
+        internal Creature OptimalCreature
         {
             get
             {
@@ -180,14 +204,22 @@ namespace Galapagos
         }
 
         /// <summary>
-        /// Optimizes the population.
+        /// Enables elitism in the population.
         /// </summary>
-        /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void Evolve(SelectionAlgorithm selectionAlgorithm = SelectionAlgorithm.FitnessProportionate, bool elitism = false, double survivalRate = 0.25)
+        /// <param name="survivalRate">The percentage of creature to carry on unchanged to the next generation.</param>
+        public void EnableElitism(double survivalRate = 0.25)
         {
-            Evolve(selectionAlgorithm, null, elitism, survivalRate);
+            if (survivalRate < 0 || survivalRate > 1)
+                throw new ArgumentException("Error! Survival rate must be a value between 0 and 1.");
+            _survivalRate = survivalRate;
+        }
+
+        /// <summary>
+        /// Disable elitism in the population.
+        /// </summary>
+        public void DisableElitism()
+        {
+            _survivalRate = 0;
         }
 
         /// <summary>
@@ -195,23 +227,10 @@ namespace Galapagos
         /// </summary>
         /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
         /// <param name="param">The selection algorithm parameter.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void Evolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism = false, double survivalRate = 0.25)
+        public void Evolve(SelectionAlgorithm selectionAlgorithm, object param = null)
         {
             Action evaluateFitness = () => { foreach (var creature in _creatures) { creature.EvaluateFitness(); } };
-            RunEvolution(selectionAlgorithm, param, elitism, survivalRate, evaluateFitness);
-        }
-
-        /// <summary>
-        /// Optimizes the population. Evaluates creature fitness values in parallel.
-        /// </summary>
-        /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm = SelectionAlgorithm.FitnessProportionate, bool elitism = false, double survivalRate = 0.25)
-        {
-            ParallelEvolve(selectionAlgorithm, null, elitism, survivalRate);
+            RunEvolution(selectionAlgorithm, param, evaluateFitness);
         }
 
         /// <summary>
@@ -219,12 +238,10 @@ namespace Galapagos
         /// </summary>
         /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
         /// <param name="param">The selection algorithm parameter.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm, object param, bool elitism = false, double survivalRate = 0.25)
+        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm, object param = null)
         {
             Action evaluateFitness = () => { Parallel.ForEach(_creatures, (creature) => { creature.EvaluateFitness(); }); };
-            RunEvolution(selectionAlgorithm, param, elitism, survivalRate, evaluateFitness);
+            RunEvolution(selectionAlgorithm, param, evaluateFitness);
         }
 
         /// <summary>
@@ -235,11 +252,8 @@ namespace Galapagos
         /// <param name="elitism">A value indicating if elitism should be used.</param>
         /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
         /// <param name="evaluateFitness">A delegate that evaluates creature fitness.</param>
-        private void RunEvolution(SelectionAlgorithm selectionAlgorithm, object param, bool elitism, double survivalRate, Action evaluateFitness)
+        private void RunEvolution(SelectionAlgorithm selectionAlgorithm, object param, Action evaluateFitness)
         {
-            if (survivalRate < 0 || survivalRate > 1)
-                throw new ArgumentException("Error! Survival rate must be a value between 0 and 1.");
-
             if (_terminationConditions.Count == 0)
                 _terminationConditions[$"{TerminationCondition.GenerationThreshold}"] = new GenerationThreshold(this, 1000);
 
@@ -247,7 +261,7 @@ namespace Galapagos
             {
                 evaluateFitness();
                 var selection = GeneticFactory.ConstructSelectionAlgorithm(_creatures, selectionAlgorithm, param);
-                BreedNewGeneration(selection, elitism, survivalRate);
+                BreedNewGeneration(selection);
 
                 _generation++;
                 _optimalCreature = FindOptimalCreature();
@@ -274,17 +288,15 @@ namespace Galapagos
         /// Breeds a new generation of creatures.
         /// </summary>
         /// <param name="selection">The selection algorithm.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
-        private void BreedNewGeneration(ISelectionAlgorithm selection, bool elitism, double survivalRate)
+        private void BreedNewGeneration(ISelectionAlgorithm selection)
         {
             var newGeneration = new Creature[Size];
 
             var i = 0;
-            if(elitism)
+            if(_survivalRate > 0)
             {
                 var sortedCreatures = _creatures.OrderByDescending(creature => creature.Fitness).ToArray();
-                for (var j = 0; j < Size * survivalRate; j++)
+                for (var j = 0; j < Size * _survivalRate; j++)
                 {
                     newGeneration[j] = sortedCreatures[j];
                     i++;
@@ -343,9 +355,9 @@ namespace Galapagos
 
         #region IEnumerable Members
 
-        public IEnumerator<Creature> GetEnumerator()
+        public IEnumerator<ICreature> GetEnumerator()
         {
-            return _creatures.ToList().GetEnumerator();
+            return ((ICreature[])_creatures).ToList().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

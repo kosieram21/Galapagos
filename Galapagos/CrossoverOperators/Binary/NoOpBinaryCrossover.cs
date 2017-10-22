@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Galapagos.CrossoverOperators.Shared;
+using Galapagos.API;
 
 namespace Galapagos.CrossoverOperators.Binary
 {

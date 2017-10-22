@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Galapagos;
+using Galapagos.API;
 
 namespace Galapagos.UnitTests.Problems
 {
@@ -21,7 +22,7 @@ namespace Galapagos.UnitTests.Problems
 
             CREATURE_METADATA = new CreatureMetadata(creature => 
             {
-                var ordering = creature.GetChromosome<PermutationChromosome>("ordering").Permutation;
+                var ordering = creature.GetChromosome<IPermutationChromosome>("ordering");
                 double fitness = 0;
 
                 for(var i = 1; i < ordering.Count(); i++)
@@ -51,13 +52,13 @@ namespace Galapagos.UnitTests.Problems
             {
                 var solution = Evolve();
                 if (solution.Fitness >= FITNESS_THRESHOLD)
-                    return solution.GetChromosome<PermutationChromosome>("ordering").Permutation;
+                    return solution.GetChromosome<IPermutationChromosome>("ordering").ToArray();
             }
         }
 
-        private Creature Evolve()
+        private ICreature Evolve()
         {
-            var population = new Population(POPULATION_SIZE, CREATURE_METADATA);
+            var population = Population.Create(POPULATION_SIZE, CREATURE_METADATA);
             population.EnableLogging();
 
             //population.EnableNiches(50);
@@ -65,7 +66,7 @@ namespace Galapagos.UnitTests.Problems
             population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, GENERATION_THRESHOLD);
             population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
 
-            population.Evolve(SelectionAlgorithm.Tournament, 5, false, 0.10);
+            population.Evolve(SelectionAlgorithm.Tournament, 5);
 
             return population.OptimalCreature;
         }

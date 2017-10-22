@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galapagos.SelectionAlgorithms
+namespace Galapagos.API
 {
     /// <summary>
     /// A creature selection algorithm.

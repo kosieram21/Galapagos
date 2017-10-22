@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galapagos.MutationOperators
+namespace Galapagos.API
 {
     public interface IMutation : IOperator
     {

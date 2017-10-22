@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Galapagos.CrossoverOperators;
 using Galapagos.MutationOperators;
+using Galapagos.API;
+using Galapagos.API.Factory;
 
 namespace Galapagos
 {

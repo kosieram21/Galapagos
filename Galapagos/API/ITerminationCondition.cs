@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galapagos.TerminationConditions
+namespace Galapagos.API
 {
     /// <summary>
     /// A termination condition for population evolution.

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.API;
+using Galapagos.API.Factory;
 
 namespace Galapagos
 {
     /// <summary>
     /// An evolvable solution to an optimization problem.
     /// </summary>
-    public class Creature
+    public class Creature : ICreature
     {
         private readonly CreatureMetadata _creatureMetadata;
         private readonly IDictionary<string, IChromosome> _chromosomes = new Dictionary<string, IChromosome>();

@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Galapagos.API;
+using Galapagos.API.Factory;
 
 namespace Galapagos.UnitTests.ChromosomeTests
 {

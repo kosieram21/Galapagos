@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.API;
 
 namespace Galapagos
 {
     /// <summary>
     /// A permutation genetic property of a creature.
     /// </summary>
-    public class PermutationChromosome : IChromosome
+    public class PermutationChromosome : IPermutationChromosome
     {
         private readonly uint[] _permutation;
 
@@ -65,6 +67,21 @@ namespace Galapagos
             }
 
             return seen.All(o => o);
+        }
+
+        /// <summary>
+        /// Accesses a gene from the chromosome.
+        /// </summary>
+        /// <param name="index">The gene index.</param>
+        /// <returns>The gene.</returns>
+        public uint this[int index]
+        {
+            get
+            {
+                if (index >= _permutation.Count())
+                    throw new Exception($"Error! {index} is larger than the chromosome size.");
+                return _permutation[index];
+            }
         }
 
         /// <summary>
@@ -170,5 +187,19 @@ namespace Galapagos
         /// Gets the permutation length.
         /// </summary>
         public uint N => (uint)_permutation.Length;
+
+        #region IEnumerable Members
+
+        public IEnumerator<uint> GetEnumerator()
+        {
+            return _permutation.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }

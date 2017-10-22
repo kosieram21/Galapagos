@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galapagos
+namespace Galapagos.API
 {
     public interface IOperator
     {

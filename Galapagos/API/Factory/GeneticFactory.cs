@@ -11,8 +11,9 @@ using Galapagos.MutationOperators.Binary;
 using Galapagos.MutationOperators.Permutation;
 using Galapagos.SelectionAlgorithms;
 using Galapagos.TerminationConditions;
+using Galapagos.API;
 
-namespace Galapagos
+namespace Galapagos.API.Factory
 {
     /// <summary>
     /// Utility class for creating pieces of a genetic algorithm.

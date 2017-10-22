@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Galapagos;
+using Galapagos.API;
 
 namespace Galapagos.UnitTests.Problems
 {
@@ -85,8 +86,6 @@ namespace Galapagos.UnitTests.Problems
         private readonly char[,] _initialBoard;
         private readonly IList<IList<char>> _unknownValues = new List<IList<char>>();
 
-        private Population _population;
-
         private const int POPULATION_SIZE = 7500;
 
         private const uint FITNESS_THRESHOLD = 18;
@@ -117,17 +116,18 @@ namespace Galapagos.UnitTests.Problems
             }
         }
 
-        private Creature EvolveSolution()
+        private ICreature EvolveSolution()
         {
             var geneticDescription = ConstructCreatureMetadata();
-            _population = new Population(POPULATION_SIZE, geneticDescription);
+            var population = Population.Create(POPULATION_SIZE, geneticDescription);
 
-            _population.EnableLogging();
-            _population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
-            _population.RegisterTerminationCondition(TerminationCondition.FitnessPlateau, PLATEAU_LENGTH);
-            _population.ParallelEvolve(SelectionAlgorithm.Tournament, TOURNAMENT_SIZE, ELITISM, SURVIVAL_RATE);
+            population.EnableLogging();
+            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
+            population.RegisterTerminationCondition(TerminationCondition.FitnessPlateau, PLATEAU_LENGTH);
+            if (ELITISM) population.EnableElitism(SURVIVAL_RATE);
+            population.ParallelEvolve(SelectionAlgorithm.Tournament, TOURNAMENT_SIZE);
 
-            return _population.OptimalCreature;
+            return population.OptimalCreature;
         }
 
         private CreatureMetadata ConstructCreatureMetadata()
@@ -159,7 +159,7 @@ namespace Galapagos.UnitTests.Problems
             return metadata;
         }
 
-        private Func<Creature, double> ConstructFitnessFunction()
+        private Func<ICreature, double> ConstructFitnessFunction()
         {
             return (creature) =>
             {
@@ -187,13 +187,13 @@ namespace Galapagos.UnitTests.Problems
             };
         }
 
-        private uint[,] ConstructBoard(Creature creature)
+        private uint[,] ConstructBoard(ICreature creature)
         {
             var board = new uint[9, 9];
 
             for (var i = 0; i < 9; i++)
             {
-                var permutation = creature.GetChromosome<PermutationChromosome>($"Row{i}").Permutation;
+                var permutation = creature.GetChromosome<IPermutationChromosome>($"Row{i}");
                 var permutationIndex = 0;
                 var row = new uint[9];
 

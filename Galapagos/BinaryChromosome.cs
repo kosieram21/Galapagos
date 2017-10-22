@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.API;
 
 namespace Galapagos
 {
     /// <summary>
     /// A binary genetic property of a creature.
     /// </summary>
-    public class BinaryChromosome : IChromosome
+    public class BinaryChromosome : IBinaryChromosome
     {
         private readonly bool[] _bits;
         private readonly uint _bitCount;
@@ -69,6 +71,21 @@ namespace Galapagos
         /// Gets the bitCount.
         /// </summary>
         public uint BitCount => _bitCount;
+
+        /// <summary>
+        /// Accesses a gene from the chromosome.
+        /// </summary>
+        /// <param name="index">The gene index.</param>
+        /// <returns>The gene.</returns>
+        public bool this[int index]
+        {
+            get
+            {
+                if (index >= _bits.Count())
+                    throw new Exception($"Error! {index} is larger than the chromosome size.");
+                return _bits[index];
+            }
+        }
 
         /// <summary>
         /// Converts the binary chromosome to an uint.
@@ -133,5 +150,19 @@ namespace Galapagos
 
             return bin;
         }
+
+        #region IEnumerable Members
+
+        public IEnumerator<bool> GetEnumerator()
+        {
+            return _bits.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }

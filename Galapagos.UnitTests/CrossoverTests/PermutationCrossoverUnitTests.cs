@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Galapagos.API;
+using Galapagos.API.Factory;
 
 namespace Galapagos.UnitTests.CrossoverTests
 {

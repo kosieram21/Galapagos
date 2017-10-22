@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ICreature.cs" />
+    <Compile Include="API\IPopulation.cs" />
     <Compile Include="BinaryChromosome.cs" />
     <Compile Include="ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
@@ -48,24 +50,24 @@
     <Compile Include="CrossoverOperators\Binary\TwoPointCrossover.cs" />
     <Compile Include="CrossoverOperators\Binary\UniformCrossover.cs" />
     <Compile Include="CrossoverOperators\Crossover.cs" />
-    <Compile Include="CrossoverOperators\ICrossover.cs" />
+    <Compile Include="API\ICrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\AlternatingPositionCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\MidpointCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\NoOpPermutationCrossover.cs" />
     <Compile Include="CrossoverOperators\Permutation\OrderCrossover.cs" />
     <Compile Include="CrossoverOperators\Shared\NoOpCrossover.cs" />
     <Compile Include="DataLogger.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="API\Enums.cs" />
     <Compile Include="CreatureMetadata.cs" />
-    <Compile Include="GeneticFactory.cs" />
-    <Compile Include="IChromosome.cs" />
-    <Compile Include="IOperator.cs" />
+    <Compile Include="API\Factory\GeneticFactory.cs" />
+    <Compile Include="API\IChromosome.cs" />
+    <Compile Include="API\IOperator.cs" />
     <Compile Include="MutationOperators\Binary\CyclicShiftBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\FlipBitMutation.cs" />
     <Compile Include="MutationOperators\Binary\RandomizationBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\ReverseBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\SingleBitMutation.cs" />
-    <Compile Include="MutationOperators\IMutation.cs" />
+    <Compile Include="API\IMutation.cs" />
     <Compile Include="MutationOperators\Mutation.cs" />
     <Compile Include="MutationOperators\Permutation\CyclicShiftPermutationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\RandomizationPermutationMutation.cs" />
@@ -78,7 +80,7 @@
     <Compile Include="Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionAlgorithms\FitnessProportionateSelection.cs" />
-    <Compile Include="SelectionAlgorithms\ISelectionAlgorithm.cs" />
+    <Compile Include="API\ISelectionAlgorithm.cs" />
     <Compile Include="SelectionAlgorithms\StochasticUniversalSampling.cs" />
     <Compile Include="SelectionAlgorithms\TournamentSelection.cs" />
     <Compile Include="SelectionAlgorithms\TruncationSelection.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="TerminationConditions\FitnessPlateau.cs" />
     <Compile Include="TerminationConditions\FitnessThreshold.cs" />
     <Compile Include="TerminationConditions\GenerationThreshold.cs" />
-    <Compile Include="TerminationConditions\ITerminationCondition.cs" />
+    <Compile Include="API\ITerminationCondition.cs" />
     <Compile Include="TerminationConditions\Timer.cs" />
   </ItemGroup>
   <ItemGroup />

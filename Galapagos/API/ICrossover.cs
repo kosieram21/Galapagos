@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galapagos.CrossoverOperators
+namespace Galapagos.API
 {
     public interface ICrossover : IOperator
     {

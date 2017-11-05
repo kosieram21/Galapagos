@@ -80,7 +80,7 @@ namespace Galapagos.Metadata
         /// <param name="condition"></param>
         internal void AddTerminationCondition(ITerminationCondition condition)
         {
-            TerminationConditions.Add(condition);
+            _terminationConditions.Add(condition);
         }
 
         /// <summary>

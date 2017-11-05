@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Galapagos.Chromosomes;
 using Galapagos.API;
@@ -22,4 +22,4 @@ namespace Galapagos.UnitTests.ChromosomeTests
             Assert.AreEqual((uint)2, distance);
         }
     }
-}
+}*/

@@ -7,12 +7,12 @@ namespace Galapagos.UnitTests
     [TestClass]
     public class MetadataParserUnitTest
     {
-        private const string FILE_PATH = @"C:\Users\kosie\Desktop\test.meta";
+        private const string FILE_PATH = @"C:\Users\kosie\Desktop\test.xml";
 
         [TestMethod]
-        public void TestMethod1()
+        public void MetadataParseTest()
         {
-            MetadataParser.Parse(FILE_PATH);
+            var metadata = MetadataParser.Parse(FILE_PATH);
         }
     }
 }

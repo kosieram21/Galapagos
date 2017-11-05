@@ -12,27 +12,25 @@ namespace Galapagos.TerminationConditions
     /// </summary>
     public class GenerationThreshold : ITerminationCondition
     {
-        private readonly Population _population;
-        private readonly int _generationThreshold;
+        private readonly uint _generationThreshold;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="GenerationThreshold"/> class.
         /// </summary>
-        /// <param name="population">The creature population.</param>
         /// <param name="generationThreshold">The generation threshold.</param>
-        internal GenerationThreshold(Population population, int generationThreshold)
+        internal GenerationThreshold(uint generationThreshold)
         {
-            _population = population;
             _generationThreshold = generationThreshold;
         }
 
         /// <summary>
         /// Checks the termination condition.
         /// </summary>
+        /// <param name="population">The population to check against.</param>
         /// <returns>A value indicating if evolution should terminate.</returns>
-        public bool Check()
+        public bool Check(IPopulation population)
         {
-            return _population.Generation >= _generationThreshold;
+            return ((Population)population).Generation >= _generationThreshold;
         }
     }
 }

@@ -105,26 +105,23 @@ namespace Galapagos.API.Factory
         /// <param name="algorithm">The selection algorithm to construct.</param>
         /// <param name="param">The selection algorithm parameter.</param>
         /// <returns>The selection algorithm.</returns>
-        public static ISelectionAlgorithm ConstructSelectionAlgorithm(Creature[] creatures, SelectionAlgorithm algorithm, object param)
+        public static ISelectionAlgorithm ConstructSelectionAlgorithm(SelectionAlgorithm algorithm, object param = null)
         {
             try
             {
                 switch (algorithm)
                 {
                     case SelectionAlgorithm.FitnessProportionate:
-                        return new FitnessProportionateSelection(creatures);
+                        return new FitnessProportionateSelection();
                     case SelectionAlgorithm.StochasticUniversalSampling:
-                        //if (param != null) ValidateParameterType(typeof(int), param?.GetType());
-                        int? n = param == null ? default(int?) : Convert.ToInt32(param);
-                        return new StochasticUniversalSampling(creatures, n);
+                        uint? n = param == null ? default(uint?) : Convert.ToUInt32(param);
+                        return new StochasticUniversalSampling(n);
                     case SelectionAlgorithm.Tournament:
-                        //if (param != null) ValidateParameterType(typeof(int), param?.GetType());
-                        int? k = param == null ? default(int?) : Convert.ToInt32(param);
-                        return new TournamentSelection(creatures, k);
+                        uint? k = param == null ? default(uint?) : Convert.ToUInt32(param);
+                        return new TournamentSelection(k);
                     case SelectionAlgorithm.Truncation:
-                        //if(param != null) ValidateParameterType(typeof(double), param?.GetType());
                         double? truncationRate = param == null ? default(double?) : Convert.ToDouble(param);
-                        return new TruncationSelection(creatures, truncationRate);
+                        return new TruncationSelection(truncationRate);
                     default:
                         throw new ArgumentException("Error! Invalid algorithm selection.");
                 }
@@ -142,26 +139,22 @@ namespace Galapagos.API.Factory
         /// <param name="condition">The termination condition to construct.</param>
         /// <param name="param">The termination condition parameter.</param>
         /// <returns>The constructed termination condition.</returns>
-        public static ITerminationCondition ConstructTerminationCondition(Population population, TerminationCondition condition, object param)
+        public static ITerminationCondition ConstructTerminationCondition(TerminationCondition condition, object param = null)
         {
             try
             {
                 switch (condition)
                 {
                     case TerminationCondition.FitnessPlateau:
-                        //ValidateParameterType(typeof(int), param?.GetType());
-                        var plateauLength = Convert.ToInt32(param);
-                        return new FitnessPlateau(population, plateauLength);
+                        var plateauLength = Convert.ToUInt32(param);
+                        return new FitnessPlateau(plateauLength);
                     case TerminationCondition.FitnessThreshold:
-                        //ValidateParameterType(typeof(uint), param?.GetType());
                         var fitnessThreshold = Convert.ToUInt32(param);
-                        return new FitnessThreshold(population, fitnessThreshold);
+                        return new FitnessThreshold(fitnessThreshold);
                     case TerminationCondition.GenerationThreshold:
-                        //ValidateParameterType(typeof(int), param?.GetType());
-                        var generationThreshold = Convert.ToInt32(param);
-                        return new GenerationThreshold(population, generationThreshold);
+                        var generationThreshold = Convert.ToUInt32(param);
+                        return new GenerationThreshold(generationThreshold);
                     case TerminationCondition.Timer:
-                        //ValidateParameterType(typeof(TimeSpan), param?.GetType());
                         var stopTime = (TimeSpan)param;
                         return new Timer(stopTime);
                     default:
@@ -179,7 +172,7 @@ namespace Galapagos.API.Factory
         /// </summary>
         /// <param name="chromosomeMetadata">The chromosome metadata.</param>
         /// <returns>The chromosome.</returns>
-        public static IChromosome ConstructChromosome(ChromosomeMetadata chromosomeMetadata)
+        public static IChromosome ConstructChromosome(IChromosomeMetadata chromosomeMetadata)
         {
             switch (chromosomeMetadata.Type)
             {
@@ -199,7 +192,7 @@ namespace Galapagos.API.Factory
         /// <param name="chromosomeMetadata">The chromosome metadata.</param>
         /// <param name="genes">The chromosome genes genes.</param>
         /// <returns>The chromosome.</returns>
-        public static IChromosome ConstructChromosome<T>(ChromosomeMetadata chromosomeMetadata, T[] genes)
+        public static IChromosome ConstructChromosome<T>(IChromosomeMetadata chromosomeMetadata, T[] genes)
         {
             switch(chromosomeMetadata.Type)
             {
@@ -210,16 +203,6 @@ namespace Galapagos.API.Factory
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }
-        }
-
-        /// <summary>
-        /// Validates a given parameter is of the correct type.
-        /// </summary>
-        /// <param name="expected">The expected type.</param>
-        /// <param name="received">The recieved type.</param>
-        public static void ValidateParameterType(Type expected, Type received)
-        {
-            if(expected != received) throw new ArgumentException($"Error! Expected an {expected} but received a {received}");
         }
     }
 }

@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Galapagos.SelectionAlgorithms;
-using Galapagos.TerminationConditions;
 using Galapagos.API;
-using Galapagos.API.Factory;
 
 namespace Galapagos
 {
@@ -16,71 +13,29 @@ namespace Galapagos
     /// </summary>
     public class Population : IPopulation
     {
+        private readonly IPopulationMetadata _populationMetadata;
+
         private Creature _optimalCreature;
         private readonly Creature[] _creatures;
 
         private int _generation = 0;
 
-        private readonly IDictionary<string, ITerminationCondition> _terminationConditions = new Dictionary<string, ITerminationCondition>();
+        private IList<Niche> _niches = new List<Niche>();
 
         private bool _loggingEnabled = false;
         private DataLogger _logger = null;
 
-        private bool _nichesEnabled = false;
-        private IList<Niche> _niches = new List<Niche>();
-        private uint _distanceThreshold;
-
-        private double _survivalRate = 0;
-
         /// <summary>
         /// Constructs a new instance of the <see cref="Population"/> class.
         /// </summary>
-        /// <param name="creatureMetadata">The gmetadata of creatures belonging to the population.</param>
-        internal Population(CreatureMetadata creatureMetadata)
-            : this(1000, creatureMetadata) { }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="Population"/> class.
-        /// </summary>
-        /// <param name="size">The population size.</param>
-        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
-        internal Population(uint size, CreatureMetadata creatureMetadata)
+        /// <param name="populationMetadata">The population metadata.</param>
+        internal Population(IPopulationMetadata populationMetadata)
         {
-            _creatures = new Creature[size];
+            _populationMetadata = populationMetadata;
+
+            _creatures = new Creature[_populationMetadata.Size];
             for (var i = 0; i < _creatures.Count(); i++)
-                _creatures[i] = new Creature(creatureMetadata);
-        }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="Population"/> class.
-        /// </summary>
-        /// <remarks>Python friendly constructor.</remarks>
-        /// <param name="size">The population size.</param>
-        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
-        internal Population(int size, CreatureMetadata creatureMetadata)
-            : this((uint)size, creatureMetadata)
-        {
-            if (size <= 0)
-                throw new ArgumentException("Error! Gene count must be a positive value.");
-        }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="Population"/> class.
-        /// </summary>
-        /// <param name="creatureMetadata">The gmetadata of creatures belonging to the population.</param>
-        public static IPopulation Create(CreatureMetadata creatureMetadata)
-        {
-            return new Population(creatureMetadata) as IPopulation;
-        }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="Population"/> class.
-        /// </summary>
-        /// <param name="size">The population size.</param>
-        /// <param name="creatureMetadata">The metadata of creatures belonging to the population.</param>
-        public static IPopulation Create(uint size, CreatureMetadata creatureMetadata)
-        {
-            return new Population(size, creatureMetadata) as IPopulation;
+                _creatures[i] = new Creature(populationMetadata);
         }
 
         /// <summary>
@@ -91,7 +46,12 @@ namespace Galapagos
         /// <summary>
         /// Gets the population generation.
         /// </summary>
-        public int Generation => _generation;
+        internal int Generation => _generation;
+
+        /// <summary>
+        /// Gets the population creatures.
+        /// </summary>
+        internal Creature[] Creatures => _creatures;
 
         /// <summary>
         /// Accesses a creature from the population.
@@ -144,27 +104,6 @@ namespace Galapagos
         }
 
         /// <summary>
-        /// Registers an evolution termination condition.
-        /// </summary>
-        /// <param name="condition">The termination condition to set.</param>
-        /// <param name="param">The termination condition parameter.</param>
-        public void RegisterTerminationCondition(TerminationCondition condition, object param)
-        {
-            if (!_terminationConditions.ContainsKey($"{condition}"))
-                _terminationConditions[$"{condition}"] = GeneticFactory.ConstructTerminationCondition(this, condition, param);
-        }
-
-        /// <summary>
-        /// Unregisters an evolution termination condition.
-        /// </summary>
-        /// <param name="condition">The termination condition to set.</param>
-        public void UnregisterTerminationCondition(TerminationCondition condition)
-        {
-            if (_terminationConditions.ContainsKey($"{condition}"))
-                _terminationConditions.Remove($"{condition}");
-        }
-
-        /// <summary>
         /// Enables fitness logging.
         /// </summary>
         /// <param name="path">The path to log data to.</param>
@@ -184,84 +123,33 @@ namespace Galapagos
         }
 
         /// <summary>
-        /// Enables niches in the population.
-        /// </summary>
-        /// <param name="distanceThreshold">The distance threshold for the niches.</param>
-        public void EnableNiches(int distanceThreshold)
-        {
-            if (!_nichesEnabled)
-                _nichesEnabled = true;
-            _distanceThreshold = (uint)distanceThreshold;
-        }
-
-        /// <summary>
-        /// Disables niches in the population.
-        /// </summary>
-        public void DisableNiches()
-        {
-            if (_nichesEnabled)
-                _nichesEnabled = false;
-        }
-
-        /// <summary>
-        /// Enables elitism in the population.
-        /// </summary>
-        /// <param name="survivalRate">The percentage of creature to carry on unchanged to the next generation.</param>
-        public void EnableElitism(double survivalRate = 0.25)
-        {
-            if (survivalRate < 0 || survivalRate > 1)
-                throw new ArgumentException("Error! Survival rate must be a value between 0 and 1.");
-            _survivalRate = survivalRate;
-        }
-
-        /// <summary>
-        /// Disable elitism in the population.
-        /// </summary>
-        public void DisableElitism()
-        {
-            _survivalRate = 0;
-        }
-
-        /// <summary>
         /// Optimizes the population.
         /// </summary>
-        /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
-        /// <param name="param">The selection algorithm parameter.</param>
-        public void Evolve(SelectionAlgorithm selectionAlgorithm, object param = null)
+        public void Evolve()
         {
             Action evaluateFitness = () => { foreach (var creature in _creatures) { creature.EvaluateFitness(); } };
-            RunEvolution(selectionAlgorithm, param, evaluateFitness);
+            RunEvolution(evaluateFitness);
         }
 
         /// <summary>
         /// Optimizes the population. Evaluates creature fitness values in parallel.
         /// </summary>
-        /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
-        /// <param name="param">The selection algorithm parameter.</param>
-        public void ParallelEvolve(SelectionAlgorithm selectionAlgorithm, object param = null)
+        public void ParallelEvolve()
         {
             Action evaluateFitness = () => { Parallel.ForEach(_creatures, (creature) => { creature.EvaluateFitness(); }); };
-            RunEvolution(selectionAlgorithm, param, evaluateFitness);
+            RunEvolution(evaluateFitness);
         }
 
         /// <summary>
         /// Runs the evolution process.
         /// </summary>
-        /// <param name="selectionAlgorithm">The selection algorithm to use.</param>
-        /// <param name="param">The selection algorithm parameter.</param>
-        /// <param name="elitism">A value indicating if elitism should be used.</param>
-        /// <param name="survivalRate">The percentage of the population to carry over is elitism is enabled.</param>
         /// <param name="evaluateFitness">A delegate that evaluates creature fitness.</param>
-        private void RunEvolution(SelectionAlgorithm selectionAlgorithm, object param, Action evaluateFitness)
+        private void RunEvolution(Action evaluateFitness)
         {
-            if (_terminationConditions.Count == 0)
-                _terminationConditions[$"{TerminationCondition.GenerationThreshold}"] = new GenerationThreshold(this, 1000);
-
             while (true)
             {
                 evaluateFitness();
-                var selection = GeneticFactory.ConstructSelectionAlgorithm(_creatures, selectionAlgorithm, param);
-                BreedNewGeneration(selection);
+                BreedNewGeneration();
 
                 _generation++;
                 _optimalCreature = FindOptimalCreature();
@@ -275,7 +163,7 @@ namespace Galapagos
                     if (_logger != null) _logger.Log(_generation, OptimalCreature.Fitness);
                 }
 
-                if (_terminationConditions.Any(kvp => kvp.Value.Check()))
+                if (_populationMetadata.TerminationConditions.Any(condition => condition.Check(this)))
                 {
                     foreach (var creature in _creatures)
                         creature.UnregisterNiche();
@@ -288,15 +176,17 @@ namespace Galapagos
         /// Breeds a new generation of creatures.
         /// </summary>
         /// <param name="selection">The selection algorithm.</param>
-        private void BreedNewGeneration(ISelectionAlgorithm selection)
+        private void BreedNewGeneration()
         {
             var newGeneration = new Creature[Size];
 
+            _populationMetadata.SelectionAlgorithm.Initialize(this);
+
             var i = 0;
-            if(_survivalRate > 0)
+            if(_populationMetadata.SurvivalRate > 0)
             {
                 var sortedCreatures = _creatures.OrderByDescending(creature => creature.Fitness).ToArray();
-                for (var j = 0; j < Size * _survivalRate; j++)
+                for (var j = 0; j < Size * _populationMetadata.SurvivalRate; j++)
                 {
                     newGeneration[j] = sortedCreatures[j];
                     i++;
@@ -305,15 +195,15 @@ namespace Galapagos
 
             while (i < Size)
             {
-                var parentX = selection.Invoke();
-                var parentY = selection.Invoke();
-                newGeneration[i] = parentX.Breed(parentY);
+                var parentX = _populationMetadata.SelectionAlgorithm.Invoke();
+                var parentY = _populationMetadata.SelectionAlgorithm.Invoke();
+                newGeneration[i] = ((Creature)parentX).Breed((Creature)parentY);
                 i++;
             }
 
             Array.Copy(newGeneration, _creatures, Size);
 
-            if (_nichesEnabled)
+            if (_populationMetadata.DistanceThreshold > 0)
             {
                 ClearNiches();
                 AssignNiches();
@@ -331,7 +221,7 @@ namespace Galapagos
                 if (candidate != null)
                     candidate.Add(creature);
                 else
-                    _niches.Add(new Niche(creature, _distanceThreshold));
+                    _niches.Add(new Niche(creature, _populationMetadata.DistanceThreshold));
             }
 
             var activeNiches = new List<Niche>();

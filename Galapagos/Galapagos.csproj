@@ -41,9 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ICreature.cs" />
+    <Compile Include="API\IPopulationMetadata.cs" />
     <Compile Include="API\IPopulation.cs" />
     <Compile Include="Chromosomes\BinaryChromosome.cs" />
-    <Compile Include="ChromosomeMetadata.cs" />
+    <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
     <Compile Include="CrossoverOperators\Binary\SinglePointCrossover.cs" />
@@ -58,10 +59,12 @@
     <Compile Include="CrossoverOperators\Shared\NoOpCrossover.cs" />
     <Compile Include="DataLogger.cs" />
     <Compile Include="API\Enums.cs" />
-    <Compile Include="CreatureMetadata.cs" />
+    <Compile Include="Metadata\Parser\MetadataParser.cs" />
+    <Compile Include="Metadata\PopulationMetadata.cs" />
     <Compile Include="API\Factory\GeneticFactory.cs" />
     <Compile Include="API\IChromosome.cs" />
     <Compile Include="API\IOperator.cs" />
+    <Compile Include="API\IChromosomeMetadata.cs" />
     <Compile Include="MutationOperators\Binary\CyclicShiftBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\FlipBitMutation.cs" />
     <Compile Include="MutationOperators\Binary\RandomizationBinaryMutation.cs" />
@@ -91,7 +94,6 @@
     <Compile Include="API\ITerminationCondition.cs" />
     <Compile Include="TerminationConditions\Timer.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

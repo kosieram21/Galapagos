@@ -14,13 +14,13 @@ namespace Galapagos.UnitTests.Problems
         private const uint POPULATION_SIZE = 100;
         private const uint GENERATION_THRESHOLD = 1000;
         private readonly int FITNESS_THRESHOLD;
-        private readonly CreatureMetadata CREATURE_METADATA;
+        private readonly PopulationMetadata CREATURE_METADATA;
 
         public NQueens(uint boardSize)
         {
             FITNESS_THRESHOLD = GetFitnessThreshold(boardSize);
 
-            CREATURE_METADATA = new CreatureMetadata(creature => 
+            CREATURE_METADATA = new PopulationMetadata(creature => 
             {
                 var ordering = creature.GetChromosome<IPermutationChromosome>("ordering");
                 double fitness = 0;
@@ -43,7 +43,7 @@ namespace Galapagos.UnitTests.Problems
             orderingMetadata.AddMutationOperators(PermutationMutation.Transposition | PermutationMutation.CyclicShift, 2);
             orderingMetadata.AddMutationOperators(PermutationMutation.Randomization, 1);
 
-            CREATURE_METADATA.Add(orderingMetadata);
+            CREATURE_METADATA.AddChromosomeMetadata(orderingMetadata);
         }
 
         public uint[] Solve()

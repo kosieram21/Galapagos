@@ -12,17 +12,24 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class FitnessProportionateSelection : ISelectionAlgorithm
     {
-        protected readonly Creature[] _creatures;
-        protected readonly double F = 0;
+        protected Creature[] _creatures;
+        protected double F = 0;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
-        internal FitnessProportionateSelection(Creature[] creatures)
+        internal FitnessProportionateSelection()
         {
-            _creatures = creatures.OrderByDescending(creature => creature.Fitness).ToArray();
-            foreach (var creature in creatures)
+        }
+
+        /// <summary>
+        /// Initializes the selection algorithm.
+        /// </summary>
+        /// <param name="population">The population to select from.</param>
+        public virtual void Initialize(IPopulation population)
+        {
+            _creatures = ((Population)population).Creatures.OrderByDescending(creature => creature.Fitness).ToArray();
+            foreach (var creature in _creatures)
             {
                 if (!(creature.Fitness > 0))
                     throw new InvalidOperationException("Error! Fitness porprtionate selction requires a positive fitness value");
@@ -35,7 +42,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Invokes the selection algorithm.
         /// </summary>
         /// <returns>The selected creature.</returns>
-        public virtual Creature Invoke()
+        public virtual ICreature Invoke()
         {
             var value = Stochastic.NextDouble() * F;
             foreach(var creature in _creatures)

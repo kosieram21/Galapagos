@@ -12,32 +12,38 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class TournamentSelection : ISelectionAlgorithm
     {
-        private readonly Creature[] _creatures;
-        private readonly int K = 2;
+        private Creature[] _creatures;
+        private readonly uint K = 2;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
+        /// Constructs a new instance of the <see cref="TournamentSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
-        internal TournamentSelection(Creature[] creatures)
-            : this(creatures, null) { }
+        internal TournamentSelection()
+            : this(null) { }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
+        /// Constructs a new instance of the <see cref="TournamentSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
         /// <param name="k">The tournament size.</param>
-        internal TournamentSelection(Creature[] creatures, int? k)
+        internal TournamentSelection(uint? k)
         {
-            if (k != null) K = (int)k;
-            _creatures = creatures;
+            if (k != null) K = (uint)k;
+        }
+
+        /// <summary>
+        /// Initializes the selection algorithm.
+        /// </summary>
+        /// <param name="population">The population to select from.</param>
+        public void Initialize(IPopulation population)
+        {
+            _creatures = ((Population)population).Creatures;
         }
 
         /// <summary>
         /// Invokes the selection algorithm.
         /// </summary>
         /// <returns>The selected creature.</returns>
-        public Creature Invoke()
+        public ICreature Invoke()
         {
             var size = _creatures.Count();
             Creature best = null;

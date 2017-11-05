@@ -12,8 +12,7 @@ namespace Galapagos.TerminationConditions
     /// </summary>
     public class FitnessPlateau : ITerminationCondition
     {
-        private readonly Population _population;
-        private readonly int _plateauLength;
+        private readonly uint _plateauLength;
 
         private double _bestFitness = 0;
         private int _count = 0;
@@ -21,23 +20,22 @@ namespace Galapagos.TerminationConditions
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessPlateau"/> class.
         /// </summary>
-        /// <param name="population">The creature population.</param>
         /// <param name="plateauLength">The fitness plateau length.</param>
-        internal FitnessPlateau(Population population, int plateauLength)
+        internal FitnessPlateau(uint plateauLength)
         {
-            _population = population;
             _plateauLength = plateauLength;
         }
 
         /// <summary>
         /// Checks the termination condition.
         /// </summary>
+        /// <param name="population">The population to check against.</param>
         /// <returns>A value indicating if evolution should terminate.</returns>
-        public bool Check()
+        public bool Check(IPopulation population)
         {
-            if (_population.OptimalCreature.TrueFitness > _bestFitness)
+            if (((Population)population).OptimalCreature.TrueFitness > _bestFitness)
             {
-                _bestFitness = _population.OptimalCreature.TrueFitness;
+                _bestFitness = ((Population)population).OptimalCreature.TrueFitness;
                 _count = 0;
             }
             else

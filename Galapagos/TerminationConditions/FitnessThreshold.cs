@@ -12,27 +12,25 @@ namespace Galapagos.TerminationConditions
     /// </summary>
     public class FitnessThreshold : ITerminationCondition
     {
-        private readonly Population _population;
         private readonly double _fitnessThreshold;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessThreshold"/> class.
         /// </summary>
-        /// <param name="population">The creature population.</param>
         /// <param name="fitnessThreshold">The fitness threshold.</param>
-        internal FitnessThreshold(Population population, double fitnessThreshold)
+        internal FitnessThreshold(double fitnessThreshold)
         {
-            _population = population;
             _fitnessThreshold = fitnessThreshold;
         }
 
         /// <summary>
         /// Checks the termination condition.
         /// </summary>
+        /// <param name="population">The population to check against.</param>
         /// <returns>A value indicating if evolution should terminate.</returns>
-        public bool Check()
+        public bool Check(IPopulation population)
         {
-            return _population.OptimalCreature.TrueFitness >= _fitnessThreshold;
+            return ((Population)population).OptimalCreature.TrueFitness >= _fitnessThreshold;
         }
     }
 }

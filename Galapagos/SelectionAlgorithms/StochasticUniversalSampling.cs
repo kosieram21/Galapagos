@@ -13,24 +13,30 @@ namespace Galapagos.SelectionAlgorithms
     public class StochasticUniversalSampling : FitnessProportionateSelection, ISelectionAlgorithm
     {
         private readonly IList<Creature> _selection = new List<Creature>();
-        private readonly int N = 100;
+        private readonly uint N = 100;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
-        internal StochasticUniversalSampling(Creature[] creatures) 
-            : this(creatures, null) { }
+        internal StochasticUniversalSampling() 
+            : this(null) { }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
         /// <param name="n">The number of creatures to select.</param>
-        internal StochasticUniversalSampling(Creature[] creatures, int? n)
-            : base(creatures)
+        internal StochasticUniversalSampling(uint? n)
         {
-            if (n != null) N = (int)n;
+            if (n != null) N = (uint)n;
+        }
+
+        /// <summary>
+        /// Initializes the selection algorithm.
+        /// </summary>
+        /// <param name="population">The population to select from.</param>
+        public override void Initialize(IPopulation population)
+        {
+            base.Initialize(population);
             ComputeSelection();
         }
 
@@ -38,7 +44,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Invokes the selection algorithm.
         /// </summary>
         /// <returns>The selected creature.</returns>
-        public override Creature Invoke()
+        public override ICreature Invoke()
         {
             var size = _selection.Count();
             var i = Stochastic.Next(size);

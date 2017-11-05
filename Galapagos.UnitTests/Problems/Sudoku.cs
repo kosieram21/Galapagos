@@ -130,11 +130,11 @@ namespace Galapagos.UnitTests.Problems
             return population.OptimalCreature;
         }
 
-        private CreatureMetadata ConstructCreatureMetadata()
+        private PopulationMetadata ConstructCreatureMetadata()
         {
             var chromosomeMetadata = ConstructChromosomeMetadata();
             var fitnessFunction = ConstructFitnessFunction();
-            return new CreatureMetadata(fitnessFunction, chromosomeMetadata);
+            return new PopulationMetadata(fitnessFunction, chromosomeMetadata);
         }
 
         private IList<ChromosomeMetadata> ConstructChromosomeMetadata()

@@ -12,9 +12,15 @@ namespace Galapagos.API
     public interface ISelectionAlgorithm
     {
         /// <summary>
+        /// Initializes the selection algorithm.
+        /// </summary>
+        /// <param name="population">The population to select from.</param>
+        void Initialize(IPopulation population);
+
+        /// <summary>
         /// Invokes the selection algorithm.
         /// </summary>
         /// <returns>The selected creature.</returns>
-        Creature Invoke();
+        ICreature Invoke();
     }
 }

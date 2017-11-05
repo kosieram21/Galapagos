@@ -37,8 +37,9 @@ namespace Galapagos.TerminationConditions
         /// <summary>
         /// Checks the termination condition.
         /// </summary>
+        /// <param name="population">The population to check against.</param>
         /// <returns>A value indicating if evolution should terminate.</returns>
-        public bool Check()
+        public bool Check(IPopulation population)
         {
             if (!_stopWatch.IsRunning)
                 _stopWatch.Start();

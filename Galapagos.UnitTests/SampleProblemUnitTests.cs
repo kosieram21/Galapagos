@@ -7,7 +7,7 @@ using Galapagos.UnitTests.Problems;
 namespace Galapagos.UnitTests
 {
     [TestClass]
-    public class SampleProblemIntegrationTests
+    public class SampleProblemUnitTests
     {
         private const int WAIT_TIME = 5000;
 

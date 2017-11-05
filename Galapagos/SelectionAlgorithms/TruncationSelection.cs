@@ -14,26 +14,32 @@ namespace Galapagos.SelectionAlgorithms
     {
         private readonly Random _rng = new Random(DateTime.Now.Millisecond);
 
-        private readonly Creature[] _creatures;
-        private readonly List<Creature> _truncation;
+        private Creature[] _creatures;
+        private List<Creature> _truncation;
         private readonly double _truncationRate = 0.33;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
-        internal TruncationSelection(Creature[] creatures)
-            : this(creatures, null) { }
+        internal TruncationSelection()
+            : this(null) { }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="FitnessProportionateSelection"/> class.
         /// </summary>
-        /// <param name="creatures">The creature population.</param>
         /// <param name="truncationRate">The truncation rate.</param>
-        internal TruncationSelection(Creature[] creatures, double? truncationRate)
+        internal TruncationSelection(double? truncationRate)
         {
             if (truncationRate != null) _truncationRate = (double)truncationRate;
-            _creatures = creatures;
+        }
+
+        /// <summary>
+        /// Initializes the selection algorithm.
+        /// </summary>
+        /// <param name="population">The population to select from.</param>
+        public void Initialize(IPopulation population)
+        {
+            _creatures = ((Population)population).Creatures;
             _truncation = ComputeTruncation();
         }
 
@@ -41,7 +47,7 @@ namespace Galapagos.SelectionAlgorithms
         /// Invokes the selection algorithm.
         /// </summary>
         /// <returns>The selected creature.</returns>
-        public Creature Invoke()
+        public ICreature Invoke()
         {
             var size = _creatures.Count();
             var i = Stochastic.Next((size * _truncationRate) - 1);

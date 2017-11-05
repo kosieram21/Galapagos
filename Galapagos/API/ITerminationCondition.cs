@@ -14,7 +14,8 @@ namespace Galapagos.API
         /// <summary>
         /// Checks the termination condition.
         /// </summary>
+        /// <param name="population">The population to check against.</param>
         /// <returns>A value indicating if evolution should terminate.</returns>
-        bool Check();
+        bool Check(IPopulation population);
     }
 }

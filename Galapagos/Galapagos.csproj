@@ -43,6 +43,7 @@
     <Compile Include="API\ICreature.cs" />
     <Compile Include="API\IPopulationMetadata.cs" />
     <Compile Include="API\IPopulation.cs" />
+    <Compile Include="API\Session.cs" />
     <Compile Include="Chromosomes\BinaryChromosome.cs" />
     <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />

@@ -9,7 +9,9 @@ using Galapagos.API.Factory;
 
 namespace Galapagos.Metadata.Parser
 {
-    public static class MetadataParser
+    //TODO: Clean up chromosome metadata parse logic.
+
+    internal static class MetadataParser
     {
         /// <summary>
         /// Parses the given population metadata file.

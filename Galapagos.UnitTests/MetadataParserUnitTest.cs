@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Galapagos.Metadata.Parser;
+using Galapagos.API;
 
 namespace Galapagos.UnitTests
 {
@@ -12,7 +12,7 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void MetadataParseTest()
         {
-            var metadata = MetadataParser.Parse(FILE_PATH);
+            var metadata = Session.Instance.LoadMetadata(FILE_PATH, null);
         }
     }
 }

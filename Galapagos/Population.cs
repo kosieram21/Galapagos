@@ -71,8 +71,12 @@ namespace Galapagos
         /// <summary>
         /// Gets or sets the creature best suited to solve the propblem.
         /// </summary>
-        ICreature IPopulation.OptimalCreature => OptimalCreature as ICreature;
-        internal Creature OptimalCreature
+        public ICreature OptimalCreature => InternalOptimalCreature as ICreature;
+
+        /// <summary>
+        /// Internal optimal creature getter/setter.
+        /// </summary>
+        internal Creature InternalOptimalCreature
         {
             get
             {
@@ -157,10 +161,10 @@ namespace Galapagos
                 if (_loggingEnabled)
                 {
                     //Temp until better logging infrastructure is established.
-                    var msg = $"Generation: {_generation}, Fitness: {OptimalCreature.Fitness}";
+                    var msg = $"Generation: {_generation}, Fitness: {InternalOptimalCreature.Fitness}";
                     Console.WriteLine(msg);
                     System.Diagnostics.Debug.WriteLine(msg);
-                    if (_logger != null) _logger.Log(_generation, OptimalCreature.Fitness);
+                    if (_logger != null) _logger.Log(_generation, InternalOptimalCreature.Fitness);
                 }
 
                 if (_populationMetadata.TerminationConditions.Any(condition => condition.Check(this)))

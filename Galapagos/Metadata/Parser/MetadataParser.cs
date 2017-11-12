@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Galapagos.API;
 using Galapagos.API.Factory;
+using System.Text.RegularExpressions;
 
 namespace Galapagos.Metadata.Parser
 {
@@ -152,7 +153,7 @@ namespace Galapagos.Metadata.Parser
                 if (child.Name.ToString() != "Chromosome")
                     throw new ArgumentException($"Error! {child.Name} is not a valid child element of Chromosomes.");
 
-                chromosomes.Add(ParseChromosome(child));
+                chromosomes.AddRange(ParseChromosome(child));
             }
 
             return chromosomes;
@@ -163,11 +164,12 @@ namespace Galapagos.Metadata.Parser
         /// </summary>
         /// <param name="element">The Chromosome element.</param>
         /// <returns>The parsed chromosome.</returns>
-        private static IChromosomeMetadata ParseChromosome(XElement element)
+        private static IList<IChromosomeMetadata> ParseChromosome(XElement element)
         {
             var attributes = element.Attributes();
             var nameAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Name");
             var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
+            var repeatAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Repeat");
 
             if (nameAttribute == null)
                 throw new ArgumentException("Error! Chromosome element must contain a Name attribute.");
@@ -176,56 +178,69 @@ namespace Galapagos.Metadata.Parser
                 throw new ArgumentException("Error! Chromosome element must contain a Type attribute.");
 
             var type = (ChromosomeType)Enum.Parse(typeof(ChromosomeType), typeAttribute.Value);
+            var repeat = repeatAttribute == null ? 1 : Int32.Parse(repeatAttribute.Value);
 
-            ChromosomeMetadata chromosomeMetadata = type == ChromosomeType.Binary ?
-                new BinaryChromosomeMetadata() as ChromosomeMetadata : 
-                new PermutationChromosomeMetadata() as ChromosomeMetadata;
+            if (repeat < 0)
+                throw new ArgumentException("Error! Repeat attribute must be a positive value.");
 
-            foreach (var attribute in element.Attributes())
+            var chromosomeMetadataList = new List<IChromosomeMetadata>();
+
+            for (var i = 0; i < repeat; i++)
             {
-                switch (attribute.Name.ToString())
+
+                ChromosomeMetadata chromosomeMetadata = type == ChromosomeType.Binary ?
+                    new BinaryChromosomeMetadata() as ChromosomeMetadata :
+                    new PermutationChromosomeMetadata() as ChromosomeMetadata;
+
+                foreach (var attribute in element.Attributes())
                 {
-                    case "Name":
-                        chromosomeMetadata.Name = attribute.Value;
-                        break;
-                    case "Type":
-                        break;
-                    case "GeneCount":
-                        chromosomeMetadata.GeneCount = UInt32.Parse(attribute.Value);
-                        break;
-                    case "CrossoverRate":
-                        chromosomeMetadata.CrossoverRate = Double.Parse(attribute.Value);
-                        break;
-                    case "MutationRate":
-                        chromosomeMetadata.MutationRate = Double.Parse(attribute.Value);
-                        break;
-                    default:
-                        throw new ArgumentException($"Error! {attribute.Name} is not a valid Chromosome attribute.");
+                    switch (attribute.Name.ToString())
+                    {
+                        case "Name":
+                            chromosomeMetadata.Name = Regex.Replace(attribute.Value, "%i", $"{i}");
+                            break;
+                        case "GeneCount":
+                            chromosomeMetadata.GeneCount = UInt32.Parse(attribute.Value);
+                            break;
+                        case "CrossoverRate":
+                            chromosomeMetadata.CrossoverRate = Double.Parse(attribute.Value);
+                            break;
+                        case "MutationRate":
+                            chromosomeMetadata.MutationRate = Double.Parse(attribute.Value);
+                            break;
+                        case "Type":
+                        case "Repeat":
+                            break;
+                        default:
+                            throw new ArgumentException($"Error! {attribute.Name} is not a valid Chromosome attribute.");
+                    }
                 }
+
+                foreach (var child in element.Elements())
+                {
+                    switch (child.Name.ToString())
+                    {
+                        case "Crossovers":
+                            if (type == ChromosomeType.Binary)
+                                ParseBinaryCrossovers(chromosomeMetadata, child);
+                            else if (type == ChromosomeType.Permutation)
+                                ParsePermutationCrossovers(chromosomeMetadata, child);
+                            break;
+                        case "Mutations":
+                            if (type == ChromosomeType.Binary)
+                                ParseBinaryMutations(chromosomeMetadata, child);
+                            else if (type == ChromosomeType.Permutation)
+                                ParsePermutationMutations(chromosomeMetadata, child);
+                            break;
+                        default:
+                            throw new AggregateException($"Error! {child.Name} is not a valid child element of Chromosome.");
+                    }
+                }
+
+                chromosomeMetadataList.Add(chromosomeMetadata as IChromosomeMetadata);
             }
 
-            foreach (var child in element.Elements())
-            {
-                switch (child.Name.ToString())
-                {
-                    case "Crossovers":
-                        if (type == ChromosomeType.Binary)
-                            ParseBinaryCrossovers(chromosomeMetadata, child);
-                        else if (type == ChromosomeType.Permutation)
-                            ParsePermutationCrossovers(chromosomeMetadata, child);
-                        break;
-                    case "Mutations":
-                        if (type == ChromosomeType.Binary)
-                            ParseBinaryMutations(chromosomeMetadata, child);
-                        else if (type == ChromosomeType.Permutation)
-                            ParsePermutationMutations(chromosomeMetadata, child);
-                        break;
-                    default:
-                        throw new AggregateException($"Error! {child.Name} is not a valid child element of Chromosome.");
-                }
-            }
-
-            return chromosomeMetadata;
+            return chromosomeMetadataList;
         }
 
         /// <summary>

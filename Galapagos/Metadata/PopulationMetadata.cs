@@ -59,7 +59,7 @@ namespace Galapagos.Metadata
         /// <summary>
         /// Gets the termination conditions.
         /// </summary>
-        public List<ITerminationCondition> TerminationConditions
+        public IReadOnlyList<ITerminationCondition> TerminationConditions
         {
             get
             {

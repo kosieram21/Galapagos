@@ -31,7 +31,7 @@ namespace Galapagos.API
         /// <summary>
         /// Gets the termination conditions.
         /// </summary>
-        List<ITerminationCondition> TerminationConditions { get; }
+        IReadOnlyList<ITerminationCondition> TerminationConditions { get; }
 
         /// <summary>
         /// Gets the fitness function.

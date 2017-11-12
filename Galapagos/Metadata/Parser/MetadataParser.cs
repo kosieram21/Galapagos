@@ -96,7 +96,7 @@ namespace Galapagos.Metadata.Parser
 
             var algorithm = (SelectionAlgorithm)Enum.Parse(typeof(SelectionAlgorithm), typeAttribute.Value);
 
-            return GeneticFactory.ConstructSelectionAlgorithm(algorithm, argAttribute.Value);
+            return GeneticFactory.ConstructSelectionAlgorithm(algorithm, argAttribute?.Value);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Galapagos.Metadata.Parser
 
             var condition = (TerminationCondition)Enum.Parse(typeof(TerminationCondition), typeAttribute.Value);
 
-            return GeneticFactory.ConstructTerminationCondition(condition, argAttribute.Value);
+            return GeneticFactory.ConstructTerminationCondition(condition, argAttribute?.Value);
         }
 
         /// <summary>

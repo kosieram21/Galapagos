@@ -28,7 +28,13 @@ namespace Galapagos
         {
             _populationMetadata = populationMetadata;
             foreach (var chromosomeMetadata in populationMetadata)
-                _chromosomes.Add(chromosomeMetadata.Name, GeneticFactory.ConstructChromosome(chromosomeMetadata));
+            {
+                if (_chromosomes.ContainsKey(chromosomeMetadata.Name))
+                    throw new ArgumentException($"Error! Creature already contain a chromosome named {chromosomeMetadata.Name}");
+
+                _chromosomes.Add(chromosomeMetadata.Name,
+                    GeneticFactory.ConstructChromosome(chromosomeMetadata.Type, chromosomeMetadata.GeneCount));
+            }
         }
 
         /// <summary>

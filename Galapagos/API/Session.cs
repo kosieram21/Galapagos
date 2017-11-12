@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Linq;
 using System.Reflection;
 using Galapagos.Metadata;
 using Galapagos.Metadata.Parser;
@@ -30,7 +31,25 @@ namespace Galapagos.API
             path = Path.HasExtension(path) ? Path.ChangeExtension(path, "xml") : $"{path}.xml";
             path = parts.Count() != 1 ? path : Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), path);
 
-            var metadata = MetadataParser.Parse(path) as PopulationMetadata;
+            var xDoc = XDocument.Load(path);
+
+            var metadata = MetadataParser.Parse(xDoc) as PopulationMetadata;
+            metadata.FitnessFunction = fitnessFunction;
+
+            return metadata as IPopulationMetadata;
+        }
+
+        /// <summary>
+        /// Loads the metadata XML file from the given stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="fitnessFunction">The fitness function.</param>
+        /// <returns>The parsed metadata.</returns>
+        public IPopulationMetadata LoadMetadata(Stream stream, Func<ICreature, double> fitnessFunction)
+        {
+            var xDoc = XDocument.Load(stream);
+
+            var metadata = MetadataParser.Parse(xDoc) as PopulationMetadata;
             metadata.FitnessFunction = fitnessFunction;
 
             return metadata as IPopulationMetadata;

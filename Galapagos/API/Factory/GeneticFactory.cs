@@ -170,16 +170,17 @@ namespace Galapagos.API.Factory
         /// <summary>
         /// Constructs a chromosome from metadata.
         /// </summary>
-        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="chromosomeType">The chromosome type.</param>
+        /// <param name="geneCount">The gene count.</param>
         /// <returns>The chromosome.</returns>
-        public static IChromosome ConstructChromosome(IChromosomeMetadata chromosomeMetadata)
+        public static IChromosome ConstructChromosome(ChromosomeType chromosomeType, uint geneCount)
         {
-            switch (chromosomeMetadata.Type)
+            switch (chromosomeType)
             {
                 case ChromosomeType.Binary:
-                    return new BinaryChromosome(chromosomeMetadata.GeneCount);
+                    return new BinaryChromosome(geneCount);
                 case ChromosomeType.Permutation:
-                    return new PermutationChromosome(chromosomeMetadata.GeneCount);
+                    return new PermutationChromosome(geneCount);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }
@@ -189,12 +190,12 @@ namespace Galapagos.API.Factory
         /// Constructs a chromosome from metadata.
         /// </summary>
         /// <typeparam name="T">The array data type.</typeparam>
-        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="chromosomeType">The chromosome type.</param>
         /// <param name="genes">The chromosome genes genes.</param>
         /// <returns>The chromosome.</returns>
-        public static IChromosome ConstructChromosome<T>(IChromosomeMetadata chromosomeMetadata, T[] genes)
+        public static IChromosome ConstructChromosome<T>(ChromosomeType chromosomeType, T[] genes)
         {
-            switch(chromosomeMetadata.Type)
+            switch(chromosomeType)
             {
                 case ChromosomeType.Binary:
                     return new BinaryChromosome(genes as bool[]);

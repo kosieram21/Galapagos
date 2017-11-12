@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Galapagos.Chromosomes;
@@ -14,7 +14,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private BinaryChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(new BinaryChromosomeMetadata("NULL", GENE_COUNT)) 
+            return GeneticFactory.ConstructChromosome(ChromosomeType.Binary, GENE_COUNT) 
                 as BinaryChromosome;
         }
 
@@ -117,4 +117,4 @@ namespace Galapagos.UnitTests.MutationTests
             VerifyChangeOccured(chromosome, mutation);
         }
     }
-}*/
+}

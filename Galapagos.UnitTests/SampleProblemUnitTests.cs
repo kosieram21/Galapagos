@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Threading;
@@ -24,11 +24,11 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void NQueensTest()
         {
-            var puzzle = new NQueens(15);
+            var puzzle = new NQueens();
             var solution = puzzle.Solve();
             NQueens.PrintBoard(solution);
 
             Thread.Sleep(WAIT_TIME);
         }
     }
-}*/
+}

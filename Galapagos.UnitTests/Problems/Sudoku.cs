@@ -1,10 +1,9 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using Galapagos;
 using Galapagos.API;
 
 namespace Galapagos.UnitTests.Problems
@@ -86,21 +85,6 @@ namespace Galapagos.UnitTests.Problems
         private readonly char[,] _initialBoard;
         private readonly IList<IList<char>> _unknownValues = new List<IList<char>>();
 
-        private const int POPULATION_SIZE = 7500;
-
-        private const uint FITNESS_THRESHOLD = 18;
-        private const int PLATEAU_LENGTH = 100;
-        private const int TOURNAMENT_SIZE = 5;
-
-        private const bool ELITISM = true;
-        private const double SURVIVAL_RATE = 0.33;
-
-        private const double CROSSOVER_RATE = 1;
-        private const PermutationCrossover CROSSOVER_OPERATORS = PermutationCrossover.AlternatingPosition |PermutationCrossover.Midpoint;
-
-        private const double MUTATION_RATE = 0.25;
-        private const PermutationMutation MUTATION_OPERATORS = PermutationMutation.Transposition | PermutationMutation.Reverse | PermutationMutation.Randomization;
-
         public Sudoku(char[,] initialBoard)
         {
             _initialBoard = initialBoard;
@@ -110,38 +94,21 @@ namespace Galapagos.UnitTests.Problems
         {
             while (true)
             {
-                var solution = EvolveSolution();
-                if (solution.Fitness >= FITNESS_THRESHOLD)
-                    return ConstructBoard(solution);
+                var metadata = GetPopulationMetadata();
+                var population = Session.Instance.CreatePopulation(metadata);
+
+                population.EnableLogging();
+                population.ParallelEvolve();
+
+                if (population.OptimalCreature.Fitness >= 18)
+                    return ConstructBoard(population.OptimalCreature);
             }
         }
 
-        private ICreature EvolveSolution()
+        private IPopulationMetadata GetPopulationMetadata()
         {
-            var geneticDescription = ConstructCreatureMetadata();
-            var population = Population.Create(POPULATION_SIZE, geneticDescription);
+            var metadata = Session.Instance.LoadMetadata(Metadata.Sudoku, FitnessFunction);
 
-            population.EnableLogging();
-            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
-            population.RegisterTerminationCondition(TerminationCondition.FitnessPlateau, PLATEAU_LENGTH);
-            if (ELITISM) population.EnableElitism(SURVIVAL_RATE);
-            population.ParallelEvolve(SelectionAlgorithm.Tournament, TOURNAMENT_SIZE);
-
-            return population.OptimalCreature;
-        }
-
-        private PopulationMetadata ConstructCreatureMetadata()
-        {
-            var chromosomeMetadata = ConstructChromosomeMetadata();
-            var fitnessFunction = ConstructFitnessFunction();
-            return new PopulationMetadata(fitnessFunction, chromosomeMetadata);
-        }
-
-        private IList<ChromosomeMetadata> ConstructChromosomeMetadata()
-        {
-            var metadata = new List<ChromosomeMetadata>();
-
-            _unknownValues.Clear();
             for (var i = 0; i < 9; i++)
             {
                 _unknownValues.Add(new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9' });
@@ -152,67 +119,35 @@ namespace Galapagos.UnitTests.Problems
                         _unknownValues[i].Remove(_initialBoard[i, j]);
                 }
 
-                metadata.Add(new PermutationChromosomeMetadata($"Row{i}", (uint)_unknownValues[i].Count, 
-                    CROSSOVER_RATE, MUTATION_RATE, CROSSOVER_OPERATORS, MUTATION_OPERATORS));
+                metadata[i].GeneCount = (uint)_unknownValues[i].Count;
             }
 
             return metadata;
         }
 
-        private Func<ICreature, double> ConstructFitnessFunction()
+        private double FitnessFunction(ICreature creature)
         {
-            return (creature) =>
-            {
-                uint fitness = 0;
+            uint fitness = 0;
 
-                var board = ConstructBoard(creature);
-                for (var i = 0; i < 9; i++)
-                {
-                    var column = GetColumn(board, i);
-                    if (EvaluateRegion(column))
-                        fitness++;
-                }
-
-                for (var i = 0; i < 3; i++)
-                {
-                    for (var j = 0; j < 3; j++)
-                    {
-                        var box = GetBox(board, i, j);
-                        if (EvaluateRegion(box))
-                            fitness++;
-                    }
-                }
-
-                return fitness;
-            };
-        }
-
-        private uint[,] ConstructBoard(ICreature creature)
-        {
-            var board = new uint[9, 9];
-
+            var board = ConstructBoard(creature);
             for (var i = 0; i < 9; i++)
             {
-                var permutation = creature.GetChromosome<IPermutationChromosome>($"Row{i}");
-                var permutationIndex = 0;
-                var row = new uint[9];
+                var column = GetColumn(board, i);
+                if (EvaluateRegion(column))
+                    fitness++;
+            }
 
-                for (var j = 0; j < 9; j++)
+            for (var i = 0; i < 3; i++)
+            {
+                for (var j = 0; j < 3; j++)
                 {
-                    if (_initialBoard[i, j] == '?')
-                    {
-                        var index = (int)permutation[permutationIndex];
-                        board[i, j] = (uint)(_unknownValues[i][index] - '0');
-                        permutationIndex++;
-                    }
-                    else
-                    {
-                        board[i, j] = (uint)(_initialBoard[i, j] - '0');
-                    }
+                    var box = GetBox(board, i, j);
+                    if (EvaluateRegion(box))
+                        fitness++;
                 }
             }
 
-            return board;
+            return fitness;
         }
 
         private uint[] GetColumn(uint[,] board, int columnIndex)
@@ -251,6 +186,34 @@ namespace Galapagos.UnitTests.Problems
             return seen.All(o => o);
         }
 
+        private uint[,] ConstructBoard(ICreature creature)
+        {
+            var board = new uint[9, 9];
+
+            for (var i = 0; i < 9; i++)
+            {
+                var permutation = creature.GetChromosome<IPermutationChromosome>($"Row{i}");
+                var permutationIndex = 0;
+                var row = new uint[9];
+
+                for (var j = 0; j < 9; j++)
+                {
+                    if (_initialBoard[i, j] == '?')
+                    {
+                        var index = (int)permutation[permutationIndex];
+                        board[i, j] = (uint)(_unknownValues[i][index] - '0');
+                        permutationIndex++;
+                    }
+                    else
+                    {
+                        board[i, j] = (uint)(_initialBoard[i, j] - '0');
+                    }
+                }
+            }
+
+            return board;
+        }
+
         public static void PrintBoard(uint[,] board)
         {
             for (var i = 0; i < 9; i++)
@@ -263,4 +226,4 @@ namespace Galapagos.UnitTests.Problems
             }
         }
     }
-}*/
+}

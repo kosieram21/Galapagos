@@ -1,74 +1,42 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using Galapagos;
 using Galapagos.API;
 
 namespace Galapagos.UnitTests.Problems
 {
     class NQueens
     {
-        private const uint POPULATION_SIZE = 100;
-        private const uint GENERATION_THRESHOLD = 1000;
-        private readonly int FITNESS_THRESHOLD;
-        private readonly PopulationMetadata CREATURE_METADATA;
-
-        public NQueens(uint boardSize)
-        {
-            FITNESS_THRESHOLD = GetFitnessThreshold(boardSize);
-
-            CREATURE_METADATA = new PopulationMetadata(creature => 
-            {
-                var ordering = creature.GetChromosome<IPermutationChromosome>("ordering");
-                double fitness = 0;
-
-                for(var i = 1; i < ordering.Count(); i++)
-                {
-                    for(var j = 1; j < i + 1; j++)
-                    {
-                        if ((ordering[i] != (ordering[i -j] - j)) &&
-                            (ordering[i] != (ordering[i - j] + j)))
-                            fitness++;
-                    }
-                }
-
-                return fitness;
-            });
-
-            var orderingMetadata = new PermutationChromosomeMetadata("ordering", boardSize, 1, 0.25);
-            orderingMetadata.AddCrossoverOperators(PermutationCrossover.Order);
-            orderingMetadata.AddMutationOperators(PermutationMutation.Transposition | PermutationMutation.CyclicShift, 2);
-            orderingMetadata.AddMutationOperators(PermutationMutation.Randomization, 1);
-
-            CREATURE_METADATA.AddChromosomeMetadata(orderingMetadata);
-        }
-
         public uint[] Solve()
         {
-            while (true)
-            {
-                var solution = Evolve();
-                if (solution.Fitness >= FITNESS_THRESHOLD)
-                    return solution.GetChromosome<IPermutationChromosome>("ordering").ToArray();
-            }
+            var metadata = Session.Instance.LoadMetadata(Metadata.NQueens, FitnessFunction);
+            var population = Session.Instance.CreatePopulation(metadata);
+
+            population.EnableLogging();
+            population.Evolve();
+
+            return population.OptimalCreature.GetChromosome<IPermutationChromosome>("ordering").ToArray();
         }
 
-        private ICreature Evolve()
+        private double FitnessFunction(ICreature creature)
         {
-            var population = Population.Create(POPULATION_SIZE, CREATURE_METADATA);
-            population.EnableLogging();
+            var ordering = creature.GetChromosome<IPermutationChromosome>("ordering");
+            double fitness = 0;
 
-            //population.EnableNiches(50);
+            for (var i = 1; i < ordering.Count(); i++)
+            {
+                for (var j = 1; j < i + 1; j++)
+                {
+                    if ((ordering[i] != (ordering[i - j] - j)) &&
+                        (ordering[i] != (ordering[i - j] + j)))
+                        fitness++;
+                }
+            }
 
-            population.RegisterTerminationCondition(TerminationCondition.GenerationThreshold, GENERATION_THRESHOLD);
-            population.RegisterTerminationCondition(TerminationCondition.FitnessThreshold, FITNESS_THRESHOLD);
-
-            population.Evolve(SelectionAlgorithm.Tournament, 5);
-
-            return population.OptimalCreature;
+            return fitness;
         }
 
         public static void PrintBoard(uint[] board)
@@ -86,13 +54,5 @@ namespace Galapagos.UnitTests.Problems
                 Debug.WriteLine(row.ToString());
             }
         }
-
-        private int GetFitnessThreshold(uint size)
-        {
-            var sum = 0;
-            for (var i = 1; i < size; i++)
-                sum += i;
-            return sum;
-        }
     }
-}*/
+}

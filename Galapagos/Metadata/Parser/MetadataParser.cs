@@ -17,11 +17,10 @@ namespace Galapagos.Metadata.Parser
         /// <summary>
         /// Parses the given population metadata file.
         /// </summary>
-        /// <param name="path">The population metadata file path.</param>
+        /// <param name="xDoc">The metadata document.</param>
         /// <returns>The parsed population metadata.</returns>
-        public static IPopulationMetadata Parse(string path)
+        public static IPopulationMetadata Parse(XDocument xDoc)
         {
-            var xDoc = XDocument.Load(path);
             var root = XElement.Parse(xDoc.ToString());
 
             if (root.Name.ToString() != "Population")

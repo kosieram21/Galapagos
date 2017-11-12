@@ -40,7 +40,7 @@ namespace Galapagos.Metadata
         /// <summary>
         /// The chromosome name.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The chromosome type.
@@ -50,17 +50,17 @@ namespace Galapagos.Metadata
         /// <summary>
         /// The number of genes in the chromosome.
         /// </summary>
-        public uint GeneCount { get; internal set; }
+        public uint GeneCount { get; set; }
 
         /// <summary>
         /// The crossover rate.
         /// </summary>
-        public double CrossoverRate { get; internal set; }
+        public double CrossoverRate { get; set; }
 
         /// <summary>
         /// The mutation rate.
         /// </summary>
-        public double MutationRate { get; internal set; }
+        public double MutationRate { get; set; }
 
         /// <summary>
         /// Gets a crossover from the metadata.

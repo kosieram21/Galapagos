@@ -9,19 +9,19 @@ namespace Galapagos.API
     public interface IPopulationMetadata : IEnumerable<IChromosomeMetadata>
     {
         /// <summary>
-        /// Gets the population size.
+        /// Gets or sets the population size.
         /// </summary>
-        uint Size { get; }
+        uint Size { get; set; }
 
         /// <summary>
-        /// Gets the survival rate used in elitism. A survival rate of 0 disables elitism.
+        /// Gets or sets the survival rate used in elitism. A survival rate of 0 disables elitism.
         /// </summary>
-        double SurvivalRate { get; }
+        double SurvivalRate { get; set; }
 
         /// <summary>
-        /// Gets the distance threshold for niches. A distance threshold of 0 disable niches.
+        /// Gets or sets the distance threshold for niches. A distance threshold of 0 disable niches.
         /// </summary>
-        uint DistanceThreshold { get; }
+        uint DistanceThreshold { get; set; }
         
         /// <summary>
         /// Gets the selection algorithm.

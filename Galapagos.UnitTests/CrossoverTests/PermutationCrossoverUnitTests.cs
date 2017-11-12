@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,7 +15,7 @@ namespace Galapagos.UnitTests.CrossoverTests
 
         private PermutationChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(new PermutationChromosomeMetadata("NULL", GENE_COUNT))
+            return GeneticFactory.ConstructChromosome(ChromosomeType.Permutation, GENE_COUNT)
                 as PermutationChromosome;
         }
 
@@ -135,4 +135,4 @@ namespace Galapagos.UnitTests.CrossoverTests
             return true;
         }
     }
-}*/
+}

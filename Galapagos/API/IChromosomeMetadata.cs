@@ -11,7 +11,7 @@ namespace Galapagos.API
         /// <summary>
         /// The chromosome name.
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
 
         /// <summary>
         /// The chromosome type.
@@ -21,17 +21,17 @@ namespace Galapagos.API
         /// <summary>
         /// The number of genes in the chromosome.
         /// </summary>
-        uint GeneCount { get; }
+        uint GeneCount { get; set; }
 
         /// <summary>
         /// The crossover rate.
         /// </summary>
-        double CrossoverRate { get; }
+        double CrossoverRate { get; set; }
 
         /// <summary>
         /// The mutation rate.
         /// </summary>
-        double MutationRate { get; }
+        double MutationRate { get; set; }
 
         /// <summary>
         /// Gets a crossover from the metadata.

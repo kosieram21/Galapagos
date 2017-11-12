@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Galapagos.Chromosomes;
 using Galapagos.API;
@@ -12,9 +12,9 @@ namespace Galapagos.UnitTests.ChromosomeTests
         [TestMethod]
         public void DistanceTest()
         {
-            var x = GeneticFactory.ConstructChromosome(new PermutationChromosomeMetadata("x", 5), 
+            var x = GeneticFactory.ConstructChromosome(ChromosomeType.Permutation, 
                 new uint[] { 0, 1, 2, 3, 4 });
-            var y = GeneticFactory.ConstructChromosome(new PermutationChromosomeMetadata("y", 5), 
+            var y = GeneticFactory.ConstructChromosome(ChromosomeType.Permutation, 
                 new uint[] { 1, 3, 0, 2, 4 });
 
             var distance = x.Distance(y);
@@ -22,4 +22,4 @@ namespace Galapagos.UnitTests.ChromosomeTests
             Assert.AreEqual((uint)3, distance);
         }
     }
-}*/
+}

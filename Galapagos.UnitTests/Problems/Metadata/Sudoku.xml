@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Population Size="7500" SurvivalRate="0.33">
+  <SelectionAlgorithm Type="Tournament" Arg="5" />
+  <TerminationConditions>
+    <TerminationCondition Type="FitnessThreshold" Arg="18" />
+    <TerminationCondition Type="FitnessPlateau" Arg="100" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Repeat="9" Name="Row%i" Type="Permutation" CrossoverRate="1" MutationRate="0.25">
+      <Crossovers>
+        <Crossover Type="AlternatingPosition, Midpoint" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Transposition, Reverse, Randomization" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

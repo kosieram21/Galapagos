@@ -37,19 +37,19 @@ namespace Galapagos.Metadata
         }
 
         /// <summary>
-        /// Gets the population size.
+        /// Gets or sets the population size.
         /// </summary>
-        public uint Size { get; internal set; }
+        public uint Size { get; set; }
 
         /// <summary>
-        /// Gets the survival rate used in elitism. A survival rate of 0 disables elitism.
+        /// Gets or sets the survival rate used in elitism. A survival rate of 0 disables elitism.
         /// </summary>
-        public double SurvivalRate { get; internal set; }
+        public double SurvivalRate { get; set; }
 
         /// <summary>
-        /// Gets the distance threshold for niches. A distance threshold of 0 disable niches.
+        /// Gets or sets the distance threshold for niches. A distance threshold of 0 disable niches.
         /// </summary>
-        public uint DistanceThreshold { get; internal set; }
+        public uint DistanceThreshold { get; set; }
 
         /// <summary>
         /// Gets the selection algorithm.

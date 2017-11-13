@@ -14,6 +14,7 @@ namespace Galapagos.UnitTests.Problems
     // + M O R E
     // ---------
     // M O N E Y
+
     class Cryptarithmetic
     {
         public uint[] Solve()

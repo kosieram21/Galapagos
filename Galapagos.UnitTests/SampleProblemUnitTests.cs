@@ -38,7 +38,7 @@ namespace Galapagos.UnitTests
             var solution = puzzle.Solve();
             Cryptarithmetic.PrintMapping(solution);
 
-            Thread.Sleep(WAIT_TIME * 100);
+            Thread.Sleep(WAIT_TIME);
         }
     }
 }

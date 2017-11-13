@@ -98,9 +98,9 @@ namespace Galapagos.UnitTests.Problems
                 var population = Session.Instance.CreatePopulation(metadata);
 
                 population.EnableLogging();
-                population.ParallelEvolve();
+                population.Evolve();
 
-                if (population.OptimalCreature.Fitness >= 18)
+                if (population.OptimalCreature.Fitness >= 19)
                     return ConstructBoard(population.OptimalCreature);
             }
         }
@@ -147,7 +147,7 @@ namespace Galapagos.UnitTests.Problems
                 }
             }
 
-            return fitness;
+            return fitness + 1;
         }
 
         private uint[] GetColumn(uint[,] board, int columnIndex)

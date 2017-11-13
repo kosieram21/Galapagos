@@ -12,7 +12,7 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class TournamentSelection : ISelectionAlgorithm
     {
-        private Creature[] _creatures;
+        private ICreature[] _creatures;
         private readonly uint K = 2;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <param name="population">The population to select from.</param>
         public void Initialize(IPopulation population)
         {
-            _creatures = ((Population)population).Creatures;
+            _creatures = ((Species)population).ToArray();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Galapagos.SelectionAlgorithms
         public ICreature Invoke()
         {
             var size = _creatures.Count();
-            Creature best = null;
+            ICreature best = null;
 
             for (var i = 0; i < K; i++)
             {

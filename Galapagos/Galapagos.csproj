@@ -88,6 +88,7 @@
     <Compile Include="SelectionAlgorithms\StochasticUniversalSampling.cs" />
     <Compile Include="SelectionAlgorithms\TournamentSelection.cs" />
     <Compile Include="SelectionAlgorithms\TruncationSelection.cs" />
+    <Compile Include="Species.cs" />
     <Compile Include="Stochastic.cs" />
     <Compile Include="TerminationConditions\FitnessPlateau.cs" />
     <Compile Include="TerminationConditions\FitnessThreshold.cs" />

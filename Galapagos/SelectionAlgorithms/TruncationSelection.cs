@@ -14,8 +14,8 @@ namespace Galapagos.SelectionAlgorithms
     {
         private readonly Random _rng = new Random(DateTime.Now.Millisecond);
 
-        private Creature[] _creatures;
-        private List<Creature> _truncation;
+        private ICreature[] _creatures;
+        private List<ICreature> _truncation;
         private readonly double _truncationRate = 0.33;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <param name="population">The population to select from.</param>
         public void Initialize(IPopulation population)
         {
-            _creatures = ((Population)population).Creatures;
+            _creatures = ((Species)population).ToArray();
             _truncation = ComputeTruncation();
         }
 
@@ -59,10 +59,10 @@ namespace Galapagos.SelectionAlgorithms
         /// Computes a trunctation.
         /// </summary>
         /// <returns>The truncation.</returns>
-        private List<Creature> ComputeTruncation()
+        private List<ICreature> ComputeTruncation()
         {
             var size = _creatures.Count();
-            var selectedCreatures = new List<Creature>();
+            var selectedCreatures = new List<ICreature>();
             var sortedCreatures = _creatures.OrderByDescending(creature => creature.Fitness).ToArray();
 
             for (var i = 0; i < size * _truncationRate; i++)

@@ -13,7 +13,9 @@ namespace Galapagos
     /// </summary>
     public class Creature : ICreature
     {
-        private readonly IPopulationMetadata _populationMetadata;
+        private readonly Species _species;
+
+        private readonly IList<IChromosomeMetadata> _chromosomeMetadata = new List<IChromosomeMetadata>();
         private readonly IDictionary<string, IChromosome> _chromosomes = new Dictionary<string, IChromosome>();
 
         private double _fitness = 0;
@@ -23,11 +25,16 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="Creature"/> class.
         /// </summary>
-        /// <param name="populationMetadata">The population metadata.</param>
-        internal Creature(IPopulationMetadata populationMetadata)
+        /// <param name="species">The species this creature belongs to.</param>
+        internal Creature(Species species)
         {
-            _populationMetadata = populationMetadata;
-            foreach (var chromosomeMetadata in populationMetadata)
+            _species = species;
+
+            _chromosomeMetadata = _species.Population.Metadata
+                .Where(metadata => metadata.Name == _species.ChromosomeFilter || _species.ChromosomeFilter == "*")
+                .ToList();
+
+            foreach (var chromosomeMetadata in _chromosomeMetadata)
             {
                 if (_chromosomes.ContainsKey(chromosomeMetadata.Name))
                     throw new ArgumentException($"Error! Creature already contain a chromosome named {chromosomeMetadata.Name}");
@@ -43,14 +50,19 @@ namespace Galapagos
         /// <returns>The cloned creature.</returns>
         internal Creature Clone()
         {
-            var clone = new Creature(_populationMetadata);
-            foreach(var chromosomeMetadata in _populationMetadata)
+            var clone = new Creature(_species);
+            foreach(var chromosomeMetadata in _chromosomeMetadata)
             {
                 var chromosome = GetChromosome(chromosomeMetadata.Name);
                 clone.SetChromosome(chromosomeMetadata.Name, chromosome);
             }
             return clone;
         }
+
+        /// <summary>
+        /// Gets the species this creature belongs to.
+        /// </summary>
+        internal Species Species => _species;
 
         /// <summary>
         /// Gets the creature's fitness.
@@ -75,7 +87,7 @@ namespace Galapagos
         internal void EvaluateFitness()
         {
             if (_fitness == 0)
-                _fitness = _populationMetadata.FitnessFunction(this);
+                _fitness = _species.Population.Metadata.FitnessFunction(this);
         }
 
         /// <summary>
@@ -87,7 +99,7 @@ namespace Galapagos
         {
             uint sum = 0;
 
-            foreach(var chromosomeMetadata in _populationMetadata)
+            foreach(var chromosomeMetadata in _chromosomeMetadata)
             {
                 var x = GetChromosome(chromosomeMetadata.Name);
                 var y = other.GetChromosome(chromosomeMetadata.Name);
@@ -122,8 +134,8 @@ namespace Galapagos
         /// <returns>The child creature.</returns>
         internal Creature Breed(Creature mate)
         {
-            var child = new Creature(_populationMetadata);
-            foreach(var chromosomeMetadata in _populationMetadata)
+            var child = new Creature(_species);
+            foreach(var chromosomeMetadata in _chromosomeMetadata)
             {
                 var crossover = chromosomeMetadata.GetCrossover();
                 var mutation = chromosomeMetadata.GetMutation();
@@ -174,10 +186,20 @@ namespace Galapagos
         public TChromosomeType GetChromosome<TChromosomeType>(string name)
             where TChromosomeType : class, IChromosome
         {
-            var chromosome = GetChromosome(name);
-            if (!(chromosome is TChromosomeType))
-                throw new Exception($"Error! The chromosome {name} is not of type {typeof(TChromosomeType).Name}.");
-            return GetChromosome(name) as TChromosomeType;
+            if (Species.ChromosomeFilter == name || Species.ChromosomeFilter == "*")
+            {
+                var chromosome = GetChromosome(name);
+                if (!(chromosome is TChromosomeType))
+                    throw new Exception($"Error! The chromosome {name} is not of type {typeof(TChromosomeType).Name}.");
+                return chromosome as TChromosomeType;
+            }
+            else
+            {
+                var targetSpecies = Species.Population.GetSpecies(name);
+                if (targetSpecies == null)
+                    throw new ArgumentException($"Error! {name} is not a valid chromosome");
+                return targetSpecies.OptimalCreature.GetChromosome<TChromosomeType>(name);
+            }
         }
     }
 }

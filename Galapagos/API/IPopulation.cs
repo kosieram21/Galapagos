@@ -9,6 +9,11 @@ namespace Galapagos.API
     public interface IPopulation : IEnumerable<ICreature>
     {
         /// <summary>
+        /// Gets the population size.
+        /// </summary>
+        uint Size { get; }
+
+        /// <summary>
         /// Accesses a creature from the population.
         /// </summary>
         /// <param name="index">The creature index.</param>

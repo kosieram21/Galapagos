@@ -22,7 +22,12 @@ namespace Galapagos.API
         /// Gets or sets the distance threshold for niches. A distance threshold of 0 disable niches.
         /// </summary>
         uint DistanceThreshold { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets a value indicating if cooperative coevolution should be used.
+        /// </summary>
+        bool CooperativeCoevolution { get; set; }
+
         /// <summary>
         /// Gets the selection algorithm.
         /// </summary>

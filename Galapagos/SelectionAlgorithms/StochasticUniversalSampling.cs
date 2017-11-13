@@ -12,7 +12,7 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class StochasticUniversalSampling : FitnessProportionateSelection, ISelectionAlgorithm
     {
-        private readonly IList<Creature> _selection = new List<Creature>();
+        private readonly IList<ICreature> _selection = new List<ICreature>();
         private readonly uint N = 100;
 
         /// <summary>

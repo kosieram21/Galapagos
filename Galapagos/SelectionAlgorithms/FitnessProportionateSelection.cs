@@ -12,7 +12,7 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class FitnessProportionateSelection : ISelectionAlgorithm
     {
-        protected Creature[] _creatures;
+        protected ICreature[] _creatures;
         protected double F = 0;
 
         /// <summary>
@@ -28,7 +28,10 @@ namespace Galapagos.SelectionAlgorithms
         /// <param name="population">The population to select from.</param>
         public virtual void Initialize(IPopulation population)
         {
-            _creatures = ((Population)population).Creatures.OrderByDescending(creature => creature.Fitness).ToArray();
+            _creatures = ((Species)population).ToArray()
+                .OrderByDescending(creature => creature.Fitness).ToArray();
+
+            F = 0;
             foreach (var creature in _creatures)
             {
                 if (!(creature.Fitness > 0))

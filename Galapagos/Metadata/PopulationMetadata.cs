@@ -52,6 +52,11 @@ namespace Galapagos.Metadata
         public uint DistanceThreshold { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating if cooperative coevolution should be used.
+        /// </summary>
+        public bool CooperativeCoevolution { get; set; }
+
+        /// <summary>
         /// Gets the selection algorithm.
         /// </summary>
         public ISelectionAlgorithm SelectionAlgorithm { get; internal set; }

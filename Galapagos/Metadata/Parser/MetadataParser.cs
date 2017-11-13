@@ -50,6 +50,9 @@ namespace Galapagos.Metadata.Parser
                     case "DistanceThreshold":
                         populationMetadata.DistanceThreshold = UInt32.Parse(attribute.Value);
                         break;
+                    case "CooperativeCoevolution":
+                        populationMetadata.CooperativeCoevolution = Boolean.Parse(attribute.Value);
+                        break;
                     default:
                         throw new ArgumentException($"Error! {attribute.Name} is not a valid Population attribute.");
                 }

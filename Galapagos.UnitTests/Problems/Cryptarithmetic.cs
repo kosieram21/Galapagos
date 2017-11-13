@@ -112,20 +112,8 @@ namespace Galapagos.UnitTests.Problems
             var O = GetO(ordering);
             var R = GetR(ordering);
             var Y = GetY(ordering);
-            var C10 = GetCarryOver(D, E);
-            var C100 = GetCarryOver(N, R);
-            var C1000 = GetCarryOver(E, O);
-            var C10000 = GetCarryOver(S, M);
 
-            Debug.WriteLine(M == (C10000 % 10));
-            Debug.WriteLine(O == ((S + M + C1000) % 10));
-            Debug.WriteLine(N == ((E + O + C100) % 10));
-            Debug.WriteLine(E == ((N + R + C10) % 10));
-            Debug.WriteLine(Y == ((D + E) % 10));
-            Debug.WriteLine(S != 0);
-            Debug.WriteLine(M != 0);
-
-            Debug.WriteLine($"S:{S},E:{E},N:{N},D:{D},M:{M},O:{O},R:{R},Y:{Y};C10:{C10},C100:{C100},C1000:{C1000},C10000:{C10000}");
+            Debug.WriteLine($"S:{S},E:{E},N:{N},D:{D},M:{M},O:{O},R:{R},Y:{Y}");
         }
     }
 }

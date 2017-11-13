@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Population Size="7500">
+  <SelectionAlgorithm Type="Tournament" Arg="5" />
+  <TerminationConditions>
+    <TerminationCondition Type="FitnessThreshold" Arg="7" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Name="ordering" Type="Permutation" GeneCount="10" CrossoverRate="1" MutationRate="0.1">
+      <Crossovers>
+        <Crossover Type="Order" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Transposition, CyclicShift" Weight="2" />
+        <Mutation Type="Randomization" Weight="1" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

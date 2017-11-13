@@ -30,5 +30,15 @@ namespace Galapagos.UnitTests
 
             Thread.Sleep(WAIT_TIME);
         }
+
+        [TestMethod]
+        public void CryptarithmeticTest()
+        {
+            var puzzle = new Cryptarithmetic();
+            var solution = puzzle.Solve();
+            Cryptarithmetic.PrintMapping(solution);
+
+            Thread.Sleep(WAIT_TIME * 100);
+        }
     }
 }

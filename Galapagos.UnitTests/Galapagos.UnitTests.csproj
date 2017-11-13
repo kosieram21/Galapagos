@@ -58,6 +58,7 @@
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
+    <Compile Include="Problems\Cryptarithmetic.cs" />
     <Compile Include="Problems\Metadata.cs" />
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
@@ -76,6 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\Sudoku.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Problems\Metadata\Cryptarithmetic.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

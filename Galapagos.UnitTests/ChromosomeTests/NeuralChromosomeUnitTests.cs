@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Galapagos.Chromosomes;
-using Galapagos.Chromosomes.ANN;
+using Galapagos.API.ANN;
 using Galapagos.API;
 using Galapagos.API.Factory;
 
@@ -13,8 +13,8 @@ namespace Galapagos.UnitTests.ChromosomeTests
         [TestMethod]
         public void NeuralNetworkTest()
         {
-            var inputNodes = new uint[] { 0, 1, 2 };
-            var outputNodes = new uint[] { 5, 6 };
+            var inputNeurons = new uint[] { 0, 1, 2 };
+            var outputNeurons = new uint[] { 5, 6 };
             var adjacencyMatrix = new double[,]
             {
                 { 0, 0, 0, 1, 0, .5, 0 },
@@ -26,7 +26,7 @@ namespace Galapagos.UnitTests.ChromosomeTests
                 { 0, 0, 0, 0, 0, 0, 0 }
             };
 
-            var neuralNetwork = new NeuralNetwork(adjacencyMatrix, inputNodes, outputNodes);
+            var neuralNetwork = new NeuralNetwork(adjacencyMatrix, inputNeurons, outputNeurons);
 
             var input = new double[] { 3, 4, 5 };
             var output = neuralNetwork.Evaluate(input);

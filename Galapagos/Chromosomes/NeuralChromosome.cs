@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Galapagos.API;
-using Galapagos.Chromosomes.ANN;
+using Galapagos.API.ANN;
 
 namespace Galapagos.Chromosomes
 {

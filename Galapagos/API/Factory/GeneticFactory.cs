@@ -10,6 +10,7 @@ using Galapagos.CrossoverOperators.Permutation;
 using Galapagos.MutationOperators;
 using Galapagos.MutationOperators.Binary;
 using Galapagos.MutationOperators.Permutation;
+using Galapagos.MutationOperators.Neural;
 using Galapagos.SelectionAlgorithms;
 using Galapagos.TerminationConditions;
 using Galapagos.API;
@@ -94,6 +95,23 @@ namespace Galapagos.API.Factory
             if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReversePermutationMutation(weight));
             if ((mutationOptions & PermutationMutation.Transposition) == PermutationMutation.Transposition) mutations.Add(new TranspositionMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid permutation mutation selection.");
+
+            return mutations;
+        }
+
+        /// <summary>
+        /// Constructs a list of neural mutations operators.
+        /// </summary>
+        /// <param name="mutationOptions">The neural mutation options.</param>
+        /// <param name="weight">The mutation weight.</param>
+        /// <returns>The constructed neural mutations operators.</returns>
+        public static List<IMutation> ConstructNeuralMutationOperators(NeuralMutation mutationOptions, uint weight = 1)
+        {
+            var mutations = new List<IMutation>();
+
+            if ((mutationOptions & NeuralMutation.Edge) == NeuralMutation.Edge) mutations.Add(new EdgeMutation(weight));
+            if ((mutationOptions & NeuralMutation.Node) == NeuralMutation.Node) mutations.Add(new NodeMutation(weight));
+            if (mutations.Count == 0) throw new ArgumentException("Error! Invalid neural mutation selection.");
 
             return mutations;
         }
@@ -201,6 +219,27 @@ namespace Galapagos.API.Factory
                     return new BinaryChromosome(genes as bool[]);
                 case ChromosomeType.Permutation:
                     return new PermutationChromosome(genes as uint[]);
+                default:
+                    throw new ArgumentException($"Error! Invalid chromosome type.");
+            }
+        }
+
+        /// <summary>
+        /// Constructs a chromosome from metadata.
+        /// </summary>
+        /// <remarks>This constructor is for neural chromosomes only.</remarks>
+        /// <param name="chromosomeType">The chromosome type.</param>
+        /// <param name="inputSize">The input size.</param>
+        /// <param name="outputSize">The output size.</param>
+        /// <param name="innovationTrackerName">The innovation tracker name.</param>
+        /// <returns></returns>
+        public static IChromosome ConstructChromosome
+            (ChromosomeType chromosomeType, uint inputSize, uint outputSize, string innovationTrackerName)
+        {
+            switch(chromosomeType)
+            {
+                case ChromosomeType.Neural:
+                    return new NeuralChromosome(inputSize, outputSize, innovationTrackerName);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }

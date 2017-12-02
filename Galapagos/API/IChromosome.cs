@@ -54,4 +54,24 @@ namespace Galapagos.API
     }
 
     public interface IPermutationChromosome : IChromosome<uint> { }
+
+    public interface INeuralChromosome : IChromosome
+    {
+        /// <summary>
+        /// Gets the neural chromosome's input size.
+        /// </summary>
+        uint InputSize { get; }
+
+        /// <summary>
+        /// Gets the neural chromosome's output size.
+        /// </summary>
+        uint OutputSize { get; }
+
+        /// <summary>
+        /// Evaluates the neural network.
+        /// </summary>
+        /// <param name="inputs">The input data.</param>
+        /// <returns>The output data.</returns>
+        double[] Evaluate(double[] inputs);
+    }
 }

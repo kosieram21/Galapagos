@@ -60,6 +60,17 @@ namespace Galapagos.API
     }
 
     /// <summary>
+    /// The available neural mutation operators.
+    /// </summary>
+    [Flags]
+    public enum NeuralMutation
+    {
+        Edge = 1,
+        Node = 1 << 1,
+        All = Edge | Node
+    }
+
+    /// <summary>
     /// The available selection algorithms.
     /// </summary>
     public enum SelectionAlgorithm
@@ -87,6 +98,7 @@ namespace Galapagos.API
     public enum ChromosomeType
     {
         Binary,
-        Permutation
+        Permutation,
+        Neural
     }
 }

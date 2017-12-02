@@ -54,10 +54,12 @@
   <ItemGroup>
     <Compile Include="ChromosomeTests\PermutationChromosomeUnitTests.cs" />
     <Compile Include="ChromosomeTests\BinaryChromosomeUnitTests.cs" />
+    <Compile Include="ChromosomeTests\NeuralChromosomeUnitTests.cs" />
     <Compile Include="CrossoverTests\BinaryCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
+    <Compile Include="MutationTests\NeuralMutationTests.cs" />
     <Compile Include="Problems\Cryptarithmetic.cs" />
     <Compile Include="Problems\Metadata.cs" />
     <Compile Include="Problems\NQueens.cs" />
@@ -81,6 +83,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\Cryptarithmetic.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

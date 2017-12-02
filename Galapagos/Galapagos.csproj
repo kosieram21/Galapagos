@@ -45,6 +45,10 @@
     <Compile Include="API\IPopulation.cs" />
     <Compile Include="API\Session.cs" />
     <Compile Include="Chromosomes\BinaryChromosome.cs" />
+    <Compile Include="Chromosomes\NeuralChromosome.cs" />
+    <Compile Include="Chromosomes\ANN\Edge.cs" />
+    <Compile Include="Chromosomes\ANN\NeuralNetwork.cs" />
+    <Compile Include="Chromosomes\ANN\Node.cs" />
     <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
@@ -73,6 +77,8 @@
     <Compile Include="MutationOperators\Binary\SingleBitMutation.cs" />
     <Compile Include="API\IMutation.cs" />
     <Compile Include="MutationOperators\Mutation.cs" />
+    <Compile Include="MutationOperators\Neural\EdgeMutation.cs" />
+    <Compile Include="MutationOperators\Neural\NodeMutation.cs" />
     <Compile Include="MutationOperators\Permutation\CyclicShiftPermutationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\RandomizationPermutationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\ReversePermutationMutation.cs" />

@@ -84,7 +84,7 @@ namespace Galapagos.API.ANN
 
         internal static double Tanh(double x)
         {
-            return Math.Tan(x);
+            return Math.Tanh(x);
         }
 
         internal static double ArcTan(double x)
@@ -119,7 +119,7 @@ namespace Galapagos.API.ANN
 
         internal static double BentIdentity(double x)
         {
-            return ((Math.Sqrt(Math.Pow(x, 2) + 1) - 1) / 2) +x;
+            return ((Math.Sqrt(Math.Pow(x, 2) + 1) - 1) / 2) + x;
         }
 
         internal static double Sinc(double x)

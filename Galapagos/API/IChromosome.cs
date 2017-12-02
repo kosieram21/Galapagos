@@ -13,7 +13,12 @@ namespace Galapagos.API
         /// </summary>
         /// <param name="other">The other chromosome.</param>
         /// <returns>The distance between the chromosomes.</returns>
-        uint Distance(IChromosome other);
+        double Distance(IChromosome other);
+
+        /// <summary>
+        /// Gets or sets the creature associated with this chromosome.
+        /// </summary>
+        ICreature Creature { get; set; }
     }
 
     public interface IChromosome<T> : IChromosome, IEnumerable<T>

@@ -11,7 +11,7 @@ namespace Galapagos.Chromosomes
     /// <summary>
     /// A binary genetic property of a creature.
     /// </summary>
-    public class BinaryChromosome : IBinaryChromosome
+    public class BinaryChromosome : Chromosome, IBinaryChromosome
     {
         private readonly bool[] _bits;
         private readonly uint _bitCount;
@@ -45,7 +45,7 @@ namespace Galapagos.Chromosomes
         /// <remarks>Hamming distance.</remarks>
         /// <param name="other">The other chromosome.</param>
         /// <returns>The distance between the chromosomes.</returns>
-        public uint Distance(IChromosome other)
+        public override double Distance(IChromosome other)
         {
             if(!(other is BinaryChromosome) || (((BinaryChromosome)other).BitCount != BitCount))
                 throw new ArgumentException("Error! Incompatible chromosomes.");

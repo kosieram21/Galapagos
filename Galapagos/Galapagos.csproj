@@ -46,10 +46,12 @@
     <Compile Include="API\IPopulation.cs" />
     <Compile Include="API\Session.cs" />
     <Compile Include="Chromosomes\BinaryChromosome.cs" />
+    <Compile Include="Chromosomes\Chromosome.cs" />
     <Compile Include="Chromosomes\NeuralChromosome.cs" />
     <Compile Include="API\ANN\Connection.cs" />
     <Compile Include="API\ANN\NeuralNetwork.cs" />
     <Compile Include="API\ANN\Neuron.cs" />
+    <Compile Include="CrossoverOperators\Neural\NeatCrossover.cs" />
     <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />

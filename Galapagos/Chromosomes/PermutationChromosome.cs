@@ -11,7 +11,7 @@ namespace Galapagos.Chromosomes
     /// <summary>
     /// A permutation genetic property of a creature.
     /// </summary>
-    public class PermutationChromosome : IPermutationChromosome
+    public class PermutationChromosome : Chromosome, IPermutationChromosome
     {
         private readonly uint[] _permutation;
 
@@ -90,7 +90,7 @@ namespace Galapagos.Chromosomes
         /// <remarks>Kendall Tau distance.</remarks>
         /// <param name="other">The other chromosome.</param>
         /// <returns>The distance between the chromosomes.</returns>
-        public uint Distance(IChromosome other)
+        public override double Distance(IChromosome other)
         {
             if (!(other is PermutationChromosome) || (((PermutationChromosome)other).N != N))
                 throw new ArgumentException("Error! Incompatible chromosomes.");

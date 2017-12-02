@@ -11,7 +11,7 @@ namespace Galapagos.Chromosomes
     /// <summary>
     /// A TWEANN encoded in a chromosome.
     /// </summary>
-    public class NeuralChromosome : INeuralChromosome
+    public class NeuralChromosome : Chromosome, INeuralChromosome
     {
         #region Gene Definitions
 
@@ -137,6 +137,10 @@ namespace Galapagos.Chromosomes
 
         private NeuralNetwork _network = null;
 
+        private double c1 = 1;
+        private double c2 = 1;
+        private double c3 = 1;
+
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosome"/> class.
         /// </summary>
@@ -196,9 +200,55 @@ namespace Galapagos.Chromosomes
         /// </summary>
         /// <param name="other">The other chromosome.</param>
         /// <returns>The distance between the chromosomes.</returns>
-        public uint Distance(IChromosome other)
+        public override double Distance(IChromosome other)
         {
-            throw new NotImplementedException();
+            if (!(other is NeuralChromosome))
+                throw new ArgumentException("Error! Incompatible chromosome.");
+
+            var otherNeuralChromosome = other as NeuralChromosome;
+            var otherSortedGenes = otherNeuralChromosome.EdgeGenes.OrderByDescending(gene => gene.ID).Reverse();
+            var currentSortedGenes = EdgeGenes.OrderByDescending(gene => gene.ID).Reverse();
+
+            var currentGeneQueue = new Queue<EdgeGene>(currentSortedGenes);
+            var otherGeneQueue = new Queue<EdgeGene>(otherSortedGenes);
+
+            var matchingGeneCount = 0;
+
+            double E = 0;
+            double D = 0;
+            double W = 0;
+            double N = 0;
+
+            while(currentGeneQueue.Any() && otherGeneQueue.Any())
+            {
+                var currentGene = currentGeneQueue.Peek();
+                var otherGene = otherGeneQueue.Peek();
+
+                if (currentGene.ID == otherGene.ID)
+                {
+                    W += currentGene.ID - otherGene.ID;
+                    matchingGeneCount++;
+
+                    currentGeneQueue.Dequeue();
+                    otherGeneQueue.Dequeue();
+                }
+                else if(currentGene.ID < otherGene.ID)
+                {
+                    D++;
+                    currentGeneQueue.Dequeue();
+                }
+                else
+                {
+                    D++;
+                    otherGeneQueue.Dequeue();
+                }
+            }
+
+            E = currentGeneQueue.Any() ? currentGeneQueue.Count : otherGeneQueue.Count;
+            W = W / matchingGeneCount;
+            N = currentGeneQueue.Any() ? currentSortedGenes.Count() : otherSortedGenes.Count();
+
+            return ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W);
         }
 
         /// <summary>

@@ -39,8 +39,9 @@ namespace Galapagos
                 if (_chromosomes.ContainsKey(chromosomeMetadata.Name))
                     throw new ArgumentException($"Error! Creature already contain a chromosome named {chromosomeMetadata.Name}");
 
-                _chromosomes.Add(chromosomeMetadata.Name,
-                    GeneticFactory.ConstructChromosome(chromosomeMetadata.Type, chromosomeMetadata.GeneCount));
+                var chromosome = GeneticFactory.ConstructChromosome(chromosomeMetadata.Type, chromosomeMetadata.GeneCount);
+                _chromosomes.Add(chromosomeMetadata.Name, chromosome);
+                chromosome.Creature = this;
             }
         }
 
@@ -95,9 +96,9 @@ namespace Galapagos
         /// </summary>
         /// <param name="other">The other creature.</param>
         /// <returns>The distance between the creatures.</returns>
-        internal uint Distance(Creature other)
+        internal double Distance(Creature other)
         {
-            uint sum = 0;
+            double sum = 0;
 
             foreach(var chromosomeMetadata in _chromosomeMetadata)
             {

@@ -15,14 +15,20 @@ namespace Galapagos.API.ANN
         private readonly IList<Neuron> _inputNeurons = new List<Neuron>();
         private readonly IList<Neuron> _outputNeurons = new List<Neuron>();
 
+        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Identity);
+
         /// <summary>
         /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
         /// </summary>
         /// <param name="adjacencyMatrix">The adjacency matrix representation of the network.</param>
         /// <param name="inputNeurons">The input neuron ids.</param>
         /// <param name="outputNeurons">The output neuron ids.</param>
-        public NeuralNetwork(double[,] adjacencyMatrix, IList<uint> inputNeurons, IList<uint> outputNeurons)
+        /// <param name="activationFunction">The activation function.</param>
+        public NeuralNetwork(double[,] adjacencyMatrix, IList<uint> inputNeurons, IList<uint> outputNeurons, 
+            ActivationFunction.Type activationFunction = ActivationFunction.Type.Identity)
         {
+            _activationFunction = ActivationFunction.Get(activationFunction);
+
             var n = adjacencyMatrix.GetLength(0);
             var m = adjacencyMatrix.GetLength(1);
 
@@ -129,7 +135,7 @@ namespace Galapagos.API.ANN
                     sum += (input.Weight * input.Source.Value);
 
                 if(neuron.Inputs.Count > 0)
-                    neuron.Value = sum;
+                    neuron.Value = _activationFunction(sum);
             }
 
             var outputs = new double[_outputNeurons.Count];

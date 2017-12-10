@@ -205,12 +205,8 @@ namespace Galapagos.Chromosomes
             if (!(other is NeuralChromosome))
                 throw new ArgumentException("Error! Incompatible chromosome.");
 
-            var otherNeuralChromosome = other as NeuralChromosome;
-            var otherSortedGenes = otherNeuralChromosome.EdgeGenes.OrderByDescending(gene => gene.ID).Reverse();
-            var currentSortedGenes = EdgeGenes.OrderByDescending(gene => gene.ID).Reverse();
-
-            var currentGeneQueue = new Queue<EdgeGene>(currentSortedGenes);
-            var otherGeneQueue = new Queue<EdgeGene>(otherSortedGenes);
+            var thisGeneQueue = GetGeneQueue(this);
+            var otherGeneQueue = GetGeneQueue(other as NeuralChromosome);
 
             var matchingGeneCount = 0;
 
@@ -219,9 +215,9 @@ namespace Galapagos.Chromosomes
             double W = 0;
             double N = 0;
 
-            while(currentGeneQueue.Any() && otherGeneQueue.Any())
+            while(thisGeneQueue.Any() && otherGeneQueue.Any())
             {
-                var currentGene = currentGeneQueue.Peek();
+                var currentGene = thisGeneQueue.Peek();
                 var otherGene = otherGeneQueue.Peek();
 
                 if (currentGene.ID == otherGene.ID)
@@ -229,13 +225,13 @@ namespace Galapagos.Chromosomes
                     W += currentGene.ID - otherGene.ID;
                     matchingGeneCount++;
 
-                    currentGeneQueue.Dequeue();
+                    thisGeneQueue.Dequeue();
                     otherGeneQueue.Dequeue();
                 }
                 else if(currentGene.ID < otherGene.ID)
                 {
                     D++;
-                    currentGeneQueue.Dequeue();
+                    thisGeneQueue.Dequeue();
                 }
                 else
                 {
@@ -244,11 +240,24 @@ namespace Galapagos.Chromosomes
                 }
             }
 
-            E = currentGeneQueue.Any() ? currentGeneQueue.Count : otherGeneQueue.Count;
+            E = thisGeneQueue.Any() ? thisGeneQueue.Count : otherGeneQueue.Count;
             W = W / matchingGeneCount;
-            N = currentGeneQueue.Any() ? currentSortedGenes.Count() : otherSortedGenes.Count();
+            N = thisGeneQueue.Any() ? EdgeGenes.Count() : ((NeuralChromosome)other).EdgeGenes.Count();
 
             return ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W);
+        }
+
+        /// <summary>
+        /// Gets a queue of edge genes sorted by ID for the given chromosome.
+        /// </summary>
+        /// <param name="chromosome">The chromosome.</param>
+        /// <returns>The gene queue.</returns>
+        private Queue<EdgeGene> GetGeneQueue(NeuralChromosome chromosome)
+        {
+            var sortedGenes = chromosome.EdgeGenes.OrderByDescending(gene => gene.ID).Reverse();
+            var geneQueue = new Queue<EdgeGene>(sortedGenes);
+
+            return geneQueue;
         }
 
         /// <summary>

@@ -28,18 +28,10 @@ namespace Galapagos.CrossoverOperators.Neural
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(NeuralChromosome x, NeuralChromosome y)
         {
-            var sortedNodeGenesX = GetSortedGenes<NeuralChromosome.NodeGene>(x);
-            var sortedNodeGenesY = GetSortedGenes<NeuralChromosome.NodeGene>(y);
+            var geneQueueX = GetGeneQueue(x);
+            var geneQueueY = GetGeneQueue(y);
 
-            var sortedEdgeGenesX = GetSortedGenes<NeuralChromosome.EdgeGene>(x);
-            var sortedEdgeGenesY = GetSortedGenes<NeuralChromosome.EdgeGene>(y);
-
-            var geneQueueX = new Queue<NeuralChromosome.EdgeGene>(sortedEdgeGenesX);
-            var geneQueueY = new Queue<NeuralChromosome.EdgeGene>(sortedEdgeGenesY);
-
-            var range = sortedNodeGenesX.Last().ID < sortedNodeGenesY.Last().ID ? 
-                sortedNodeGenesY.Last().ID : sortedNodeGenesX.Last().ID;
-            var seen = new bool[range];
+            var seen = InitializeSeenTracker(x, y);
 
             var approvedNodeGenes = new List<NeuralChromosome.NodeGene>();
             var approvedEdgeGenes = new List<NeuralChromosome.EdgeGene>();
@@ -95,26 +87,44 @@ namespace Galapagos.CrossoverOperators.Neural
             return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName);
         }
 
-        private IList<TGene> GetSortedGenes<TGene>(NeuralChromosome chromosome)
+        /// <summary>
+        /// Gets a queue of edge genes sorted by ID for the given chromosome.
+        /// </summary>
+        /// <param name="chromosome">The chromosome.</param>
+        /// <returns>The gene queue.</returns>
+        private Queue<NeuralChromosome.EdgeGene> GetGeneQueue(NeuralChromosome chromosome)
         {
-            var clonedGenes = chromosome.CloneGenes();
-            if(typeof(TGene) == typeof(NeuralChromosome.NodeGene))
-            {
-                var clonedNodeGenes = clonedGenes.Item1;
-                return clonedNodeGenes.OrderByDescending(gene => gene.ID).Reverse() as IList<TGene>;
-            }
-            else if(typeof(TGene) == typeof(NeuralChromosome.EdgeGene))
-            {
-                var clonedEdgeGenes = clonedGenes.Item2;
-                return clonedEdgeGenes.OrderByDescending(gene => gene.ID).Reverse() as IList<TGene>;
-            }
-            else
-            {
-                throw new ArgumentException($"Error! {typeof(TGene)} is not a valid neural gene.");
-            }
-                
+            var genes = chromosome.CloneGenes();
+            var edgeGenes = genes.Item2;
+
+            var sortedGenes = edgeGenes.OrderByDescending(gene => gene.ID).Reverse();
+            var geneQueue = new Queue<NeuralChromosome.EdgeGene>(sortedGenes);
+
+            return geneQueue;
         }
 
+        /// <summary>
+        /// Initializes the node gene seen tracker.
+        /// </summary>
+        /// <param name="x">The x parent.</param>
+        /// <param name="y">The y parent.</param>
+        /// <returns>The initialized seen tracker.</returns>
+        private bool[] InitializeSeenTracker(NeuralChromosome x, NeuralChromosome y)
+        {
+            var maxX = x.NodeGenes.Max(gene => gene.ID);
+            var maxY = y.NodeGenes.Max(gene => gene.ID);
+            var range = maxX < maxY ? maxY : maxX;
+            var seen = new bool[range];
+
+            return seen;
+        }
+
+        /// <summary>
+        /// Approves a node gene for inclusion in the child chromosome.
+        /// </summary>
+        /// <param name="selected">The selected edge gene.</param>
+        /// <param name="approvedNodeGenes">The approved node genes.</param>
+        /// <param name="seen">The node gene seen tracker.</param>
         private void ApproveNodeGenes(NeuralChromosome.EdgeGene selected, 
             ref List<NeuralChromosome.NodeGene> approvedNodeGenes, ref bool[] seen)
         {

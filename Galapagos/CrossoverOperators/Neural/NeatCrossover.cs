@@ -28,6 +28,9 @@ namespace Galapagos.CrossoverOperators.Neural
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(NeuralChromosome x, NeuralChromosome y)
         {
+            if (x.InnovationTrackerName != y.InnovationTrackerName)
+                throw new ArgumentException("Error! Incompatible chromosomes.");
+
             var geneQueueX = GetGeneQueue(x);
             var geneQueueY = GetGeneQueue(y);
 
@@ -84,7 +87,8 @@ namespace Galapagos.CrossoverOperators.Neural
                 ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
             }
 
-            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName);
+            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, 
+                x.C1, x.C2, x.C3);
         }
 
         /// <summary>

@@ -39,7 +39,7 @@ namespace Galapagos
                 if (_chromosomes.ContainsKey(chromosomeMetadata.Name))
                     throw new ArgumentException($"Error! Creature already contain a chromosome named {chromosomeMetadata.Name}");
 
-                var chromosome = GeneticFactory.ConstructChromosome(chromosomeMetadata.Type, chromosomeMetadata.GeneCount);
+                var chromosome = GeneticFactory.ConstructChromosome(chromosomeMetadata.Type, (uint)chromosomeMetadata.Properties["GeneCount"]);
                 _chromosomes.Add(chromosomeMetadata.Name, chromosome);
                 chromosome.Creature = this;
             }

@@ -119,7 +119,7 @@ namespace Galapagos.UnitTests.Problems
                         _unknownValues[i].Remove(_initialBoard[i, j]);
                 }
 
-                metadata[i].GeneCount = (uint)_unknownValues[i].Count;
+                metadata[i].Properties["GeneCount"] = _unknownValues[i].Count;
             }
 
             return metadata;

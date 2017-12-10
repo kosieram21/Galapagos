@@ -7,6 +7,7 @@ using Galapagos.Chromosomes;
 using Galapagos.CrossoverOperators;
 using Galapagos.CrossoverOperators.Binary;
 using Galapagos.CrossoverOperators.Permutation;
+using Galapagos.CrossoverOperators.Neural;
 using Galapagos.MutationOperators;
 using Galapagos.MutationOperators.Binary;
 using Galapagos.MutationOperators.Permutation;
@@ -56,6 +57,21 @@ namespace Galapagos.API.Factory
             if ((crossoverOptions & PermutationCrossover.Midpoint) == PermutationCrossover.Midpoint) crossovers.Add(new MidpointCrossover(weight));
             if ((crossoverOptions & PermutationCrossover.NoOp) == PermutationCrossover.NoOp) crossovers.Add(new NoOpPermutationCrossover(weight));
             if (crossovers.Count == 0) throw new ArgumentException("Error! Invalid permutation selection.");
+
+            return crossovers;
+        }
+
+        /// <summary>
+        /// Constructs a list of neural crossovers operators.
+        /// </summary>
+        /// <param name="crossoverOptions">The neural crossover options.</param>
+        /// <param name="weight">The crossover weight.</param>
+        /// <returns>The constructed neural crossovers operators.</returns>
+        public static List<ICrossover> ConstructNeuralCrossoverOperators(NeuralCrossover crossoverOptions, uint weight = 1)
+        {
+            var crossovers = new List<ICrossover>();
+
+            if ((crossoverOptions & NeuralCrossover.Neat) == NeuralCrossover.Neat) crossovers.Add(new NeatCrossover(weight));
 
             return crossovers;
         }

@@ -106,7 +106,7 @@ namespace Galapagos.Chromosomes
 
             Array.Copy(otherPermutation, arry, N);
 
-            var distance = MergerSort(map, arry, temp, 0, (int)(N - 1));
+            var distance = MergeSort(map, arry, temp, 0, (int)(N - 1));
             return distance;
         }
 
@@ -119,14 +119,14 @@ namespace Galapagos.Chromosomes
         /// <param name="left">The left sub array index.</param>
         /// <param name="right">The right sub array index.</param>
         /// <returns>The number of inversions in the array.</returns>
-        private uint MergerSort(uint[] map, uint[] arry, uint[] temp, int left, int right)
+        private uint MergeSort(uint[] map, uint[] arry, uint[] temp, int left, int right)
         {
             if(right > left)
             {
                 var mid = (right + left) / 2;
                 var invCount =
-                    MergerSort(map, arry, temp, left, mid) +
-                    MergerSort(map, arry, temp, mid + 1, right) +
+                    MergeSort(map, arry, temp, left, mid) +
+                    MergeSort(map, arry, temp, mid + 1, right) +
                     Merge(map, arry, temp, left, mid + 1, right);
 
                 return invCount;

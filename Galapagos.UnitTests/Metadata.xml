@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Population Size="7500">
+  <SelectionAlgorithm Type="Tournament" Arg="5" />
+  <TerminationConditions>
+    <TerminationCondition Type="FitnessThreshold" Arg="7" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Name="binary" Type="Binary" CrossoverRate="1" MutationRate="0.25" GeneCount="8" >
+      <Crossovers>
+        <Crossover Type="SinglePoint, TwoPoint" Weight="2" />
+        <Crossover Type="Uniform" Weight="1" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="FlipBit, SingleBit" />
+      </Mutations>
+    </Chromosome>
+    <Chromosome Name="permutation" Type="Permutation" CrossoverRate="1" MutationRate="0.1" GeneCount="10">
+      <Crossovers>
+        <Crossover Type="Order" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Transposition, CyclicShift" Weight="2" />
+        <Mutation Type="Randomization" Weight="1" />
+      </Mutations>
+    </Chromosome>
+    <Chromosome Name="neural" Type="Neural" CrossoverRate="1" MutationRate="0.15" InputSize="4" OutputSize="2" C1="0.25" C2="0.25" C3="0.5">
+      <Crossovers>
+        <Crossover Type="Neat" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Node, Edge" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

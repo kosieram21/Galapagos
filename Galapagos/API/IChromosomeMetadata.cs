@@ -19,11 +19,6 @@ namespace Galapagos.API
         ChromosomeType Type { get;  }
 
         /// <summary>
-        /// The number of genes in the chromosome.
-        /// </summary>
-        uint GeneCount { get; set; }
-
-        /// <summary>
         /// The crossover rate.
         /// </summary>
         double CrossoverRate { get; set; }
@@ -32,6 +27,11 @@ namespace Galapagos.API
         /// The mutation rate.
         /// </summary>
         double MutationRate { get; set; }
+
+        /// <summary>
+        /// Gets the properties associated with this chromosome.
+        /// </summary>
+        IDictionary<string, double> Properties { get; }
 
         /// <summary>
         /// Gets a crossover from the metadata.

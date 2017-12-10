@@ -46,7 +46,8 @@ namespace Galapagos.MutationOperators.Neural
 
                 // Source node connects to all other nodes. Return original chromosome.
                 if (index == targetIndex)
-                    return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName);
+                    return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName, 
+                        chromosome.C1, chromosome.C2, chromosome.C3);
             }
 
             var edgeId = innovationTracker.GetNextEdgeInnovationNumber();
@@ -55,7 +56,8 @@ namespace Galapagos.MutationOperators.Neural
 
             edgeGenes.Add(newEdge);
 
-            return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName);
+            return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
+                chromosome.C1, chromosome.C2, chromosome.C3);
         }
     }
 }

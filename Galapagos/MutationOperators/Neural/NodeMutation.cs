@@ -52,7 +52,8 @@ namespace Galapagos.MutationOperators.Neural
             edgeGenes.Add(newEdge1);
             edgeGenes.Add(newEdge2);
 
-            return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName);
+            return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
+                chromosome.C1, chromosome.C2, chromosome.C3);
         }
     }
 }

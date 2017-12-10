@@ -5,7 +5,7 @@
     <TerminationCondition Type="FitnessThreshold" Arg="7" />
   </TerminationConditions>
   <Chromosomes>
-    <Chromosome Name="ordering" Type="Permutation" GeneCount="10" CrossoverRate="1" MutationRate="0.1">
+    <Chromosome Name="ordering" Type="Permutation" CrossoverRate="1" MutationRate="0.1" GeneCount="10">
       <Crossovers>
         <Crossover Type="Order" />
       </Crossovers>

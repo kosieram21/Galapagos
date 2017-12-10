@@ -130,6 +130,10 @@ namespace Galapagos.Chromosomes
         private readonly uint _inputSize = 0;
         private readonly uint _outputSize = 0;
 
+        private readonly double _c1 = 1;
+        private readonly double _c2 = 1;
+        private readonly double _c3 = 1;
+
         private readonly string _innovationTrackerName;
 
         private readonly IList<NodeGene> _nodeGenes = new List<NodeGene>();
@@ -137,20 +141,24 @@ namespace Galapagos.Chromosomes
 
         private NeuralNetwork _network = null;
 
-        private double c1 = 1;
-        private double c2 = 1;
-        private double c3 = 1;
-
         /// <summary>
         /// Constructs a new instance of the <see cref="BinaryChromosome"/> class.
         /// </summary>
         /// <param name="inputSize">The input size.</param>
         /// <param name="outputSize">The output size.</param>
         /// <param name="innovationTrackerName">The innovation tracker name.</param>
-        internal NeuralChromosome(uint inputSize, uint outputSize, string innovationTrackerName)
+        /// <param name="c1">C1 NEAT niching weight.</param>
+        /// <param name="c2">C2 NEAT niching weight.</param>
+        /// <param name="c3">C3 NEAT niching weight.</param>
+        internal NeuralChromosome(uint inputSize, uint outputSize, string innovationTrackerName,
+            double c1 = 1, double c2 = 1, double c3 = 1)
         {
             _inputSize = inputSize;
             _outputSize = outputSize;
+
+            _c1 = c1;
+            _c2 = c2;
+            _c3 = c3;
 
             if (_inputSize == 0)
                 throw new ArgumentException("Error! Input size cannot be 0.");
@@ -174,10 +182,18 @@ namespace Galapagos.Chromosomes
         /// <param name="nodeGenes">The node genes associated with this chromosome.</param>
         /// <param name="edgeGenes">The edge genes asspciated with this chromosome.</param>
         /// <param name="innovationTrackerName">The innovation tracker name.</param>
-        internal NeuralChromosome(IList<NodeGene> nodeGenes, IList<EdgeGene> edgeGenes, string innovationTrackerName)
+        /// <param name="c1">C1 NEAT niching weight.</param>
+        /// <param name="c2">C2 NEAT niching weight.</param>
+        /// <param name="c3">C3 NEAT niching weight.</param>
+        internal NeuralChromosome(IList<NodeGene> nodeGenes, IList<EdgeGene> edgeGenes, string innovationTrackerName,
+            double c1, double c2, double c3)
         {
             _nodeGenes = nodeGenes;
             _edgeGenes = edgeGenes;
+
+            _c1 = c1;
+            _c2 = c2;
+            _c3 = c3;
 
             _innovationTrackerName = innovationTrackerName;
 
@@ -203,6 +219,9 @@ namespace Galapagos.Chromosomes
         public override double Distance(IChromosome other)
         {
             if (!(other is NeuralChromosome))
+                throw new ArgumentException("Error! Incompatible chromosome.");
+
+            if (InnovationTrackerName != ((NeuralChromosome)other).InnovationTrackerName)
                 throw new ArgumentException("Error! Incompatible chromosome.");
 
             var thisGeneQueue = GetGeneQueue(this);
@@ -244,7 +263,7 @@ namespace Galapagos.Chromosomes
             W = W / matchingGeneCount;
             N = thisGeneQueue.Any() ? EdgeGenes.Count() : ((NeuralChromosome)other).EdgeGenes.Count();
 
-            return ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W);
+            return ((C1 * E) / N) + ((C2 * D) / N) + (C3 * W);
         }
 
         /// <summary>
@@ -264,6 +283,21 @@ namespace Galapagos.Chromosomes
         /// Gets the innovation tracker associated with this chromosome.
         /// </summary>
         internal string InnovationTrackerName => _innovationTrackerName;
+
+        /// <summary>
+        /// Gets the C1 NEAT niching weight.
+        /// </summary>
+        internal double C1 => _c1;
+
+        /// <summary>
+        /// Gets the C2 NEAT niching weight.
+        /// </summary>
+        internal double C2 => _c2;
+
+        /// <summary>
+        /// Gets the C3 NEAT niching weight.
+        /// </summary>
+        internal double C3 => _c3;
 
         /// <summary>
         /// Gets the node genes for this chromosome.

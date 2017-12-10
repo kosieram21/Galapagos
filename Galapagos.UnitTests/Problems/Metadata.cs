@@ -21,10 +21,10 @@ namespace Galapagos.UnitTests.Problems
             return stream;
         }
 
-        public static Stream NQueens => LoadEmbeddedResource("NQueens");
+        public static Stream NQueens => LoadEmbeddedResource(@"NQueens");
 
-        public static Stream Sudoku => LoadEmbeddedResource("Sudoku");
+        public static Stream Sudoku => LoadEmbeddedResource(@"Sudoku");
 
-        public static Stream Cryptarithmetic => LoadEmbeddedResource("Cryptarithmetic");
+        public static Stream Cryptarithmetic => LoadEmbeddedResource(@"Cryptarithmetic");
     }
 }

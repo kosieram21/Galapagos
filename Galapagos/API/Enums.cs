@@ -33,6 +33,16 @@ namespace Galapagos.API
     }
 
     /// <summary>
+    /// The available neural crossover operators.
+    /// </summary>
+    [Flags]
+    public enum NeuralCrossover
+    {
+        Neat = 1,
+        All = Neat
+    }
+
+    /// <summary>
     /// The available binary mutation operators.
     /// </summary>
     [Flags]

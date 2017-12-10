@@ -190,9 +190,14 @@ namespace Galapagos.Metadata.Parser
             for (var i = 0; i < repeat; i++)
             {
 
-                ChromosomeMetadata chromosomeMetadata = type == ChromosomeType.Binary ?
-                    new BinaryChromosomeMetadata() as ChromosomeMetadata :
-                    new PermutationChromosomeMetadata() as ChromosomeMetadata;
+                ChromosomeMetadata chromosomeMetadata = 
+                    type == ChromosomeType.Binary ? new BinaryChromosomeMetadata() as ChromosomeMetadata :
+                    type == ChromosomeType.Permutation ? new PermutationChromosomeMetadata() as ChromosomeMetadata :
+                    type == ChromosomeType.Neural ? new NeuralChromosomeMetadata() as NeuralChromosomeMetadata :
+                    null;
+
+                if (chromosomeMetadata == null)
+                    throw new ArgumentException("Error! Invalid chromosome type.");
 
                 foreach (var attribute in element.Attributes())
                 {
@@ -201,14 +206,29 @@ namespace Galapagos.Metadata.Parser
                         case "Name":
                             chromosomeMetadata.Name = Regex.Replace(attribute.Value, "%i", $"{i}");
                             break;
-                        case "GeneCount":
-                            chromosomeMetadata.GeneCount = UInt32.Parse(attribute.Value);
-                            break;
                         case "CrossoverRate":
                             chromosomeMetadata.CrossoverRate = Double.Parse(attribute.Value);
                             break;
                         case "MutationRate":
                             chromosomeMetadata.MutationRate = Double.Parse(attribute.Value);
+                            break;
+                        case "GeneCount":
+                            chromosomeMetadata.Properties["GeneCount"] = UInt32.Parse(attribute.Value);
+                            break;
+                        case "InputSize":
+                            chromosomeMetadata.Properties["InputSize"] = UInt32.Parse(attribute.Value);
+                            break;
+                        case "OutputSize":
+                            chromosomeMetadata.Properties["OutputSize"] = UInt32.Parse(attribute.Value);
+                            break;
+                        case "C1":
+                            chromosomeMetadata.Properties["C1"] = Double.Parse(attribute.Value);
+                            break;
+                        case "C2":
+                            chromosomeMetadata.Properties["C2"] = Double.Parse(attribute.Value);
+                            break;
+                        case "C3":
+                            chromosomeMetadata.Properties["C3"] = Double.Parse(attribute.Value);
                             break;
                         case "Type":
                         case "Repeat":
@@ -227,12 +247,16 @@ namespace Galapagos.Metadata.Parser
                                 ParseBinaryCrossovers(chromosomeMetadata, child);
                             else if (type == ChromosomeType.Permutation)
                                 ParsePermutationCrossovers(chromosomeMetadata, child);
+                            else if (type == ChromosomeType.Neural)
+                                ParseNeuralCrossovers(chromosomeMetadata, child);
                             break;
                         case "Mutations":
                             if (type == ChromosomeType.Binary)
                                 ParseBinaryMutations(chromosomeMetadata, child);
                             else if (type == ChromosomeType.Permutation)
                                 ParsePermutationMutations(chromosomeMetadata, child);
+                            else if (type == ChromosomeType.Neural)
+                                ParseNeuralMutations(chromosomeMetadata, child);
                             break;
                         default:
                             throw new AggregateException($"Error! {child.Name} is not a valid child element of Chromosome.");
@@ -312,6 +336,39 @@ namespace Galapagos.Metadata.Parser
         }
 
         /// <summary>
+        /// Parses a neural cromosome Crossover elements.
+        /// </summary>
+        /// <param name="metadata">The chromosome metadata.</param>
+        /// <param name="element">The Crossovers element.</param>
+        private static void ParseNeuralCrossovers(IChromosomeMetadata metadata, XElement element)
+        {
+            foreach (var child in element.Elements())
+            {
+                if (child.Name.ToString() != "Crossover")
+                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Crossovers.");
+
+                var attributes = child.Attributes();
+                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
+                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
+
+                if (typeAttribute == null)
+                    throw new ArgumentException($"Error! Crossover element must contain a type attribute");
+
+                var crossovers = (NeuralCrossover)Enum.Parse(typeof(NeuralCrossover), typeAttribute.Value);
+
+                if (weightAttribute != null)
+                {
+                    var weight = UInt32.Parse(weightAttribute.Value);
+                    ((NeuralChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
+                }
+                else
+                {
+                    ((NeuralChromosomeMetadata)metadata).AddCrossoverOperators(crossovers);
+                }
+            }
+        }
+
+        /// <summary>
         /// Parses a binary cromosome Mutation elements.
         /// </summary>
         /// <param name="metadata">The chromosome metadata.</param>
@@ -330,16 +387,16 @@ namespace Galapagos.Metadata.Parser
                 if (typeAttribute == null)
                     throw new ArgumentException($"Error! Mutation element must contain a type attribute");
 
-                var Mutations = (BinaryMutation)Enum.Parse(typeof(BinaryMutation), typeAttribute.Value);
+                var mutations = (BinaryMutation)Enum.Parse(typeof(BinaryMutation), typeAttribute.Value);
 
                 if (weightAttribute != null)
                 {
                     var weight = UInt32.Parse(weightAttribute.Value);
-                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(Mutations, weight);
+                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
                 }
                 else
                 {
-                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(Mutations);
+                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(mutations);
                 }
             }
         }
@@ -363,16 +420,49 @@ namespace Galapagos.Metadata.Parser
                 if (typeAttribute == null)
                     throw new ArgumentException($"Error! Mutation element must contain a type attribute");
 
-                var Mutations = (PermutationMutation)Enum.Parse(typeof(PermutationMutation), typeAttribute.Value);
+                var mutations = (PermutationMutation)Enum.Parse(typeof(PermutationMutation), typeAttribute.Value);
 
                 if (weightAttribute != null)
                 {
                     var weight = UInt32.Parse(weightAttribute.Value);
-                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(Mutations, weight);
+                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
                 }
                 else
                 {
-                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(Mutations);
+                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(mutations);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses a neural cromosome Mutation elements.
+        /// </summary>
+        /// <param name="metadata">The chromosome metadata.</param>
+        /// <param name="element">The Mutations element.</param>
+        private static void ParseNeuralMutations(IChromosomeMetadata metadata, XElement element)
+        {
+            foreach (var child in element.Elements())
+            {
+                if (child.Name.ToString() != "Mutation")
+                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Mutations.");
+
+                var attributes = child.Attributes();
+                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
+                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
+
+                if (typeAttribute == null)
+                    throw new ArgumentException($"Error! Mutation element must contain a type attribute");
+
+                var mutations = (NeuralMutation)Enum.Parse(typeof(NeuralMutation), typeAttribute.Value);
+
+                if (weightAttribute != null)
+                {
+                    var weight = UInt32.Parse(weightAttribute.Value);
+                    ((NeuralChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
+                }
+                else
+                {
+                    ((NeuralChromosomeMetadata)metadata).AddMutationOperators(mutations);
                 }
             }
         }

@@ -16,9 +16,10 @@ namespace Galapagos.Metadata
     public abstract class ChromosomeMetadata : IChromosomeMetadata
     {
         private const string DEFAULT_NAME = "[NULL]";
-        private const uint DEFAULT_GENE_COUNT = 0;
         private const double DEFAULT_CROSSOVER_RATE = 1;
         private const double DEFAULT_MUTATION_RATE = 0.25;
+
+        protected IDictionary<string, double> _properties = new Dictionary<string, double>();
 
         protected List<ICrossover> _crossovers;
         protected List<IMutation> _mutations;
@@ -32,7 +33,6 @@ namespace Galapagos.Metadata
         protected ChromosomeMetadata()
         {
             Name = DEFAULT_NAME;
-            GeneCount = DEFAULT_GENE_COUNT;
             CrossoverRate = DEFAULT_CROSSOVER_RATE;
             MutationRate = DEFAULT_MUTATION_RATE;
         }
@@ -48,11 +48,6 @@ namespace Galapagos.Metadata
         public ChromosomeType Type { get; protected set; }
 
         /// <summary>
-        /// The number of genes in the chromosome.
-        /// </summary>
-        public uint GeneCount { get; set; }
-
-        /// <summary>
         /// The crossover rate.
         /// </summary>
         public double CrossoverRate { get; set; }
@@ -61,6 +56,11 @@ namespace Galapagos.Metadata
         /// The mutation rate.
         /// </summary>
         public double MutationRate { get; set; }
+
+        /// <summary>
+        /// Gets the properties associated with this chromosome.
+        /// </summary>
+        public IDictionary<string, double> Properties => _properties;
 
         /// <summary>
         /// Gets a crossover from the metadata.
@@ -147,6 +147,8 @@ namespace Galapagos.Metadata
     /// </summary>
     public class BinaryChromosomeMetadata : ChromosomeMetadata
     {
+        private const uint DEFAULT_GENE_COUNT = 0;
+
         private const BinaryCrossover DEFAULT_CROSSOVER_OPTIONS = BinaryCrossover.SinglePoint;
         private const BinaryMutation DEFAULT_MUTATION_OPTIONS = BinaryMutation.SingleBit;
 
@@ -157,6 +159,8 @@ namespace Galapagos.Metadata
             : base()
         {
             Type = ChromosomeType.Binary;
+
+            _properties["GeneCount"] = DEFAULT_GENE_COUNT;
         }
 
         /// <summary>
@@ -214,6 +218,8 @@ namespace Galapagos.Metadata
 
     public class PermutationChromosomeMetadata : ChromosomeMetadata
     {
+        private const uint DEFAULT_GENE_COUNT = 0;
+
         private const PermutationCrossover DEFAULT_CROSSOVER_OPTIONS = PermutationCrossover.Order;
         private const PermutationMutation DEFAULT_MUTATION_OPTIONS = PermutationMutation.Transposition;
 
@@ -224,6 +230,8 @@ namespace Galapagos.Metadata
             : base()
         {
             Type = ChromosomeType.Permutation;
+
+            _properties["GeneCount"] = DEFAULT_GENE_COUNT;
         }
 
         /// <summary>
@@ -276,6 +284,90 @@ namespace Galapagos.Metadata
         protected override List<IMutation> GetDefaultMutations()
         {
             return GeneticFactory.ConstructPermutationMutationOperators(DEFAULT_MUTATION_OPTIONS);
+        }
+    }
+
+    /// <summary>
+    /// Metadata for a neural creature chromosome.
+    /// </summary>
+    public class NeuralChromosomeMetadata : ChromosomeMetadata
+    {
+        private const double DEFAULT_INPUT_SIZE = 1;
+        private const double DEFAULT_OUTPUT_SIZE = 1;
+
+        private const double DEFAULT_C1_WEIGHT = 1;
+        private const double DEFAULT_C2_WEIGHT = 1;
+        private const double DEFAULT_C3_WEIGHT = 1;
+
+        private const NeuralCrossover DEFAULT_CROSSOVER_OPTIONS = NeuralCrossover.Neat;
+        private const NeuralMutation DEFAULT_MUTATION_OPTIONS = NeuralMutation.Node | NeuralMutation.Edge;
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="NeuralChromosomeMetadata"/> class.
+        /// </summary>
+        internal NeuralChromosomeMetadata()
+            : base()
+        {
+            Type = ChromosomeType.Neural;
+
+            _properties["InputSize"] = DEFAULT_INPUT_SIZE;
+            _properties["OutputSize"] = DEFAULT_OUTPUT_SIZE;
+
+            _properties["C1"] = DEFAULT_C1_WEIGHT;
+            _properties["C2"] = DEFAULT_C2_WEIGHT;
+            _properties["C3"] = DEFAULT_C3_WEIGHT;
+        }
+
+        /// <summary>
+        /// Adds new crossover operators to the metadata.
+        /// </summary>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="weight">The operator weight.</param>
+        internal void AddCrossoverOperators(NeuralCrossover crossoverOptions, uint weight = 1)
+        {
+            var crossovers = GeneticFactory.ConstructNeuralCrossoverOperators(crossoverOptions, weight);
+
+            if (_crossovers == null)
+                _crossovers = crossovers;
+            else
+                _crossovers.AddRange(crossovers);
+
+            _crossoverF += ComputeWeightedSum(crossovers);
+        }
+
+        /// <summary>
+        /// Adds new mutation operators to the metadata.
+        /// </summary>
+        /// <param name="mutationOptions">The mutation options.</param>
+        /// <param name="weight">The operator weight.</param>
+        internal void AddMutationOperators(NeuralMutation mutationOptions, uint weight = 1)
+        {
+            var mutations = GeneticFactory.ConstructNeuralMutationOperators(mutationOptions, weight);
+
+            if (_mutations == null)
+                _mutations = mutations;
+            else
+                _mutations.AddRange(mutations);
+
+            _mutationF += ComputeWeightedSum(mutations);
+        }
+
+        /// <summary>
+        /// Gets the default crossover operators.
+        /// </summary>
+        /// <returns>The default crossover operators.</returns>
+        protected override List<ICrossover> GetDefaultCrossovers()
+        {
+            return GeneticFactory.ConstructNeuralCrossoverOperators(DEFAULT_CROSSOVER_OPTIONS);
+        }
+
+        /// <summary>
+        /// Gets the default mutation operators.
+        /// </summary>
+        /// <returns>The default mutation operators.</returns>
+        protected override List<IMutation> GetDefaultMutations()
+        {
+            return GeneticFactory.ConstructNeuralMutationOperators(DEFAULT_MUTATION_OPTIONS);
         }
     }
 }

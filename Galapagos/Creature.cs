@@ -77,7 +77,8 @@ namespace Galapagos
         {
             get
             {
-                EvaluateFitness();
+                if(_fitness == 0)
+                    EvaluateFitness();
                 return _fitness;
             }
         }
@@ -87,8 +88,7 @@ namespace Galapagos
         /// </summary>
         internal void EvaluateFitness()
         {
-            if (_fitness == 0)
-                _fitness = _species.Population.Metadata.FitnessFunction(this);
+            _fitness = _species.Population.Metadata.FitnessFunction(this);
         }
 
         /// <summary>
@@ -176,6 +176,7 @@ namespace Galapagos
             if (!_chromosomes.ContainsKey(name))
                 throw new ArgumentException($"Error! {name} is not a valid chromosome.");
             _chromosomes[name] = chromosome;
+            chromosome.Creature = this;
         }
 
         /// <summary>

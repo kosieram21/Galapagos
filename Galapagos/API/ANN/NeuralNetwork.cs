@@ -76,13 +76,13 @@ namespace Galapagos.API.ANN
         /// <param name="edgeGenes">The list of edge genes.</param>
         internal NeuralNetwork(IList<NeuralChromosome.NodeGene> nodeGenes, IList<NeuralChromosome.EdgeGene> edgeGenes)
         {
-            var neuronMap = new Dictionary<NeuralChromosome.NodeGene, Neuron>();
+            var neuronMap = new Dictionary<uint, Neuron>();
 
             foreach(var gene in nodeGenes)
             {
                 var neuron = new Neuron(gene.ID);
                 _neurons.Add(neuron);
-                neuronMap[gene] = neuron;
+                neuronMap[gene.ID] = neuron;
 
                 if (gene.Type == NeuralChromosome.NodeGene.NodeType.Input)
                     _inputNeurons.Add(neuron);
@@ -94,7 +94,7 @@ namespace Galapagos.API.ANN
             {
                 if(gene.Enabled)
                 {
-                    var edge = new Connection(neuronMap[gene.Input], neuronMap[gene.Output], gene.Weight);
+                    var edge = new Connection(neuronMap[gene.Input.ID], neuronMap[gene.Output.ID], gene.Weight);
                     _connections.Add(edge);
                 }
             }

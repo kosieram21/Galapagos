@@ -1,4 +1,4 @@
-﻿<Population Size="100">
+﻿<Population Size="150" DistanceThreshold="1.5">
   <SelectionAlgorithm Type="Tournament" Arg="5" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="1000" />

@@ -16,7 +16,7 @@ namespace Galapagos.Metadata
     {
         private const uint DEFAULT_SIZE = 1000;
         private const double DEFAULT_SURVIVAL_RATE = 0;
-        private const uint DEFAULT_DISTANCE_THRESHOLD = 0;
+        private const double DEFAULT_DISTANCE_THRESHOLD = 0;
         private const SelectionAlgorithm DEFAULT_SELECTION_ALGORITHM = API.SelectionAlgorithm.FitnessProportionate;
         private const TerminationCondition DEFAULT_TERMINATION_CONDITION = TerminationCondition.GenerationThreshold;
         private const uint DEFAULT_GENERATION_THRESHOLD = 1000;
@@ -49,7 +49,7 @@ namespace Galapagos.Metadata
         /// <summary>
         /// Gets or sets the distance threshold for niches. A distance threshold of 0 disable niches.
         /// </summary>
-        public uint DistanceThreshold { get; set; }
+        public double DistanceThreshold { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating if cooperative coevolution should be used.

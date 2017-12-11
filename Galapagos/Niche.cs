@@ -16,14 +16,17 @@ namespace Galapagos
         private Creature _representative;
         private readonly IList<Creature> _creatures = new List<Creature>();
 
-        private readonly uint _distanceThreshold;
+        private readonly double _distanceThreshold;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Niche"/> class.
         /// </summary>
         /// <param name="creature">The genisis creature.</param>
-        public Niche(Creature creature, uint distanceThreshold)
+        public Niche(Creature creature, double distanceThreshold)
         {
+            if (distanceThreshold < 0)
+                throw new ArgumentException("Error! Distance threshold must be a positive value.");
+
             _representative = creature;
             Add(creature);
 

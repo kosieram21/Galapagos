@@ -30,13 +30,17 @@ namespace Galapagos.CrossoverOperators.Neural
         {
             if (x.InnovationTrackerName != y.InnovationTrackerName)
                 throw new ArgumentException("Error! Incompatible chromosomes.");
+            if (x.InputSize != y.InputSize)
+                throw new ArgumentException("Error! Incompatible chromosomes.");
+            if (x.OutputSize != y.OutputSize)
+                throw new ArgumentException("Error! Incompatible chromosomes.");
 
             var geneQueueX = GetGeneQueue(x);
             var geneQueueY = GetGeneQueue(y);
 
             var seen = InitializeSeenTracker(x, y);
 
-            var approvedNodeGenes = new List<NeuralChromosome.NodeGene>();
+            var approvedNodeGenes = InitializeApprovedNodeGenes(x);
             var approvedEdgeGenes = new List<NeuralChromosome.EdgeGene>();
 
             var mostFitChromosome = x.Creature.Fitness < y.Creature.Fitness ? y : x;
@@ -50,7 +54,6 @@ namespace Galapagos.CrossoverOperators.Neural
                 {
                     var selected = Stochastic.FlipCoin() ? geneX : geneY;
                     approvedEdgeGenes.Add(selected);
-
                     ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
 
                     geneQueueX.Dequeue();
@@ -76,7 +79,7 @@ namespace Galapagos.CrossoverOperators.Neural
                     if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
                     {
                         approvedEdgeGenes.Add(geneY);
-                        ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
+                        ApproveNodeGenes(geneY, ref approvedNodeGenes, ref seen);
                     }
                     else if (mostFitChromosome == y)
                     {
@@ -104,8 +107,22 @@ namespace Galapagos.CrossoverOperators.Neural
                     ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
                 }
             }
-
+                
             return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, x.C1, x.C2, x.C3);
+        }
+
+        /// <summary>
+        /// Initializes the approved node genes to be the set of all input/output nodes.
+        /// </summary>
+        /// <param name="chromosome"></param>
+        /// <returns></returns>
+        private List<NeuralChromosome.NodeGene> InitializeApprovedNodeGenes(NeuralChromosome chromosome)
+        {
+            var genes = chromosome.CloneGenes();
+            var nodeGenes = genes.Item1;
+            var approvedNodeGenes = nodeGenes.Where(gene => gene.Type != NeuralChromosome.NodeGene.NodeType.Hidden);
+
+            return approvedNodeGenes.ToList();
         }
 
         /// <summary>
@@ -136,6 +153,13 @@ namespace Galapagos.CrossoverOperators.Neural
             var maxY = y.NodeGenes.Max(gene => gene.ID);
             var range = maxX < maxY ? maxY : maxX;
             var seen = new bool[range + 1];
+
+            foreach(var gene in x.NodeGenes)
+            {
+                if (gene.Type == NeuralChromosome.NodeGene.NodeType.Input ||
+                    gene.Type == NeuralChromosome.NodeGene.NodeType.Output)
+                    seen[gene.ID] = true;
+            }
 
             return seen;
         }

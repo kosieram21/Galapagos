@@ -48,7 +48,7 @@ namespace Galapagos.Metadata.Parser
                         populationMetadata.SurvivalRate = Double.Parse(attribute.Value);
                         break;
                     case "DistanceThreshold":
-                        populationMetadata.DistanceThreshold = UInt32.Parse(attribute.Value);
+                        populationMetadata.DistanceThreshold = Double.Parse(attribute.Value);
                         break;
                     case "CooperativeCoevolution":
                         populationMetadata.CooperativeCoevolution = Boolean.Parse(attribute.Value);

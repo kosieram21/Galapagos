@@ -35,6 +35,11 @@ namespace Galapagos.MutationOperators.Neural
             var nodeId = innovationTracker.GetNextNodeInnovationNumber();
             var newNode = new NeuralChromosome.NodeGene(nodeId, NeuralChromosome.NodeGene.NodeType.Hidden);
 
+            //No edge genes in the genotype yet. Return original chromosome.
+            if(edgeGenes.Count == 0)
+                return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
+                        chromosome.C1, chromosome.C2, chromosome.C3);
+
             var index = Stochastic.Next(edgeGenes.Count);
             var selectedEdge = edgeGenes[index];
             var sourceNode = selectedEdge.Input;

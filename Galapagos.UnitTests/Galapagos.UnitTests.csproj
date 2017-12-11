@@ -91,7 +91,7 @@
     <EmbeddedResource Include="Metadata.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Problems\Metadata\WumpusWorld.xml" />
+    <EmbeddedResource Include="Problems\Metadata\WumpusWorld.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

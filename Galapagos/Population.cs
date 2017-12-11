@@ -148,10 +148,10 @@ namespace Galapagos
         /// <param name="evolveSpecies">A delegate that evolves the species subpopulations.</param>
         private void RunEvolution(Action evolveSpecies)
         {
+            NeuralChromosome.ResetAllInnovationTrackers();
+
             while (true)
             {
-                NeuralChromosome.ResetAllInnovationTrackers();
-
                 evolveSpecies();
                 _optimalSpecies = FindOptimalSpecies();
                 _generation++;

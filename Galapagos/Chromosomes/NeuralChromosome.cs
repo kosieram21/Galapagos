@@ -341,6 +341,17 @@ namespace Galapagos.Chromosomes
         }
 
         /// <summary>
+        /// Converts the neural chromosome into a neural network.
+        /// </summary>
+        /// <returns></returns>
+        public NeuralNetwork ToNeuralNetwork()
+        {
+            if (_network == null)
+                _network = new NeuralNetwork(_nodeGenes, _edgeGenes);
+            return _network;
+        }
+
+        /// <summary>
         /// Clones the genes of this chromosome.
         /// </summary>
         /// <returns>The clonded genes.</returns>

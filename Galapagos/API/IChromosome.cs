@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Galapagos.API.ANN;
 
 namespace Galapagos.API
 {
@@ -78,5 +79,11 @@ namespace Galapagos.API
         /// <param name="inputs">The input data.</param>
         /// <returns>The output data.</returns>
         double[] Evaluate(double[] inputs);
+
+        /// <summary>
+        /// Converts the neural chromosome into a neural network.
+        /// </summary>
+        /// <returns></returns>
+        NeuralNetwork ToNeuralNetwork();
     }
 }

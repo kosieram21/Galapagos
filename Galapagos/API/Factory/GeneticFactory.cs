@@ -29,7 +29,7 @@ namespace Galapagos.API.Factory
         /// <param name="crossoverOptions">The binary crossover options.</param>
         /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed binary crossovers operators.</returns>
-        public static List<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions, uint weight = 1)
+        public static List<ICrossover> ConstructBinaryCrossoverOperators(BinaryCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
@@ -48,7 +48,7 @@ namespace Galapagos.API.Factory
         /// <param name="crossoverOptions">The permutation crossover options.</param>
         /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed permutation crossovers operators.</returns>
-        public static List<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions, uint weight = 1)
+        public static List<ICrossover> ConstructPermutationCrossoverOperators(PermutationCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
@@ -67,7 +67,7 @@ namespace Galapagos.API.Factory
         /// <param name="crossoverOptions">The neural crossover options.</param>
         /// <param name="weight">The crossover weight.</param>
         /// <returns>The constructed neural crossovers operators.</returns>
-        public static List<ICrossover> ConstructNeuralCrossoverOperators(NeuralCrossover crossoverOptions, uint weight = 1)
+        public static List<ICrossover> ConstructNeuralCrossoverOperators(NeuralCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = new List<ICrossover>();
 
@@ -82,7 +82,7 @@ namespace Galapagos.API.Factory
         /// <param name="mutationOptions">The binary mutation options.</param>
         /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed binary mutations operators.</returns>
-        public static List<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions, uint weight = 1)
+        public static List<IMutation> ConstructBinaryMutationOperators(BinaryMutation mutationOptions, double weight = 1)
         {
             var mutations = new List<IMutation>();
 
@@ -102,7 +102,7 @@ namespace Galapagos.API.Factory
         /// <param name="mutationOptions">The permutation mutation options.</param>
         /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed permutation mutations operators.</returns>
-        public static List<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions, uint weight = 1)
+        public static List<IMutation> ConstructPermutationMutationOperators(PermutationMutation mutationOptions, double weight = 1)
         {
             var mutations = new List<IMutation>();
 
@@ -121,12 +121,14 @@ namespace Galapagos.API.Factory
         /// <param name="mutationOptions">The neural mutation options.</param>
         /// <param name="weight">The mutation weight.</param>
         /// <returns>The constructed neural mutations operators.</returns>
-        public static List<IMutation> ConstructNeuralMutationOperators(NeuralMutation mutationOptions, uint weight = 1)
+        public static List<IMutation> ConstructNeuralMutationOperators(NeuralMutation mutationOptions, double weight = 1)
         {
             var mutations = new List<IMutation>();
 
             if ((mutationOptions & NeuralMutation.Edge) == NeuralMutation.Edge) mutations.Add(new EdgeMutation(weight));
             if ((mutationOptions & NeuralMutation.Node) == NeuralMutation.Node) mutations.Add(new NodeMutation(weight));
+            if ((mutationOptions & NeuralMutation.EnableDisable) == NeuralMutation.EnableDisable) mutations.Add(new EnableDisableMutation(weight));
+            if ((mutationOptions & NeuralMutation.Weight) == NeuralMutation.Weight) mutations.Add(new WeightMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid neural mutation selection.");
 
             return mutations;

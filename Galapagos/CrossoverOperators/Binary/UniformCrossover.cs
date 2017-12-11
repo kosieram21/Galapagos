@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Binary
         /// Constructs a new instance of the <see cref="UniformCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal UniformCrossover(uint weigth = 1)
+        internal UniformCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

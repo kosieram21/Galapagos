@@ -14,7 +14,7 @@ namespace Galapagos.MutationOperators.Binary
         /// Constructs a new instance of the <see cref="RandomizationBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal RandomizationBinaryMutation(uint weigth = 1)
+        internal RandomizationBinaryMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

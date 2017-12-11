@@ -77,7 +77,9 @@ namespace Galapagos.API
     {
         Edge = 1,
         Node = 1 << 1,
-        All = Edge | Node
+        EnableDisable = 1 << 2,
+        Weight = 1 << 3,
+        All = Edge | Node | EnableDisable | Weight
     }
 
     /// <summary>

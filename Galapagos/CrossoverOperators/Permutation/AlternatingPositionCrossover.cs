@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Permutation
         /// Constructs a new instance of the <see cref="AlternatingPositionCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal AlternatingPositionCrossover(uint weigth = 1)
+        internal AlternatingPositionCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

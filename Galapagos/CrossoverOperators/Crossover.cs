@@ -19,7 +19,7 @@ namespace Galapagos.CrossoverOperators
         /// Constructs a new instance of the <see cref="Crossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        protected Crossover(uint weigth = 1)
+        protected Crossover(double weigth = 1)
         {
             Weight = weigth;
         }
@@ -27,7 +27,7 @@ namespace Galapagos.CrossoverOperators
         /// <summary>
         /// Gets the crossover weight.
         /// </summary>
-        public uint Weight { get; private set; }
+        public double Weight { get; private set; }
 
         /// <summary>
         /// Invokes the crossover operator.

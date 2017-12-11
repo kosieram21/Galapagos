@@ -19,7 +19,7 @@ namespace Galapagos.CrossoverOperators.Shared
         /// Constructs a new instance of the <see cref="NoOpCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        protected NoOpCrossover(uint weigth = 1)
+        protected NoOpCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

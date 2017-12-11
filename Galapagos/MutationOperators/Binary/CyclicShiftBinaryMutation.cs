@@ -18,7 +18,7 @@ namespace Galapagos.MutationOperators.Binary
         /// Constructs a new instance of the <see cref="CyclicShiftBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal CyclicShiftBinaryMutation(uint weigth = 1)
+        internal CyclicShiftBinaryMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

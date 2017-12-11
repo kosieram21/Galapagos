@@ -17,7 +17,7 @@ namespace Galapagos.MutationOperators.Binary
         /// Constructs a new instance of the <see cref="SingleBitMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal SingleBitMutation(uint weigth = 1)
+        internal SingleBitMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

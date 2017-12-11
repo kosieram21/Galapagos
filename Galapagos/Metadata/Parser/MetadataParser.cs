@@ -292,7 +292,7 @@ namespace Galapagos.Metadata.Parser
 
                 if(weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((BinaryChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
                 }
                 else
@@ -325,7 +325,7 @@ namespace Galapagos.Metadata.Parser
 
                 if (weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((PermutationChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
                 }
                 else
@@ -358,7 +358,7 @@ namespace Galapagos.Metadata.Parser
 
                 if (weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((NeuralChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
                 }
                 else
@@ -391,7 +391,7 @@ namespace Galapagos.Metadata.Parser
 
                 if (weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((BinaryChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
                 }
                 else
@@ -424,7 +424,7 @@ namespace Galapagos.Metadata.Parser
 
                 if (weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((PermutationChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
                 }
                 else
@@ -457,7 +457,7 @@ namespace Galapagos.Metadata.Parser
 
                 if (weightAttribute != null)
                 {
-                    var weight = UInt32.Parse(weightAttribute.Value);
+                    var weight = Double.Parse(weightAttribute.Value);
                     ((NeuralChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
                 }
                 else

@@ -15,7 +15,7 @@ namespace Galapagos.API.ANN
         private readonly IList<Neuron> _inputNeurons = new List<Neuron>();
         private readonly IList<Neuron> _outputNeurons = new List<Neuron>();
 
-        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Identity);
+        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Sigmoid);
 
         /// <summary>
         /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.

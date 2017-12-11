@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Binary
         /// Constructs a new instance of the <see cref="TwoPointCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal TwoPointCrossover(uint weigth = 1)
+        internal TwoPointCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Permutation
         /// Constructs a new instance of the <see cref="OrderCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        public OrderCrossover(uint weigth = 1)
+        public OrderCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

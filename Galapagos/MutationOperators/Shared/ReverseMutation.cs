@@ -19,7 +19,7 @@ namespace Galapagos.MutationOperators.Shared
         /// Constructs a new instance of the <see cref="ReverseMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        protected ReverseMutation(uint weigth = 1)
+        protected ReverseMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

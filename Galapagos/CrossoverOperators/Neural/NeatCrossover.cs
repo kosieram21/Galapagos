@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Neural
         /// Constructs a new instance of the <see cref="NeatCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal NeatCrossover(uint weigth = 1)
+        internal NeatCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

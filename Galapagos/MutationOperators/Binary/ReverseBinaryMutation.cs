@@ -15,7 +15,7 @@ namespace Galapagos.MutationOperators.Binary
         /// Constructs a new instance of the <see cref="ReverseBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal ReverseBinaryMutation(uint weigth = 1)
+        internal ReverseBinaryMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

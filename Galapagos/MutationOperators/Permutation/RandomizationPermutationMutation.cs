@@ -17,7 +17,7 @@ namespace Galapagos.MutationOperators.Permutation
         /// Constructs a new instance of the <see cref="RandomizationPermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal RandomizationPermutationMutation(uint weigth = 1)
+        internal RandomizationPermutationMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

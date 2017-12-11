@@ -18,7 +18,7 @@ namespace Galapagos.MutationOperators.Permutation
         /// Constructs a new instance of the <see cref="ReversePermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal ReversePermutationMutation(uint weigth = 1)
+        internal ReversePermutationMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace Galapagos.MutationOperators.Neural
         /// Constructs a new instance of the <see cref="NodeMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal NodeMutation(uint weigth = 1)
+        internal NodeMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -32,9 +32,6 @@ namespace Galapagos.MutationOperators.Neural
             var nodeGenes = genes.Item1;
             var edgeGenes = genes.Item2;
 
-            var nodeId = innovationTracker.GetNextNodeInnovationNumber();
-            var newNode = new NeuralChromosome.NodeGene(nodeId, NeuralChromosome.NodeGene.NodeType.Hidden);
-
             //No edge genes in the genotype yet. Return original chromosome.
             if(edgeGenes.Count == 0)
                 return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
@@ -47,10 +44,13 @@ namespace Galapagos.MutationOperators.Neural
 
             selectedEdge.Enabled = false;
 
-            var edgeId1 = innovationTracker.GetNextEdgeInnovationNumber();
+            var nodeId = innovationTracker.GetNextNodeInnovationNumber(selectedEdge.ID);
+            var newNode = new NeuralChromosome.NodeGene(nodeId, NeuralChromosome.NodeGene.NodeType.Hidden);
+
+            var edgeId1 = innovationTracker.GetNextEdgeInnovationNumber(sourceNode.ID, newNode.ID);
             var newEdge1 = new NeuralChromosome.EdgeGene(edgeId1, selectedEdge.Input, newNode, 1, true);
 
-            var edgeId2 = innovationTracker.GetNextEdgeInnovationNumber();
+            var edgeId2 = innovationTracker.GetNextEdgeInnovationNumber(newNode.ID, targetNode.ID);
             var newEdge2 = new NeuralChromosome.EdgeGene(edgeId2, newNode, selectedEdge.Output, selectedEdge.Weight, true);
 
             nodeGenes.Add(newNode);

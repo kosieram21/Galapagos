@@ -11,6 +11,6 @@ namespace Galapagos.API
         /// <summary>
         /// Gets the operator weight.
         /// </summary>
-        uint Weight { get; }
+        double Weight { get; }
     }
 }

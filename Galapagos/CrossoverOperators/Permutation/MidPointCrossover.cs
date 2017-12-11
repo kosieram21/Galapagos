@@ -17,7 +17,7 @@ namespace Galapagos.CrossoverOperators.Permutation
         /// Constructs a new instance of the <see cref="MidpointCrossover"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal MidpointCrossover(uint weigth = 1)
+        internal MidpointCrossover(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>

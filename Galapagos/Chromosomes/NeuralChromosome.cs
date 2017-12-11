@@ -66,27 +66,51 @@ namespace Galapagos.Chromosomes
         {
             private readonly uint _initialeNodeCount;
 
+            private readonly IDictionary<string, uint> _nodeInnovations;
+            private readonly IDictionary<string, uint> _edgeInnovations;
+
             private uint _nodeInnovationNumber;
             private uint _edgeInnovationNumber;
 
             public InnovationTracker(uint initialeNodeCount = 0)
             {
                 _initialeNodeCount = initialeNodeCount;
+
+                _nodeInnovations = new Dictionary<string, uint>();
+                _edgeInnovations = new Dictionary<string, uint>();
+
                 Reset();
             }
 
-            public uint GetNextNodeInnovationNumber()
+            public uint GetNextNodeInnovationNumber(uint edge)
             {
-                return _nodeInnovationNumber++;
+                var key = $"{edge}";
+                if (_nodeInnovations.ContainsKey(key))
+                    return _nodeInnovations[key];
+
+                var nextInnovationNumber = _nodeInnovationNumber++;
+                _nodeInnovations[key] = nextInnovationNumber;
+
+                return nextInnovationNumber;
             }
 
-            public uint GetNextEdgeInnovationNumber()
+            public uint GetNextEdgeInnovationNumber(uint input, uint output)
             {
-                return _edgeInnovationNumber++;
+                var key = $"{input}->{output}";
+                if (_edgeInnovations.ContainsKey(key))
+                    return _edgeInnovations[key];
+
+                var nextInnovationNumber = _edgeInnovationNumber++;
+                _edgeInnovations[key] = nextInnovationNumber;
+
+                return nextInnovationNumber;
             }
 
             public void Reset()
             {
+                _nodeInnovations.Clear();
+                _edgeInnovations.Clear();
+
                 _nodeInnovationNumber = _initialeNodeCount;
                 _edgeInnovationNumber = 0;
             }
@@ -269,10 +293,12 @@ namespace Galapagos.Chromosomes
             }
 
             E = thisGeneQueue.Any() ? thisGeneQueue.Count : otherGeneQueue.Count;
-            W = W / matchingGeneCount;
+            W = matchingGeneCount == 0 ? 0 : W / matchingGeneCount;
             N = thisGeneQueue.Any() ? EdgeGenes.Count() : ((NeuralChromosome)other).EdgeGenes.Count();
+            //N = N <= 20 ? 1 : N;
 
-            return ((C1 * E) / N) + ((C2 * D) / N) + (C3 * W);
+            var distance = ((C1 * E) / N) + ((C2 * D) / N) + (C3 * W);
+            return distance;
         }
 
         /// <summary>

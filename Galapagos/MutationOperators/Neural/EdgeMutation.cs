@@ -17,7 +17,7 @@ namespace Galapagos.MutationOperators.Neural
         /// Constructs a new instance of the <see cref="EdgeMutation"/> class.
         /// </summary>
         /// <param name="weigth">The crossover weight.</param>
-        internal EdgeMutation(uint weigth = 1)
+        internal EdgeMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Galapagos.MutationOperators.Neural
                         chromosome.C1, chromosome.C2, chromosome.C3);
             }
 
-            var edgeId = innovationTracker.GetNextEdgeInnovationNumber();
+            var edgeId = innovationTracker.GetNextEdgeInnovationNumber(source.ID, target.ID);
             var weight = Stochastic.NextDouble();
             var newEdge = new NeuralChromosome.EdgeGene(edgeId, source, target, weight, true);
 

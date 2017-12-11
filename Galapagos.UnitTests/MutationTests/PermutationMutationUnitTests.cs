@@ -14,7 +14,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private PermutationChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(ChromosomeType.Permutation, GENE_COUNT)
+            return UnitTestFactory.ConstructChromosome(ChromosomeType.Permutation, GENE_COUNT)
                 as PermutationChromosome;
         }
 

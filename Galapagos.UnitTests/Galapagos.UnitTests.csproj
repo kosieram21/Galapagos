@@ -57,6 +57,8 @@
     <Compile Include="ChromosomeTests\NeuralChromosomeUnitTests.cs" />
     <Compile Include="CrossoverTests\BinaryCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
+    <Compile Include="CrossoverTests\NeuralCrossoverUnitTests.cs" />
+    <Compile Include="Fakes\CreatureFake.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
     <Compile Include="MutationTests\NeuralMutationTests.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Problems\Metadata.cs" />
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
+    <Compile Include="Problems\WumpusWorld.cs" />
     <Compile Include="SampleProblemUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MetadataParserUnitTest.cs" />
@@ -86,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Metadata.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Problems\Metadata\WumpusWorld.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

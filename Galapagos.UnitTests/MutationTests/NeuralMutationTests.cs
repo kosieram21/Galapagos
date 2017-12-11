@@ -16,7 +16,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private NeuralChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(ChromosomeType.Neural, INPUT_SIZE, OUTPUT_SIZE, INNOVATION_TRACKER_NAME)
+            return UnitTestFactory.ConstructChromosome(ChromosomeType.Neural, INPUT_SIZE, OUTPUT_SIZE, INNOVATION_TRACKER_NAME)
                 as NeuralChromosome;
         }
 

@@ -125,6 +125,15 @@ namespace Galapagos.Chromosomes
             return _innovationTrackers[name];
         }
 
+        /// <summary>
+        /// Resets all innovation trackers.
+        /// </summary>
+        internal static void ResetAllInnovationTrackers()
+        {
+            foreach (var kvp in _innovationTrackers)
+                kvp.Value.Reset();
+        }
+
         #endregion
 
         private readonly uint _inputSize = 0;
@@ -241,7 +250,7 @@ namespace Galapagos.Chromosomes
 
                 if (currentGene.ID == otherGene.ID)
                 {
-                    W += currentGene.ID - otherGene.ID;
+                    W += Math.Abs(currentGene.Weight - otherGene.Weight);
                     matchingGeneCount++;
 
                     thisGeneQueue.Dequeue();

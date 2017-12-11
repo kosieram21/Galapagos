@@ -1,0 +1,16 @@
+﻿<Population Size="100">
+  <SelectionAlgorithm Type="Tournament" Arg="5" />
+  <TerminationConditions>
+    <TerminationCondition Type="GenerationThreshold" Arg="1000" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Name="nn" Type="Neural" CrossoverRate="1" MutationRate="0.15" InputSize="5" OutputSize="6">
+      <Crossovers>
+        <Crossover Type="Neat" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Node, Edge" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Galapagos.Chromosomes;
@@ -6,14 +7,14 @@ using Galapagos.API;
 using Galapagos.API.Factory;
 using Galapagos.UnitTests.Fakes;
 
-namespace Galapagos.UnitTests.ChromosomeTests
+namespace Galapagos.UnitTests.CrossoverTests
 {
     [TestClass]
-    public class NeuralChromosomeUnitTests
+    public class NeuralCrossoverUnitTests
     {
         private NeuralChromosome GetChromosomeX()
         {
-            var creature = new CreatureFake(2);
+            var creature = new CreatureFake(3);
 
             var nodeGenes = new List<NeuralChromosome.NodeGene>
             {
@@ -42,7 +43,7 @@ namespace Galapagos.UnitTests.ChromosomeTests
 
         private NeuralChromosome GetChromosomeY()
         {
-            var creature = new CreatureFake(1);
+            var creature = new CreatureFake(2);
 
             var nodeGenes = new List<NeuralChromosome.NodeGene>
             {
@@ -73,14 +74,44 @@ namespace Galapagos.UnitTests.ChromosomeTests
             return chromosome as NeuralChromosome;
         }
 
+        private NeuralChromosome GetCrossover(NeuralChromosome x, NeuralChromosome y, NeuralCrossover crossover)
+        {
+            var rator = GeneticFactory.ConstructNeuralCrossoverOperators(crossover).First();
+            return rator.Invoke(x, y) as NeuralChromosome;
+        }
+
         [TestMethod]
-        public void DistanceTest()
+        public void NeatCrossoverTest()
         {
             var x = GetChromosomeX();
             var y = GetChromosomeY();
-            var distance = Math.Round(x.Distance(y), 2);
+            var crossover = GetCrossover(x, y, NeuralCrossover.Neat);
 
-            Assert.AreEqual(0.96, distance, $"Error! Expected 0.96 but recieved {distance}.");
+            Assert.AreEqual(5, crossover.NodeGenes.Count, $"Error! Expexted 5 node genes but recieved {crossover.NodeGenes.Count}");
+            Assert.AreEqual(1, crossover.NodeGenes.Where(gene => gene.ID == 0 && gene.Type == NeuralChromosome.NodeGene.NodeType.Input).Count(),
+                "Error! Did not pass on input node 0 to child.");
+            Assert.AreEqual(1, crossover.NodeGenes.Where(gene => gene.ID == 1 && gene.Type == NeuralChromosome.NodeGene.NodeType.Input).Count(),
+                "Error! Did not pass on input node 1 to child.");
+            Assert.AreEqual(1, crossover.NodeGenes.Where(gene => gene.ID == 2 && gene.Type == NeuralChromosome.NodeGene.NodeType.Input).Count(),
+                "Error! Did not pass on input node 2 to child.");
+            Assert.AreEqual(1, crossover.NodeGenes.Where(gene => gene.ID == 3 && gene.Type == NeuralChromosome.NodeGene.NodeType.Output).Count(),
+                "Error! Did not pass on output node 3 to child.");
+            Assert.AreEqual(1, crossover.NodeGenes.Where(gene => gene.ID == 4 && gene.Type == NeuralChromosome.NodeGene.NodeType.Hidden).Count(),
+                "Error! Did not pass on hidden node 4 to child.");
+
+            Assert.AreEqual(6, crossover.EdgeGenes.Count, $"Error! Expexted 6 edge genes but recieved {crossover.EdgeGenes.Count}.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 0 && gene.Input.ID == 0 && gene.Output.ID == 3).Count(),
+                "Error! Did not pass on edge 0:[0->3] to child.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 1 && gene.Input.ID == 1 && gene.Output.ID == 3).Count(),
+                "Error! Did not pass on edge 1:[1->3] to child.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 2 && gene.Input.ID == 2 && gene.Output.ID == 3).Count(),
+                "Error! Did not pass on edge 2:[2->3] to child.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 3 && gene.Input.ID == 1 && gene.Output.ID == 4).Count(),
+                "Error! Did not pass on edge 3:[1->4] to child.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 4 && gene.Input.ID == 4 && gene.Output.ID == 3).Count(),
+                "Error! Did not pass on edge 4:[4->3] to child.");
+            Assert.AreEqual(1, crossover.EdgeGenes.Where(gene => gene.ID == 7 && gene.Input.ID == 0 && gene.Output.ID == 4).Count(),
+                "Error! Did not pass on edge 7:[0->4] to child.");
         }
     }
 }

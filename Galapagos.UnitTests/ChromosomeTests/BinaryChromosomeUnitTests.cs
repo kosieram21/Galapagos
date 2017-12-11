@@ -12,14 +12,14 @@ namespace Galapagos.UnitTests.ChromosomeTests
         [TestMethod]
         public void DistanceTest()
         {
-            var x = GeneticFactory.ConstructChromosome(ChromosomeType.Binary, 
+            var x = UnitTestFactory.ConstructChromosome(ChromosomeType.Binary, 
                 new bool[] { true, false, true, true, true, false, true });
-            var y = GeneticFactory.ConstructChromosome(ChromosomeType.Binary, 
+            var y = UnitTestFactory.ConstructChromosome(ChromosomeType.Binary, 
                 new bool[] { true, false, false, true, false, false, true });
 
             var distance = x.Distance(y);
 
-            Assert.AreEqual((uint)2, distance);
+            Assert.AreEqual((uint)2, distance, $"Error! Expected 2 but recieved {distance}.");
         }
     }
 }

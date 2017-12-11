@@ -58,19 +58,31 @@ namespace Galapagos.CrossoverOperators.Neural
                 }
                 else if(geneX.ID < geneY.ID)
                 {
-                    if (mostFitChromosome == x)
+                    if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                    {
                         approvedEdgeGenes.Add(geneX);
-
-                    ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
-
+                        ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
+                    }
+                    else if (mostFitChromosome == x)
+                    {
+                        approvedEdgeGenes.Add(geneX);
+                        ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
+                    }
+                    
                     geneQueueX.Dequeue();
                 }
                 else
                 {
-                    if (mostFitChromosome == y)
+                    if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                    {
                         approvedEdgeGenes.Add(geneY);
-
-                    ApproveNodeGenes(geneY, ref approvedNodeGenes, ref seen);
+                        ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
+                    }
+                    else if (mostFitChromosome == y)
+                    {
+                        approvedEdgeGenes.Add(geneY);
+                        ApproveNodeGenes(geneY, ref approvedNodeGenes, ref seen);
+                    }
 
                     geneQueueY.Dequeue();
                 }
@@ -81,14 +93,19 @@ namespace Galapagos.CrossoverOperators.Neural
             while(remainingQueue.Any())
             {
                 var selected = remainingQueue.Dequeue();
-                if (mostFitChromosome == remainingChromosome)
+                if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                {
                     approvedEdgeGenes.Add(selected);
-
-                ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
+                    ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
+                }
+                else if (mostFitChromosome == remainingChromosome)
+                {
+                    approvedEdgeGenes.Add(selected);
+                    ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
+                }
             }
 
-            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, 
-                x.C1, x.C2, x.C3);
+            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, x.C1, x.C2, x.C3);
         }
 
         /// <summary>
@@ -118,7 +135,7 @@ namespace Galapagos.CrossoverOperators.Neural
             var maxX = x.NodeGenes.Max(gene => gene.ID);
             var maxY = y.NodeGenes.Max(gene => gene.ID);
             var range = maxX < maxY ? maxY : maxX;
-            var seen = new bool[range];
+            var seen = new bool[range + 1];
 
             return seen;
         }

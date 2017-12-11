@@ -26,5 +26,7 @@ namespace Galapagos.UnitTests.Problems
         public static Stream Sudoku => LoadEmbeddedResource(@"Sudoku");
 
         public static Stream Cryptarithmetic => LoadEmbeddedResource(@"Cryptarithmetic");
+
+        public static Stream WumpusWorld => LoadEmbeddedResource(@"WumpusWorld");
     }
 }

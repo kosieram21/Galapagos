@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Galapagos.API;
+using Galapagos.Chromosomes;
 
 namespace Galapagos
 {
@@ -149,6 +150,8 @@ namespace Galapagos
         {
             while (true)
             {
+                NeuralChromosome.ResetAllInnovationTrackers();
+
                 evolveSpecies();
                 _optimalSpecies = FindOptimalSpecies();
                 _generation++;

@@ -32,7 +32,7 @@ namespace Galapagos.API.ANN
         /// <param name="outputNeurons">The output neuron ids.</param>
         /// <param name="activationFunction">The activation function.</param>
         public NeuralNetwork(double[,] adjacencyMatrix, IList<uint> inputNeurons, IList<uint> outputNeurons, 
-            ActivationFunction.Type activationFunction = ActivationFunction.Type.Identity)
+            ActivationFunction.Type activationFunction = ActivationFunction.Type.Sigmoid) //Temp! need to fix chromosome metadata.
         {
             _activationFunction = ActivationFunction.Get(activationFunction);
 

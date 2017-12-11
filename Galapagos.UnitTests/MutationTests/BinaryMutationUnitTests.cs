@@ -14,7 +14,7 @@ namespace Galapagos.UnitTests.MutationTests
 
         private BinaryChromosome GetChromosome()
         {
-            return GeneticFactory.ConstructChromosome(ChromosomeType.Binary, GENE_COUNT) 
+            return UnitTestFactory.ConstructChromosome(ChromosomeType.Binary, GENE_COUNT) 
                 as BinaryChromosome;
         }
 

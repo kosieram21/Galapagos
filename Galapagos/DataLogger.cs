@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Galapagos.API;
 
 namespace Galapagos
 {
@@ -22,9 +23,16 @@ namespace Galapagos
         /// <param name="path">The file path.</param>
         public DataLogger(string path = "")
         {
-            var parts = path.Split('\\');
-            path = Path.HasExtension(path) ? Path.ChangeExtension(path, "csv") : $"{path}.csv";
-            _path = parts.Count() != 1 ? path : Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), path);
+            if (path != string.Empty)
+            {
+                var parts = path.Split('\\');
+                path = Path.HasExtension(path) ? Path.ChangeExtension(path, "csv") : $"{path}.csv";
+                _path = parts.Count() != 1 ? path : Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), path);
+            }
+            else
+            {
+                _path = path;
+            }
         }
 
         /// <summary>
@@ -32,22 +40,52 @@ namespace Galapagos
         /// </summary>
         /// <param name="generation">The generation number.</param>
         /// <param name="fitness">The best fitness in the population.</param>
-        public void Log(int generation, double fitness)
+        /// <param name="niches">The niches of the optimal species.</param>
+        public void Log(int generation, double fitness, IReadOnlyList<Niche> niches)
         {
-            if (!File.Exists(_path))
+            var nicheCount = niches.Count;
+            var nicheSizeGap = ComputeNicheSizeGap(niches);
+
+            if (Session.Instance.LogToConsole)
             {
+                var msg = $"Generation: {generation}, Fitness: {fitness}, Niche Count: {nicheCount}, Niche Size Gap: {nicheSizeGap}";
+                Console.WriteLine(msg);
+                System.Diagnostics.Debug.WriteLine(msg);
+            }
+
+            if (_path != string.Empty)
+            {
+                if (!File.Exists(_path))
+                {
+                    using (StreamWriter file = new StreamWriter(_path, true))
+                    {
+                        file.WriteLine("Generation,Fitness,Niche Count,Niche Size Gap");
+                        file.Close();
+                    }
+                }
+
                 using (StreamWriter file = new StreamWriter(_path, true))
                 {
-                    file.WriteLine("Generation,Fitness");
+                    file.WriteLine($"{generation},{fitness},{nicheCount},{nicheSizeGap}");
                     file.Close();
                 }
             }
+        }
 
-            using (StreamWriter file = new StreamWriter(_path, true))
-            {
-                file.WriteLine($"{generation},{fitness}");
-                file.Close();
-            }
+        /// <summary>
+        /// Computes the niche size gap.
+        /// </summary>
+        /// <param name="niches">The niches.</param>
+        /// <returns>The niche size gap.</returns>
+        private double ComputeNicheSizeGap(IReadOnlyList<Niche> niches)
+        {
+            if (niches.Count == 0)
+                return 0;
+
+            var max = niches.Max(niche => niche.Count());
+            var min = niches.Min(niche => niche.Count());
+
+            return Math.Abs(max - min);
         }
     }
 }

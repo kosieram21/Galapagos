@@ -22,6 +22,20 @@ namespace Galapagos.API
             new Lazy<Session>(() => new Session());
 
         /// <summary>
+        /// Constructs a new instance of the <see cref="Session"/> class.
+        /// </summary>
+        private Session()
+        {
+            LogToConsole = true;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating if console logging should be enabled.
+        /// File logging is still available even if console logging is disabled.
+        /// </summary>
+        public bool LogToConsole { get; set; }
+
+        /// <summary>
         /// Loads a neural network from a .ann file.
         /// </summary>
         /// <param name="path">The .ann file path.</param>

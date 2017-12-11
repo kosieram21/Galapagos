@@ -102,11 +102,11 @@
     <Compile Include="SelectionAlgorithms\TruncationSelection.cs" />
     <Compile Include="Species.cs" />
     <Compile Include="Stochastic.cs" />
-    <Compile Include="SelectionAlgorithms\TerminationConditions\FitnessPlateau.cs" />
-    <Compile Include="SelectionAlgorithms\TerminationConditions\FitnessThreshold.cs" />
-    <Compile Include="SelectionAlgorithms\TerminationConditions\GenerationThreshold.cs" />
+    <Compile Include="TerminationConditions\FitnessPlateau.cs" />
+    <Compile Include="TerminationConditions\FitnessThreshold.cs" />
+    <Compile Include="TerminationConditions\GenerationThreshold.cs" />
     <Compile Include="API\ITerminationCondition.cs" />
-    <Compile Include="SelectionAlgorithms\TerminationConditions\Timer.cs" />
+    <Compile Include="TerminationConditions\Timer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

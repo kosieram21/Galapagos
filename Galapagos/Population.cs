@@ -111,7 +111,7 @@ namespace Galapagos
         /// <param name="path">The path to log data to.</param>
         public void EnableLogging(string path = "")
         {
-            if (path != string.Empty) _logger = new DataLogger(path);
+            _logger = new DataLogger(path);
             _loggingEnabled = true;
         }
 
@@ -120,7 +120,7 @@ namespace Galapagos
         /// </summary>
         public void DisableLogging()
         {
-            if (_logger != null) _logger = null;
+            _logger = null;
             _loggingEnabled = false;
         }
 
@@ -157,13 +157,7 @@ namespace Galapagos
                 _generation++;
 
                 if (_loggingEnabled)
-                {
-                    //Temp until better logging infrastructure is established.
-                    var msg = $"Generation: {_generation}, Fitness: {OptimalCreature.Fitness}";
-                    Console.WriteLine(msg);
-                    System.Diagnostics.Debug.WriteLine(msg);
-                    if (_logger != null) _logger.Log(_generation, OptimalCreature.Fitness);
-                }
+                    _logger.Log(_generation, OptimalCreature.Fitness, _optimalSpecies.Niches);
 
                 if (_populationMetadata.TerminationConditions.Any(condition => condition.Check(this)))
                 {

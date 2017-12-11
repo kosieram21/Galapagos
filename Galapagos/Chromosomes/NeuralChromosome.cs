@@ -295,7 +295,7 @@ namespace Galapagos.Chromosomes
             E = thisGeneQueue.Any() ? thisGeneQueue.Count : otherGeneQueue.Count;
             W = matchingGeneCount == 0 ? 0 : W / matchingGeneCount;
             N = thisGeneQueue.Any() ? EdgeGenes.Count() : ((NeuralChromosome)other).EdgeGenes.Count();
-            //N = N <= 20 ? 1 : N;
+            N = N == 0 ? 1 : N;
 
             var distance = ((C1 * E) / N) + ((C2 * D) / N) + (C3 * W);
             return distance;

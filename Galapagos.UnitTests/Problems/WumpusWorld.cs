@@ -50,6 +50,8 @@ namespace Galapagos.UnitTests.Problems
         private readonly int N;
         private readonly int M;
 
+        private Tuple<int, int> _goldPosition;
+
         private Tuple<int, int> _position;
         private Direction _direction;
         private int _arrowCount;
@@ -69,6 +71,10 @@ namespace Galapagos.UnitTests.Problems
             Reset();
         }
 
+        public Tuple<int, int> Position => _position;
+
+        public Tuple<int, int> GoldPosition => _goldPosition;
+
         public bool Done => _done;
 
         public double Reward => _reward;
@@ -80,14 +86,12 @@ namespace Galapagos.UnitTests.Problems
                 for (var j = 0; j < M; j++)
                 {
                     if (_board[i, j] == START)
-                    {
                         _position = new Tuple<int, int>(i, j);
-                        goto END;
-                    }
+                    if (_board[i, j] == GOLD)
+                        _goldPosition = new Tuple<int, int>(i, j);
                 }
             }
 
-        END:
             _direction = Direction.EAST;
             _arrowCount = 1;
             _reward = 0;
@@ -100,7 +104,11 @@ namespace Galapagos.UnitTests.Problems
 
         public double[] GetPercepts()
         {
-            var percepts = new double[] { Stench(), Breeze(), Gliter(), Bump(), Scream() };
+            var percepts = new double[] 
+            {
+                Stench(), Breeze(), Gliter(), Bump(), Scream(),
+                Arrow(), Gold(), Orientation(), PosX(), PosY()
+            };
             return percepts;
         }
 
@@ -173,6 +181,40 @@ namespace Galapagos.UnitTests.Problems
         {
             double scream = _wumpusAlive ? 0 : 1;
             return scream;
+        }
+
+        private double Arrow()
+        {
+            double arrow = _arrowCount == 0 ? 0 : 1;
+            return arrow;
+        }
+
+        private double Gold()
+        {
+            double gold = _goldFound ? 1 : 0;
+            return gold;
+        }
+
+        private double Orientation()
+        {
+            double orientauin =
+                _direction == Direction.NORTH ? 0 :
+                _direction == Direction.EAST ? 1 :
+                _direction == Direction.SOUTH ? 2 :
+                _direction == Direction.WEST ? 3 :
+                -1;
+
+            return orientauin;
+        }
+
+        private double PosX()
+        {
+            return _position.Item1;
+        }
+
+        private double PosY()
+        {
+            return _position.Item2;
         }
 
         private double AdjacentToGameObject(char obj)
@@ -321,7 +363,7 @@ namespace Galapagos.UnitTests.Problems
 
     public class WumpusWorldTrainer
     {
-        private const uint EPISODE_LENGTH = 100;
+        private const uint EPISODE_LENGTH = 50;
 
         private readonly WumpusWorld _environment;
 
@@ -347,18 +389,22 @@ namespace Galapagos.UnitTests.Problems
 
             _environment.Reset();
 
-            var episode = 0;
-            while(episode < EPISODE_LENGTH && !_environment.Done)
+            var j = 0;
+            while (j < EPISODE_LENGTH && !_environment.Done)
             {
                 var percepts = _environment.GetPercepts();
                 var output = nn.Evaluate(percepts);
                 var action = (uint)Array.IndexOf(output, output.Max());
 
                 _environment.TakeAction(action);
-                episode++;
+                j++;
             }
 
-            return _environment.Reward;
+            var bonus = (_environment.Position.Item1 == 3 && _environment.Position.Item2 == 0) ? 4 : 0;
+            return _environment.Reward + j +
+                (6 - 
+                Math.Abs(_environment.Position.Item1 - _environment.GoldPosition.Item1) - 
+                Math.Abs(_environment.Position.Item2 - _environment.GoldPosition.Item2));
         }
     }
 }

@@ -58,6 +58,11 @@ namespace Galapagos
         public uint Size => Population.Metadata.Size;
 
         /// <summary>
+        /// Gets the niches in this species.
+        /// </summary>
+        internal IReadOnlyList<Niche> Niches => _niches as IReadOnlyList<Niche>;
+
+        /// <summary>
         /// Accesses a creature from the population.
         /// </summary>
         /// <param name="index">The creature index.</param>

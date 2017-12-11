@@ -12,8 +12,6 @@ namespace Galapagos.SelectionAlgorithms
     /// </summary>
     public class TruncationSelection : ISelectionAlgorithm
     {
-        private readonly Random _rng = new Random(DateTime.Now.Millisecond);
-
         private ICreature[] _creatures;
         private List<ICreature> _truncation;
         private readonly double _truncationRate = 0.33;

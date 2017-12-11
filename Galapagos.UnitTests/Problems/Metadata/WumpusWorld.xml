@@ -1,15 +1,16 @@
-﻿<Population Size="300" DistanceThreshold="1">
+﻿<Population Size="150" DistanceThreshold="0.75">
   <SelectionAlgorithm Type="Tournament" Arg="2" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="1000" />
   </TerminationConditions>
   <Chromosomes>
-    <Chromosome Name="nn" Type="Neural" CrossoverRate="0.75" MutationRate="0.75" InputSize="5" OutputSize="6" C1="2" C2="2" C3="0.4">
+    <Chromosome Name="nn" Type="Neural" CrossoverRate="0.75" MutationRate="0.75" InputSize="10" OutputSize="6" C1="1" C2="2" C3="0.4">
       <Crossovers>
         <Crossover Type="Neat" />
       </Crossovers>
       <Mutations>
-        <Mutation Type="Node, Edge"  Weight="2" />
+        <Mutation Type="Edge"  Weight="2" />
+        <Mutation Type="Node" Weight="1" />
         <Mutation Type="Weight" Weight="0.5" />
         <Mutation Type="EnableDisable" Weight="0.5" />
       </Mutations>

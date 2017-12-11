@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ANN\ActivationFunction.cs" />
+    <Compile Include="API\ANN\AnnFile.cs" />
     <Compile Include="API\ICreature.cs" />
     <Compile Include="API\IPopulationMetadata.cs" />
     <Compile Include="API\IPopulation.cs" />

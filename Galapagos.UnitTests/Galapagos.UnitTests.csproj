@@ -67,6 +67,7 @@
     <Compile Include="SampleProblemUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MetadataParserUnitTest.cs" />
+    <Compile Include="NeuralNetworkUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Galapagos\Galapagos.csproj">

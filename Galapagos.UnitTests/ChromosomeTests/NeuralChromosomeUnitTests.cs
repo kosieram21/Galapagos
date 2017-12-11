@@ -32,8 +32,8 @@ namespace Galapagos.UnitTests.ChromosomeTests
             var output = neuralNetwork.Evaluate(input);
 
             Assert.AreEqual(2, output.Length, $"Expected 2 outputs but recieved {output.Length}");
-            Assert.AreEqual(4, output[0], $"Expected first output to be 4 but recieved {output.Length}");
-            Assert.AreEqual(6, output[1], $"Expected second output to be 6 but recieved {output.Length}");
+            Assert.AreEqual(4, output[0], $"Expected first output to be 4 but recieved {output[0]}");
+            Assert.AreEqual(6, output[1], $"Expected second output to be 6 but recieved {output[1]}");
         }
 
         [TestMethod]

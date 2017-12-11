@@ -20,6 +20,13 @@ namespace Galapagos.API.ANN
         /// <summary>
         /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
         /// </summary>
+        /// <param name="annFile">The .ann file.</param>
+        public NeuralNetwork(AnnFile annFile)
+            : this(annFile.AdjacencyMatrix, annFile.InputNeurons, annFile.OutputNeurons, annFile.ActivationFunction) { }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
+        /// </summary>
         /// <param name="adjacencyMatrix">The adjacency matrix representation of the network.</param>
         /// <param name="inputNeurons">The input neuron ids.</param>
         /// <param name="outputNeurons">The output neuron ids.</param>

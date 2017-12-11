@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Reflection;
 using Galapagos.Metadata;
 using Galapagos.Metadata.Parser;
+using Galapagos.API.ANN;
 
 namespace Galapagos.API
 {
@@ -19,6 +20,31 @@ namespace Galapagos.API
         public static Session Instance => _session.Value;
         private static readonly Lazy<Session> _session =
             new Lazy<Session>(() => new Session());
+
+        /// <summary>
+        /// Loads a neural network from a .ann file.
+        /// </summary>
+        /// <param name="path">The .ann file path.</param>
+        /// <returns>The neural network.</returns>
+        public NeuralNetwork LoadNeuralNetwork(string path)
+        {
+            var annFile = AnnFile.Open(path);
+            var network = LoadNeuralNetwork(annFile);
+
+            return network;
+        }
+
+        /// <summary>
+        /// Loads a neural network from a .ann file.
+        /// </summary>
+        /// <param name="annFile">The .ann file/</param>
+        /// <returns>The neural network.</returns>
+        public NeuralNetwork LoadNeuralNetwork(AnnFile annFile)
+        {
+            var network = new NeuralNetwork(annFile);
+
+            return network;
+        }
 
         /// <summary>
         /// Loads the metadata XML file at the given location.

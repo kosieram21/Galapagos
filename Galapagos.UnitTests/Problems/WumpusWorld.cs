@@ -355,6 +355,7 @@ namespace Galapagos.UnitTests.Problems
                 var action = (uint)Array.IndexOf(output, output.Max());
 
                 _environment.TakeAction(action);
+                episode++;
             }
 
             return _environment.Reward;

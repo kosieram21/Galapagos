@@ -46,7 +46,7 @@ namespace Galapagos.UnitTests
         {
             var environment = new WumpusWorld(WumpusWorld.Boards.Board1);
             var trainer = new WumpusWorldTrainer(environment);
-            //var neuralNetwork = trainer.Train();
+            var neuralNetwork = trainer.Train();
 
             Thread.Sleep(WAIT_TIME);
         }

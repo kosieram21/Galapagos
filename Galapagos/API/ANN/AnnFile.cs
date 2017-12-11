@@ -19,7 +19,7 @@ namespace Galapagos.API.ANN
         /// <summary>
         /// Gets or sets the activation function.
         /// </summary>
-        public ActivationFunction.Type ActivationFunction { get; set; }
+        public ActivationFunction.Type Activation { get; set; }
 
         /// <summary>
         /// Gets or sets the input neurons.
@@ -48,7 +48,7 @@ namespace Galapagos.API.ANN
             var path = Path.Combine(directory, $"{Name}.ann");
             using (StreamWriter writer = new StreamWriter(path))
             {
-                WriteActivationFunction(writer, ActivationFunction);
+                WriteActivationFunction(writer, Activation);
                 WriteUIntArray(writer, InputNeurons);
                 WriteUIntArray(writer, OutputNeurons);
                 WriteAdjacencyMatrix(writer, AdjacencyMatrix);
@@ -72,7 +72,7 @@ namespace Galapagos.API.ANN
                 annFile = new AnnFile
                 {
                     Name = Regex.Replace(parts.Last(), @"\..*", ""),
-                    ActivationFunction = ReadActivationFunction(reader),
+                    Activation = ReadActivationFunction(reader),
                     InputNeurons = ReadUIntArray(reader),
                     OutputNeurons = ReadUIntArray(reader),
                     AdjacencyMatrix = ReadAdjacencyMatrix(reader)

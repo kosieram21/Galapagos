@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Galapagos.API;
 using Galapagos.API.ANN;
+using System.Threading;
 
 namespace Galapagos.UnitTests.Problems
 {
@@ -14,7 +15,7 @@ namespace Galapagos.UnitTests.Problems
         public const char WUMPUS = 'W';
         public const char PIT = 'P';
         public const char GOLD = 'G';
-        public const char EMPTY = 'E';
+        public const char EMPTY = ' ';
 
         public const uint FORWWARD = 0;
         public const uint TURN_LEFT = 1;
@@ -23,17 +24,27 @@ namespace Galapagos.UnitTests.Problems
         public const uint SHOOT = 4;
         public const uint CLIMB = 5;
 
+        public static string[] ACTION_MAP = new string[6]
+        {
+            "FORWWARD",
+            "TURN_LEFT",
+            "TURN_RIGHT",
+            "GRAB",
+            "SHOOT",
+            "CLIMB"
+        };
+
         #region Boards
 
         public static class Boards
         {
             public static readonly char[,] Board1 = new char[,]
-                {
+            {
                 { EMPTY, EMPTY, EMPTY, PIT },
                 { WUMPUS, GOLD, PIT, EMPTY },
                 { EMPTY, EMPTY, EMPTY, EMPTY },
                 { START, EMPTY, PIT, EMPTY }
-                };
+            };
         }
 
         #endregion
@@ -112,6 +123,17 @@ namespace Galapagos.UnitTests.Problems
             return percepts;
         }
 
+        public string GetPerceptsText()
+        {
+            var stench = Stench() == 1 ? "STENCH" : "NONE";
+            var breeze = Breeze() == 1 ? "BREEZE" : "NONE";
+            var gliter = Gliter() == 1 ? "GLITER" : "NONE";
+            var bump = Bump() == 1 ? "BUMP" : "NONE";
+            var scream = Scream() == 1 ? "SCREAM" : "NONE";
+
+            return $"[{stench},{breeze},{gliter},{bump},{scream}]";
+        }
+
         public void TakeAction(uint action)
         {
             if (!_done)
@@ -142,6 +164,33 @@ namespace Galapagos.UnitTests.Problems
 
                 _reward--;
             }
+        }
+
+        public void Render()
+        {
+            var boarder = new StringBuilder();
+            for (var i = 0; i < ((2 * N) + 2); i++)
+                boarder.Append("-");
+
+            System.Diagnostics.Debug.WriteLine(boarder);
+
+            for(var i = 0; i < _board.GetLength(0); i++)
+            {
+                var sb = new StringBuilder().AppendFormat("-{0}", GetCharAtLoaction(i, 0));
+                for (var j = 1; j < _board.GetLength(1); j++)
+                    sb.AppendFormat(",{0}", GetCharAtLoaction(i, j));
+                System.Diagnostics.Debug.WriteLine(sb.Append("-").ToString());
+            }
+
+            System.Diagnostics.Debug.WriteLine(boarder);
+            System.Diagnostics.Debug.WriteLine("");
+        }
+
+        private char GetCharAtLoaction(int i, int j)
+        {
+            if (_position.Item1 == i && _position.Item2 == j)
+                return 'A';
+            return _board[i, j];
         }
 
         #region Percept Helpers
@@ -363,7 +412,7 @@ namespace Galapagos.UnitTests.Problems
 
     public class WumpusWorldTrainer
     {
-        private const uint EPISODE_LENGTH = 50;
+        private const uint MAX_ACTIONS = 50;
 
         private readonly WumpusWorld _environment;
 
@@ -389,22 +438,58 @@ namespace Galapagos.UnitTests.Problems
 
             _environment.Reset();
 
-            var j = 0;
-            while (j < EPISODE_LENGTH && !_environment.Done)
+            var i = 0;
+            while (i < MAX_ACTIONS && !_environment.Done)
             {
                 var percepts = _environment.GetPercepts();
                 var output = nn.Evaluate(percepts);
                 var action = (uint)Array.IndexOf(output, output.Max());
 
                 _environment.TakeAction(action);
-                j++;
+                i++;
             }
 
             var bonus = (_environment.Position.Item1 == 3 && _environment.Position.Item2 == 0) ? 4 : 0;
-            return _environment.Reward + j +
+            return _environment.Reward + i +
                 (6 - 
                 Math.Abs(_environment.Position.Item1 - _environment.GoldPosition.Item1) - 
                 Math.Abs(_environment.Position.Item2 - _environment.GoldPosition.Item2));
+        }
+    }
+
+    public class WumpusWorldAgent
+    {
+        private const uint MAX_ACTIONS = 50;
+        private const int TIMEOUT = 250;
+
+        private readonly NeuralNetwork _network;
+
+        public WumpusWorldAgent(NeuralNetwork network)
+        {
+            _network = network;
+        }
+
+        public void Navigate(WumpusWorld environment)
+        {
+            environment.Reset();
+
+            var i = 0;
+            while (i < MAX_ACTIONS && !environment.Done)
+            {
+                var percepts = environment.GetPercepts();
+                var output = _network.Evaluate(percepts);
+                var action = (uint)Array.IndexOf(output, output.Max());
+
+                System.Diagnostics.Debug.WriteLine($"Action Count: {i}");
+                System.Diagnostics.Debug.WriteLine($"Percepts: {environment.GetPerceptsText()}");
+                System.Diagnostics.Debug.WriteLine($"Action: {WumpusWorld.ACTION_MAP[action]}");
+                environment.Render();
+
+                environment.TakeAction(action);
+                i++;
+
+                Thread.Sleep(TIMEOUT);
+            }
         }
     }
 }

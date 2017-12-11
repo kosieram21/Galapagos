@@ -27,7 +27,7 @@ namespace Galapagos.UnitTests
         private readonly AnnFile _annFile = new AnnFile
         {
             Name = _name,
-            ActivationFunction = _activationFunction,
+            Activation = _activationFunction,
             InputNeurons = _inputNeurons,
             OutputNeurons = _outputNeurons,
             AdjacencyMatrix = _adjacencyMatrix
@@ -42,7 +42,7 @@ namespace Galapagos.UnitTests
             var annFile = AnnFile.Open(Path.Combine(path, _name));
 
             Assert.AreEqual(_annFile.Name, annFile.Name, "Failed to read .ann file name");
-            Assert.AreEqual(_annFile.ActivationFunction, annFile.ActivationFunction, "Failed to read .ann file activation function.");
+            Assert.AreEqual(_annFile.Activation, annFile.Activation, "Failed to read .ann file activation function.");
 
             for(var i = 0; i < annFile.InputNeurons.Count; i++)
                 Assert.AreEqual(_annFile.InputNeurons[i], annFile.InputNeurons[i], "Failed to read .ann file input neurons.");

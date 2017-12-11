@@ -9,20 +9,30 @@ namespace Galapagos.API.ANN
 {
     public class NeuralNetwork
     {
+        private readonly ActivationFunction.Type _activation = ActivationFunction.Type.Sigmoid;
+        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Sigmoid);
+
         private readonly IList<Neuron> _neurons = new List<Neuron>();
         private readonly IList<Connection> _connections = new List<Connection>();
 
         private readonly IList<Neuron> _inputNeurons = new List<Neuron>();
         private readonly IList<Neuron> _outputNeurons = new List<Neuron>();
 
-        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Sigmoid);
+        private double[,] _adjacencyMatrix = null;
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
+        /// </summary>
+        /// <param name="path">The .ann file path.</param>
+        public NeuralNetwork(string path)
+            : this(AnnFile.Open(path)) { }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
         /// </summary>
         /// <param name="annFile">The .ann file.</param>
         public NeuralNetwork(AnnFile annFile)
-            : this(annFile.AdjacencyMatrix, annFile.InputNeurons, annFile.OutputNeurons, annFile.ActivationFunction) { }
+            : this(annFile.AdjacencyMatrix, annFile.InputNeurons, annFile.OutputNeurons, annFile.Activation) { }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="NeuralNetwork"/> class.
@@ -34,6 +44,9 @@ namespace Galapagos.API.ANN
         public NeuralNetwork(double[,] adjacencyMatrix, IList<uint> inputNeurons, IList<uint> outputNeurons, 
             ActivationFunction.Type activationFunction = ActivationFunction.Type.Sigmoid) //Temp! need to fix chromosome metadata.
         {
+            _adjacencyMatrix = adjacencyMatrix;
+
+            _activation = activationFunction;
             _activationFunction = ActivationFunction.Get(activationFunction);
 
             var n = adjacencyMatrix.GetLength(0);
@@ -101,6 +114,11 @@ namespace Galapagos.API.ANN
         }
 
         /// <summary>
+        /// Gets the activarion function.
+        /// </summary>
+        public ActivationFunction.Type Activation => _activation;
+
+        /// <summary>
         /// Gets the neurons.
         /// </summary>
         public IReadOnlyList<Neuron> Neurons => _neurons as IReadOnlyList<Neuron>;
@@ -119,6 +137,19 @@ namespace Galapagos.API.ANN
         /// Gets the output neurons.
         /// </summary>
         public IReadOnlyList<Neuron> OutputNeurons => _outputNeurons as IReadOnlyList<Neuron>;
+
+        /// <summary>
+        /// Gets the adjacency matrix for this neural network.
+        /// </summary>
+        public double[,] AdjacencyMatrix
+        {
+            get
+            {
+                if (_adjacencyMatrix == null)
+                    _adjacencyMatrix = ComputeAdjacencyMatrix();
+                return _adjacencyMatrix;
+            }
+        }
 
         /// <summary>
         /// Evaluates the neural network.
@@ -150,6 +181,60 @@ namespace Galapagos.API.ANN
                 outputs[i] = _outputNeurons[i].Value;
 
             return outputs;
+        }
+
+        /// <summary>
+        /// Saves the neural network as a .ann file.
+        /// </summary>
+        /// <param name="name">The .ann file name.</param>
+        /// <returns>The .ann file.</returns>
+        public AnnFile Save(string name)
+        {
+            var map = ComputeNodeIdMap();
+            return new AnnFile
+            {
+                Name = name,
+                Activation = Activation,
+                InputNeurons = InputNeurons.Select(neuron => (uint)map[neuron.ID]).ToList(),
+                OutputNeurons = OutputNeurons.Select(neuron => (uint)map[neuron.ID]).ToList(),
+                AdjacencyMatrix = AdjacencyMatrix
+            };
+        }
+
+        /// <summary>
+        /// Computes the adjacency matrix for this neural network.
+        /// </summary>
+        /// <returns>The adjacency matrix.</returns>
+        private double[,] ComputeAdjacencyMatrix()
+        {
+            var M = Neurons.Count;
+            var adjacencyMatrix = new double[M, M];
+            var map = ComputeNodeIdMap();
+
+            foreach (var connection in Connections)
+            {
+                var i = map[connection.Source.ID];
+                var j = map[connection.Target.ID];
+                adjacencyMatrix[i, j] = connection.Weight;
+            }
+
+            return adjacencyMatrix;
+        }
+
+        /// <summary>
+        /// Computes the node id map for saving .ann files.
+        /// </summary>
+        /// <returns>The node id map.</returns>
+        private int[] ComputeNodeIdMap()
+        {
+            var N = Neurons.Max(neuron => neuron.ID) + 1;
+            var M = Neurons.Count;
+
+            var map = new int[N];
+            for (var i = 0; i < M; i++)
+                map[Neurons[i].ID] = i;
+
+            return map;
         }
     }
 }

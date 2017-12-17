@@ -15,7 +15,7 @@ namespace Galapagos.UnitTests.Problems
         public const char WUMPUS = 'W';
         public const char PIT = 'P';
         public const char GOLD = 'G';
-        public const char EMPTY = ' ';
+        public const char EMPTY = '*';
 
         public const uint FORWWARD = 0;
         public const uint TURN_LEFT = 1;
@@ -45,6 +45,14 @@ namespace Galapagos.UnitTests.Problems
                 { EMPTY, EMPTY, EMPTY, EMPTY },
                 { START, EMPTY, PIT, EMPTY }
             };
+
+            public static readonly char[,] Board2 = new char[,]
+            {
+                { EMPTY, EMPTY, EMPTY, PIT },
+                { WUMPUS, EMPTY, PIT, EMPTY },
+                { EMPTY, EMPTY, EMPTY, EMPTY },
+                { START, GOLD, PIT, EMPTY }
+            };
         }
 
         #endregion
@@ -61,7 +69,7 @@ namespace Galapagos.UnitTests.Problems
         private readonly int N;
         private readonly int M;
 
-        private Tuple<int, int> _goldPosition;
+        private Tuple<int, int> _startPosition;
 
         private Tuple<int, int> _position;
         private Direction _direction;
@@ -82,13 +90,17 @@ namespace Galapagos.UnitTests.Problems
             Reset();
         }
 
-        public Tuple<int, int> Position => _position;
+        public Tuple<int, int> StartPosition => _startPosition;
 
-        public Tuple<int, int> GoldPosition => _goldPosition;
+        public Tuple<int, int> Position => _position;
 
         public bool Done => _done;
 
         public double Reward => _reward;
+
+        public bool GoldFound => _goldFound;
+
+        public bool WumpusAlive => _wumpusAlive;
 
         public void Reset()
         {
@@ -97,9 +109,10 @@ namespace Galapagos.UnitTests.Problems
                 for (var j = 0; j < M; j++)
                 {
                     if (_board[i, j] == START)
+                    {
                         _position = new Tuple<int, int>(i, j);
-                    if (_board[i, j] == GOLD)
-                        _goldPosition = new Tuple<int, int>(i, j);
+                        _startPosition = new Tuple<int, int>(i, j);
+                    }
                 }
             }
 
@@ -115,10 +128,10 @@ namespace Galapagos.UnitTests.Problems
 
         public double[] GetPercepts()
         {
-            var percepts = new double[] 
+            var percepts = new double[]
             {
                 Stench(), Breeze(), Gliter(), Bump(), Scream(),
-                Arrow(), Gold(), Orientation(), PosX(), PosY()
+                //Arrow(), Gold(), Orientation(), PosX(), PosY()
             };
             return percepts;
         }
@@ -174,7 +187,7 @@ namespace Galapagos.UnitTests.Problems
 
             System.Diagnostics.Debug.WriteLine(boarder);
 
-            for(var i = 0; i < _board.GetLength(0); i++)
+            for (var i = 0; i < _board.GetLength(0); i++)
             {
                 var sb = new StringBuilder().AppendFormat("-{0}", GetCharAtLoaction(i, 0));
                 for (var j = 1; j < _board.GetLength(1); j++)
@@ -217,7 +230,7 @@ namespace Galapagos.UnitTests.Problems
         {
             double bump = 0;
 
-            if(_collision)
+            if (_collision)
             {
                 bump = 1;
                 _collision = false;
@@ -354,7 +367,7 @@ namespace Galapagos.UnitTests.Problems
 
         private void Shoot()
         {
-            if(_arrowCount != 0 && _wumpusAlive)
+            if (_arrowCount != 0 && _wumpusAlive)
             {
                 var i = _position.Item1;
                 var j = _position.Item2;
@@ -393,7 +406,7 @@ namespace Galapagos.UnitTests.Problems
             var i = _position.Item1;
             var j = _position.Item2;
 
-            if(_board[i, j] == START)
+            if (_board[i, j] == START)
             {
                 _done = true;
 
@@ -412,7 +425,7 @@ namespace Galapagos.UnitTests.Problems
 
     public class WumpusWorldTrainer
     {
-        private const uint MAX_ACTIONS = 50;
+        private const uint MAX_ACTIONS = 20;
 
         private readonly WumpusWorld _environment;
 
@@ -439,21 +452,38 @@ namespace Galapagos.UnitTests.Problems
             _environment.Reset();
 
             var i = 0;
+            var j = 0;
+            var prev_action = -1;
             while (i < MAX_ACTIONS && !_environment.Done)
             {
                 var percepts = _environment.GetPercepts();
                 var output = nn.Evaluate(percepts);
                 var action = (uint)Array.IndexOf(output, output.Max());
 
+                if (action == prev_action)
+                    j++;
+                if (j > 5)
+                    break;
+
+                prev_action = (int)action;
+
                 _environment.TakeAction(action);
                 i++;
             }
 
-            var bonus = (_environment.Position.Item1 == 3 && _environment.Position.Item2 == 0) ? 4 : 0;
-            return _environment.Reward + i +
-                (6 - 
-                Math.Abs(_environment.Position.Item1 - _environment.GoldPosition.Item1) - 
-                Math.Abs(_environment.Position.Item2 - _environment.GoldPosition.Item2));
+            /*var bonus = !_environment.GoldFound ? -100 : 60 - (10 *
+                (Math.Abs(_environment.Position.Item1 - _environment.StartPosition.Item1) +
+                Math.Abs(_environment.Position.Item2 - _environment.StartPosition.Item2)));*/
+            var bonus = 0;
+
+            if (!_environment.WumpusAlive)
+                bonus += 10;
+            if (_environment.GoldFound)
+                bonus += 150;
+
+
+            //return _environment.Reward + i + bonus;
+            return _environment.Reward + bonus;
         }
     }
 

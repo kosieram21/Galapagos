@@ -41,7 +41,7 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void WumpusWorldTrainerTest()
         {
-            var environment = new WumpusWorld(WumpusWorld.Boards.Board1);
+            var environment = new WumpusWorld(WumpusWorld.Boards.Board2);
             var trainer = new WumpusWorldTrainer(environment);
             var neuralNetwork = trainer.Train();
 
@@ -55,7 +55,7 @@ namespace Galapagos.UnitTests
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), WUMPUS_WORLD_ANN_FILE);
             var neuralNetwork = Session.Instance.LoadNeuralNetwork(path);
-            var environment = new WumpusWorld(WumpusWorld.Boards.Board1);
+            var environment = new WumpusWorld(WumpusWorld.Boards.Board2);
 
             var agent = new WumpusWorldAgent(neuralNetwork);
             agent.Navigate(environment);

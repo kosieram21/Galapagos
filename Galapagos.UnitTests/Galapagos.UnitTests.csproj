@@ -62,10 +62,12 @@
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
     <Compile Include="MutationTests\NeuralMutationTests.cs" />
+    <Compile Include="Problems\3Sat.cs" />
     <Compile Include="Problems\Cryptarithmetic.cs" />
     <Compile Include="Problems\Metadata.cs" />
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
+    <Compile Include="Problems\TSP.cs" />
     <Compile Include="Problems\WumpusWorld.cs" />
     <Compile Include="SampleProblemUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\WumpusWorld.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Problems\Metadata\3Sat.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Problems\Metadata\TSP.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

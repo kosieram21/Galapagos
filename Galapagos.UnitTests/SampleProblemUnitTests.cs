@@ -15,6 +15,14 @@ namespace Galapagos.UnitTests
         private const string WUMPUS_WORLD_ANN_FILE = "Wumpus";
 
         [TestMethod]
+        public void _3SatTest()
+        {
+            var puzzle = new _3Sat();
+            var solution = puzzle.Solve();
+            _3Sat.PrintInterpretation(solution);
+        }
+
+        [TestMethod]
         public void SudokuTest()
         {
             var puzzle = new Sudoku(Sudoku.Boards.Board1);
@@ -36,6 +44,14 @@ namespace Galapagos.UnitTests
             var puzzle = new Cryptarithmetic();
             var solution = puzzle.Solve();
             Cryptarithmetic.PrintMapping(solution);
+        }
+
+        [TestMethod]
+        public void TspTest()
+        {
+            var puzzle = new TSP(TSP.Maps.Map1);
+            var solution = puzzle.Solve();
+            TSP.PrintTour(solution);
         }
 
         [TestMethod]

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Population Size="100" SurvivalRate="0.25">
+  <SelectionAlgorithm Type="Tournament" Arg="2" />
+  <TerminationConditions>
+    <TerminationCondition Type="FitnessThreshold" Arg="9" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Name="interpretation" Type="Binary" CrossoverRate="1" MutationRate="0.1" GeneCount="9">
+      <Crossovers>
+        <Crossover Type="Uniform" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="FlipBit, SingleBit" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

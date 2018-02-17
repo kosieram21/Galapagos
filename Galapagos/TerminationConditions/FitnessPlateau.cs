@@ -14,7 +14,7 @@ namespace Galapagos.TerminationConditions
     {
         private readonly uint _plateauLength;
 
-        private double _bestFitness = 0;
+        private double _bestFitness = double.MinValue;
         private int _count = 0;
 
         /// <summary>

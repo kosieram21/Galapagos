@@ -2,6 +2,7 @@
   <SelectionAlgorithm Type="Tournament" Arg="2" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="500" />
+    <TerminationCondition Type="FitnessPlateau" Arg="100" />
   </TerminationConditions>
   <Chromosomes>
     <Chromosome Name="nn" Type="Neural" CrossoverRate="0.75" MutationRate="0.75" 

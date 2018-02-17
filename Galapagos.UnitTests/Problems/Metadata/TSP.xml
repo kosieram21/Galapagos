@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Population Size="1000" SurvivalRate=".25" >
+  <SelectionAlgorithm Type="Tournament" Arg="5" />
+  <TerminationConditions>
+    <TerminationCondition Type="GenerationThreshold" Arg="1000" />
+    <TerminationCondition Type="FitnessPlateau" Arg="100" />
+  </TerminationConditions>
+  <Chromosomes>
+    <Chromosome Name="tour" Type="Permutation" CrossoverRate="1" MutationRate="0.1" GeneCount="13">
+      <Crossovers>
+        <Crossover Type="Order, AlternatingPosition" />
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="Transposition" Weight="4" />
+        <Mutation Type="Randomization" Weight="1" />
+      </Mutations>
+    </Chromosome>
+  </Chromosomes>
+</Population>

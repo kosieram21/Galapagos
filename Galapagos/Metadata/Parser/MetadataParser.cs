@@ -19,7 +19,7 @@ namespace Galapagos.Metadata.Parser
         /// <returns>The parsed population metadata.</returns>
         public static IPopulationMetadata Parse(XDocument xDoc)
         {
-            SyntacticValidater.Validate(xDoc);
+            SyntacticValidator.Validate(xDoc);
             var metadata = ParsePopulation(xDoc.Root);
             SemanticValidator.Validate(metadata);
 

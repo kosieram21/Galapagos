@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Galapagos.Metadata.Parser
 {
-    internal static class SyntacticValidater
+    internal static class SyntacticValidator
     {
         /// <summary>
         /// Performs syntactic validation on the given <see cref="XDocument"/>.

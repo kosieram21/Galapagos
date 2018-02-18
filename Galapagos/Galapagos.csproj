@@ -70,7 +70,7 @@
     <Compile Include="API\Enums.cs" />
     <Compile Include="Metadata\Parser\MetadataParser.cs" />
     <Compile Include="Metadata\Parser\SemanticValidator.cs" />
-    <Compile Include="Metadata\Parser\SyntacticValidater.cs" />
+    <Compile Include="Metadata\Parser\SyntacticValidator.cs" />
     <Compile Include="Metadata\PopulationMetadata.cs" />
     <Compile Include="API\Factory\GeneticFactory.cs" />
     <Compile Include="API\IChromosome.cs" />

@@ -108,6 +108,14 @@
     <Compile Include="API\ITerminationCondition.cs" />
     <Compile Include="TerminationConditions\Timer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Metadata\Parser\Schema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Metadata\Parser\test.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

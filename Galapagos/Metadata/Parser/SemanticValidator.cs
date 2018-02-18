@@ -111,6 +111,7 @@ namespace Galapagos.Metadata.Parser
             ValidatePropertyExists(chromosomeMetadata, "C1");
             ValidatePropertyExists(chromosomeMetadata, "C2");
             ValidatePropertyExists(chromosomeMetadata, "C3");
+            ValidatePropertyExists(chromosomeMetadata, "ActivationFunction");
 
             if (chromosomeMetadata.Properties["C1"] < 0)
                 throw new ArgumentException("Error! C1 must be a positive value.");

@@ -108,7 +108,7 @@ namespace Galapagos.CrossoverOperators.Neural
                 }
             }
                 
-            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, x.C1, x.C2, x.C3);
+            return new NeuralChromosome(approvedNodeGenes, approvedEdgeGenes, x.InnovationTrackerName, x.C1, x.C2, x.C3, x.ActivationFunction);
         }
 
         /// <summary>

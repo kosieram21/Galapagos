@@ -9,8 +9,8 @@ namespace Galapagos.API.ANN
 {
     public class NeuralNetwork
     {
-        private readonly ActivationFunction.Type _activation = ActivationFunction.Type.Sigmoid;
-        private readonly Func<double, double> _activationFunction = ActivationFunction.Get(ActivationFunction.Type.Sigmoid);
+        private readonly ActivationFunction _activation = ActivationFunction.Sigmoid;
+        private readonly Func<double, double> _activationFunction = ActivationFunctions.Get(ActivationFunction.Sigmoid);
 
         private readonly IList<Neuron> _neurons = new List<Neuron>();
         private readonly IList<Connection> _connections = new List<Connection>();
@@ -42,12 +42,12 @@ namespace Galapagos.API.ANN
         /// <param name="outputNeurons">The output neuron ids.</param>
         /// <param name="activationFunction">The activation function.</param>
         public NeuralNetwork(double[,] adjacencyMatrix, IList<uint> inputNeurons, IList<uint> outputNeurons, 
-            ActivationFunction.Type activationFunction = ActivationFunction.Type.Sigmoid) //Temp! need to fix chromosome metadata.
+            ActivationFunction activationFunction = ActivationFunction.Sigmoid) //Temp! need to fix chromosome metadata.
         {
             _adjacencyMatrix = adjacencyMatrix;
 
             _activation = activationFunction;
-            _activationFunction = ActivationFunction.Get(activationFunction);
+            _activationFunction = ActivationFunctions.Get(activationFunction);
 
             var n = adjacencyMatrix.GetLength(0);
             var m = adjacencyMatrix.GetLength(1);
@@ -87,8 +87,11 @@ namespace Galapagos.API.ANN
         /// </summary>
         /// <param name="nodeGenes">The list of node genes.</param>
         /// <param name="edgeGenes">The list of edge genes.</param>
-        internal NeuralNetwork(IList<NeuralChromosome.NodeGene> nodeGenes, IList<NeuralChromosome.EdgeGene> edgeGenes)
+        internal NeuralNetwork(IList<NeuralChromosome.NodeGene> nodeGenes, IList<NeuralChromosome.EdgeGene> edgeGenes, ActivationFunction activationFunction)
         {
+            _activation = activationFunction;
+            _activationFunction = ActivationFunctions.Get(activationFunction);
+
             var neuronMap = new Dictionary<uint, Neuron>();
 
             foreach(var gene in nodeGenes)
@@ -116,7 +119,7 @@ namespace Galapagos.API.ANN
         /// <summary>
         /// Gets the activarion function.
         /// </summary>
-        public ActivationFunction.Type Activation => _activation;
+        public ActivationFunction Activation => _activation;
 
         /// <summary>
         /// Gets the neurons.

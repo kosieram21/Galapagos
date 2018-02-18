@@ -297,6 +297,9 @@ namespace Galapagos.Metadata.Parser
                     case "C3":
                         chromosomeMetadata.Properties["C3"] = Double.Parse(attribute.Value);
                         break;
+                    case "ActivationFunction":
+                        chromosomeMetadata.Properties["ActivationFunction"] = (int)Enum.Parse(typeof(ActivationFunction), attribute.Value);
+                        break;
                 }
             }
         }

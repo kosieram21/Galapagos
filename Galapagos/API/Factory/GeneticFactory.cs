@@ -218,7 +218,8 @@ namespace Galapagos.API.Factory
                     return new PermutationChromosome((uint)metadata.Properties[@"GeneCount"]);
                 case ChromosomeType.Neural:
                     return new NeuralChromosome((uint)metadata.Properties[@"InputSize"], (uint)metadata.Properties["OutputSize"], metadata.Name,
-                        metadata.Properties[@"C1"], metadata.Properties[@"C2"], metadata.Properties[@"C3"]);
+                        metadata.Properties[@"C1"], metadata.Properties[@"C2"], metadata.Properties[@"C3"], 
+                        (ActivationFunction)metadata.Properties["ActivationFunction"]);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }
@@ -304,7 +305,7 @@ namespace Galapagos.API.Factory
             switch (chromosomeType)
             {
                 case ChromosomeType.Neural:
-                    return new NeuralChromosome(nodeGenes, edgeGenes, "UT", 1, 1, 1);
+                    return new NeuralChromosome(nodeGenes, edgeGenes, "UT", 1, 1, 1, ActivationFunction.Sigmoid);
                 default:
                     throw new ArgumentException($"Error! Invalid chromosome type.");
             }

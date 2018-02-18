@@ -7,7 +7,8 @@
   </TerminationConditions>
   <Chromosomes>
     <NeuralChromosome Name="nn" CrossoverRate="0.75" MutationRate="0.75" 
-                InputSize="5" OutputSize="6" C1="1" C2="1.25" C3="0.5">
+                      InputSize="5" OutputSize="6" C1="1" C2="1.25" C3="0.5"
+                      ActivationFunction="ReLu">
       <Crossovers>
         <Crossover Type="Neat" />
       </Crossovers>

@@ -313,6 +313,8 @@ namespace Galapagos.Metadata
         private const double DEFAULT_C2_WEIGHT = 1;
         private const double DEFAULT_C3_WEIGHT = 1;
 
+        private const ActivationFunction DEFAULT_ACTIVATION_FUNCTION = ActivationFunction.Sigmoid;
+
         private const NeuralCrossover DEFAULT_CROSSOVER_OPTIONS = NeuralCrossover.Neat;
         private const NeuralMutation DEFAULT_MUTATION_OPTIONS = NeuralMutation.Node | NeuralMutation.Edge;
 
@@ -330,6 +332,8 @@ namespace Galapagos.Metadata
             _properties["C1"] = DEFAULT_C1_WEIGHT;
             _properties["C2"] = DEFAULT_C2_WEIGHT;
             _properties["C3"] = DEFAULT_C3_WEIGHT;
+
+            _properties["ActivationFunction"] = (int)DEFAULT_ACTIVATION_FUNCTION;
         }
 
         /// <summary>

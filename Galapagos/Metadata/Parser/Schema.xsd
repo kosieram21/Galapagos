@@ -106,6 +106,24 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="ActivationFunction" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Identity"/>
+      <xs:enumeration value="BinaryStep"/>
+      <xs:enumeration value="Sigmoid"/>
+      <xs:enumeration value="Tanh"/>
+      <xs:enumeration value="ArcTan"/>
+      <xs:enumeration value="Sinusoid"/>
+      <xs:enumeration value="Softsign"/>
+      <xs:enumeration value="ReLu"/>
+      <xs:enumeration value="LeakyReLu"/>
+      <xs:enumeration value="SoftPlus"/>
+      <xs:enumeration value="BentIdentity"/>
+      <xs:enumeration value="Sinc"/>
+      <xs:enumeration value="Gaussian"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:complexType name="Operator">
     <xs:attribute name="Weight" type="xs:double" default="1" />
   </xs:complexType>
@@ -275,6 +293,8 @@
                       <xs:attribute name="C1" type="xs:double" default="1"/>
                       <xs:attribute name="C2" type="xs:double" default="1"/>
                       <xs:attribute name="C3" type="xs:double" default="1"/>
+                      
+                      <xs:attribute name="ActivationFunction" type="ActivationFunction" default="Sigmoid"/>
                     </xs:extension>
                   </xs:complexContent>
                 </xs:complexType>

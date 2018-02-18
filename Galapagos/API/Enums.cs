@@ -113,4 +113,24 @@ namespace Galapagos.API
         Permutation,
         Neural
     }
+
+    /// <summary>
+    /// The available activation functions.
+    /// </summary>
+    public enum ActivationFunction : int
+    {
+        Identity = 0,
+        BinaryStep = 1,
+        Sigmoid = 2,
+        Tanh = 3,
+        ArcTan = 4,
+        Sinusoid = 5,
+        Softsign = 6,
+        ReLu = 7,
+        LeakyReLu = 8,
+        SoftPlus = 9,
+        BentIdentity = 10,
+        Sinc = 11,
+        Gaussian = 12
+    }
 }

@@ -19,7 +19,7 @@ namespace Galapagos.API.ANN
         /// <summary>
         /// Gets or sets the activation function.
         /// </summary>
-        public ActivationFunction.Type Activation { get; set; }
+        public ActivationFunction Activation { get; set; }
 
         /// <summary>
         /// Gets or sets the input neurons.
@@ -89,9 +89,9 @@ namespace Galapagos.API.ANN
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <returns>The activation function.</returns>
-        private static ActivationFunction.Type ReadActivationFunction(StreamReader reader)
+        private static ActivationFunction ReadActivationFunction(StreamReader reader)
         {
-            ActivationFunction.Type activationFunction;
+            ActivationFunction activationFunction;
 
             var line = reader.ReadLine();
             if (line == null)
@@ -109,9 +109,9 @@ namespace Galapagos.API.ANN
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="activationFunction">The activation function.</param>
-        private static void WriteActivationFunction(StreamWriter writer, ActivationFunction.Type activationFunction)
+        private static void WriteActivationFunction(StreamWriter writer, ActivationFunction activationFunction)
         {
-            var line = Enum.GetName(typeof(ActivationFunction.Type), activationFunction);
+            var line = Enum.GetName(typeof(ActivationFunction), activationFunction);
             writer.WriteLine(line);
         }
 

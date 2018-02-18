@@ -6,59 +6,42 @@ using System.Threading.Tasks;
 
 namespace Galapagos.API.ANN
 {
-    public static class ActivationFunction
+    public static class ActivationFunctions
     {
-        public enum Type
-        {
-            Identity,
-            BinaryStep,
-            Sigmoid,
-            Tanh,
-            ArcTan,
-            Sinusoid,
-            Softsign,
-            ReLu,
-            LeakyReLu,
-            SoftPlus,
-            BentIdentity,
-            Sinc,
-            Gaussian
-        }
-
         /// <summary>
         /// Gets an activation function.
         /// </summary>
         /// <param name="type">The activation function type.</param>
         /// <returns>The activation function.</returns>
-        public static Func<double, double> Get(Type type)
+        public static Func<double, double> Get(ActivationFunction type)
         {
             switch(type)
             {
-                case Type.Identity:
+                case ActivationFunction.Identity:
                     return Identity;
-                case Type.BinaryStep:
+                case ActivationFunction.BinaryStep:
                     return BinaryStep;
-                case Type.Sigmoid:
+                case ActivationFunction.Sigmoid:
                     return Sigmoid;
-                case Type.Tanh:
+                case ActivationFunction.Tanh:
                     return Tanh;
-                case Type.ArcTan:
+                case ActivationFunction.ArcTan:
                     return ArcTan;
-                case Type.Sinusoid:
+                case ActivationFunction.Sinusoid:
                     return Sinusoid;
-                case Type.Softsign:
+                case ActivationFunction.Softsign:
                     return Softsign;
-                case Type.ReLu:
+                case ActivationFunction.ReLu:
                     return ReLu;
-                case Type.LeakyReLu:
+                case ActivationFunction.LeakyReLu:
                     return LeakyReLu;
-                case Type.SoftPlus:
+                case ActivationFunction.SoftPlus:
                     return SoftPlus;
-                case Type.BentIdentity:
+                case ActivationFunction.BentIdentity:
                     return BentIdentity;
-                case Type.Sinc:
+                case ActivationFunction.Sinc:
                     return Sinc;
-                case Type.Gaussian:
+                case ActivationFunction.Gaussian:
                     return Gaussian;
                 default:
                     throw new ArgumentException($"Error! {type} is not a valid activation function.");

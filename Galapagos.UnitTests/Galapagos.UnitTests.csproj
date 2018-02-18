@@ -59,6 +59,8 @@
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\NeuralCrossoverUnitTests.cs" />
     <Compile Include="Fakes\CreatureFake.cs" />
+    <Compile Include="Fakes\CrossoverFake.cs" />
+    <Compile Include="Fakes\MutationFake.cs" />
     <Compile Include="MutationTests\BinaryMutationUnitTests.cs" />
     <Compile Include="MutationTests\PermutationMutationUnitTests.cs" />
     <Compile Include="MutationTests\NeuralMutationTests.cs" />

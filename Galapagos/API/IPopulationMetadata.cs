@@ -29,19 +29,19 @@ namespace Galapagos.API
         bool CooperativeCoevolution { get; set; }
 
         /// <summary>
-        /// Gets the selection algorithm.
+        /// Gets or sets the selection algorithm.
         /// </summary>
-        ISelectionAlgorithm SelectionAlgorithm { get; }
+        ISelectionAlgorithm SelectionAlgorithm { get; set; }
 
         /// <summary>
         /// Gets the termination conditions.
         /// </summary>
-        IReadOnlyList<ITerminationCondition> TerminationConditions { get; }
+        IList<ITerminationCondition> TerminationConditions { get; }
 
         /// <summary>
-        /// Gets the fitness function.
+        /// Gets or sets the fitness function.
         /// </summary>
-        Func<ICreature, double> FitnessFunction { get; }
+        Func<ICreature, double> FitnessFunction { get; set; }
 
         /// <summary>
         /// Gets or sets chromosome metadata from the metadata.

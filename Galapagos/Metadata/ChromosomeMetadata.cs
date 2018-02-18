@@ -63,6 +63,32 @@ namespace Galapagos.Metadata
         public IDictionary<string, double> Properties => _properties;
 
         /// <summary>
+        /// Adds a crossover operator to the metadata.
+        /// </summary>
+        /// <param name="crossover">The crossover operator.</param>
+        public void AddCrossover(ICrossover crossover)
+        {
+            if (_crossovers == null)
+                _crossovers = new List<ICrossover> { crossover };
+            else
+                _crossovers.Add(crossover);
+            _crossoverF += crossover.Weight;
+        }
+
+        /// <summary>
+        /// Removes a crossover operator to the metadata.
+        /// </summary>
+        /// <param name="crossover">The crossover operator.</param>
+        public void RemoveCrossover(ICrossover crossover)
+        {
+            if(_crossovers != null && _crossovers.Contains(crossover))
+            {
+                _crossovers.Remove(crossover);
+                _crossoverF -= crossover.Weight;
+            }
+        }
+
+        /// <summary>
         /// Gets a crossover from the metadata.
         /// </summary>
         /// <returns>A crossover operator.</returns>
@@ -75,6 +101,33 @@ namespace Galapagos.Metadata
             }
 
             return SelectOperator(_crossovers, _crossoverF);
+        }
+
+        /// <summary>
+        /// Adds a mutation operator to the metadata.
+        /// </summary>
+        /// <param name="mutation">The mutation operator.</param>
+
+        public void AddMutation(IMutation mutation)
+        {
+            if (_mutations == null)
+                _mutations = new List<IMutation> { mutation };
+            else
+                _mutations.Add(mutation);
+            _mutationF += mutation.Weight;
+        }
+
+        /// <summary>
+        /// Removes a mutation operator to the metadata.
+        /// </summary>
+        /// <param name="mutation">The mutation operator.</param>
+        public void RemoveMutation(IMutation mutation)
+        {
+            if (_mutations != null && _mutations.Contains(mutation))
+            {
+                _mutations.Remove(mutation);
+                _mutationF -= mutation.Weight;
+            }
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Population Size="500" DistanceThreshold="1" xmlns="http://tempuri.org/Schema.xsd">
+<Population Size="10" DistanceThreshold="1" xmlns="http://tempuri.org/Schema.xsd">
   <SelectionAlgorithm Type="Tournament" Arg="2" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="500" />

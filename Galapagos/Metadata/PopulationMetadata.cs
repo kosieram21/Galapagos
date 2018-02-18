@@ -57,14 +57,14 @@ namespace Galapagos.Metadata
         public bool CooperativeCoevolution { get; set; }
 
         /// <summary>
-        /// Gets the selection algorithm.
+        /// Gets or sets the selection algorithm.
         /// </summary>
-        public ISelectionAlgorithm SelectionAlgorithm { get; internal set; }
+        public ISelectionAlgorithm SelectionAlgorithm { get; set; }
 
         /// <summary>
         /// Gets the termination conditions.
         /// </summary>
-        public IReadOnlyList<ITerminationCondition> TerminationConditions
+        public IList<ITerminationCondition> TerminationConditions
         {
             get
             {
@@ -75,9 +75,9 @@ namespace Galapagos.Metadata
         }
 
         /// <summary>
-        /// Gets the fitness function.
+        /// Gets or sets the fitness function.
         /// </summary>
-        public Func<ICreature, double> FitnessFunction { get; internal set; }
+        public Func<ICreature, double> FitnessFunction { get; set; }
 
         /// <summary>
         /// Adds a termination condition to the metadata.

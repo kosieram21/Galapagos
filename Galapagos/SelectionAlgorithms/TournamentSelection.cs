@@ -36,7 +36,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <param name="population">The population to select from.</param>
         public void Initialize(IPopulation population)
         {
-            _creatures = ((Species)population).ToArray();
+            _creatures = population.ToArray();
         }
 
         /// <summary>

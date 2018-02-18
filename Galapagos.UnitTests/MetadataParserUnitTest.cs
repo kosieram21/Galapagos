@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
+using System.Reflection;
 using Galapagos.API;
 using Galapagos.Chromosomes;
 using Galapagos.SelectionAlgorithms;
 using Galapagos.TerminationConditions;
-using System.IO;
-using System.Reflection;
+using Galapagos.UnitTests.Fakes;
 
 namespace Galapagos.UnitTests
 {
@@ -61,6 +62,28 @@ namespace Galapagos.UnitTests
             Assert.AreEqual(0.25, neural.Properties["C2"], "Failed to parse neural chromosome C2 weight.");
             Assert.AreEqual(0.5, neural.Properties["C3"], "Failed to parse neural chromosome C3 weight.");
             Assert.AreEqual(ActivationFunction.ReLu, (ActivationFunction)neural.Properties["ActivationFunction"], "Failed to parse neural chromosome activation function.");
+        }
+
+        [TestMethod]
+        public void AddRemoveCrossoverTest()
+        {
+            var stream = LoadEmbeddedResource(@"Metadata");
+            var metadata = Session.Instance.LoadMetadata(stream, null);
+
+            var crossover = new CrossoverFake();
+            metadata[0].AddCrossover(crossover);
+            metadata[0].RemoveCrossover(crossover);
+        }
+
+        [TestMethod]
+        public void AddRemoveMutationTest()
+        {
+            var stream = LoadEmbeddedResource(@"Metadata");
+            var metadata = Session.Instance.LoadMetadata(stream, null);
+
+            var mutation = new MutationFake();
+            metadata[0].AddMutation(mutation);
+            metadata[0].RemoveMutation(mutation);
         }
     }
 }

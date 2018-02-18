@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using Galapagos.API;
 using Galapagos.API.Factory;
-using System.Text.RegularExpressions;
 
 namespace Galapagos.Metadata.Parser
 {
-    //TODO: Clean up chromosome metadata parse logic.
-
     internal static class MetadataParser
     {
         /// <summary>
@@ -21,25 +19,37 @@ namespace Galapagos.Metadata.Parser
         /// <returns>The parsed population metadata.</returns>
         public static IPopulationMetadata Parse(XDocument xDoc)
         {
-            var root = XElement.Parse(xDoc.ToString());
+            SyntacticValidater.Validate(xDoc);
+            var metadata = ParsePopulation(xDoc.Root);
 
-            if (root.Name.ToString() != "Population")
-                throw new ArgumentException("Error! Population must be the root metadata element.");
-
-            return ParsePopulationElement(root);
+            return metadata;
         }
 
         /// <summary>
         /// Parses a Population element.
         /// </summary>
         /// <param name="element">The Population element.</param>
-        private static IPopulationMetadata ParsePopulationElement(XElement element)
+        /// <returns>The parsed population metadata.</returns>
+        private static IPopulationMetadata ParsePopulation(XElement element)
         {
             var populationMetadata = new PopulationMetadata();
 
-            foreach(var attribute in element.Attributes())
+            ParsePopulationAttributes(ref populationMetadata, element);
+            ParsePopulationChildren(ref populationMetadata, element);
+
+            return populationMetadata;
+        }
+
+        /// <summary>
+        /// Parses the population attributes.
+        /// </summary>
+        /// <param name="populationMetadata">The population metadata.</param>
+        /// <param name="element">The population element.</param>
+        private static void ParsePopulationAttributes(ref PopulationMetadata populationMetadata, XElement element)
+        {
+            foreach (var attribute in element.Attributes())
             {
-                switch (attribute.Name.ToString())
+                switch (attribute.Name.LocalName)
                 {
                     case "Size":
                         populationMetadata.Size = UInt32.Parse(attribute.Value);
@@ -53,34 +63,32 @@ namespace Galapagos.Metadata.Parser
                     case "CooperativeCoevolution":
                         populationMetadata.CooperativeCoevolution = Boolean.Parse(attribute.Value);
                         break;
-                    default:
-                        throw new ArgumentException($"Error! {attribute.Name} is not a valid Population attribute.");
                 }
             }
+        }
 
-            foreach(var child in element.Elements())
+        /// <summary>
+        /// Parses the population children.
+        /// </summary>
+        /// <param name="populationMetadata">The population metadata.</param>
+        /// <param name="element">The population element.</param>
+        private static void ParsePopulationChildren(ref PopulationMetadata populationMetadata, XElement element)
+        {
+            foreach (var child in element.Elements())
             {
-                switch(child.Name.ToString())
+                switch (child.Name.LocalName)
                 {
                     case "SelectionAlgorithm":
                         populationMetadata.SelectionAlgorithm = ParseSelectionAlgorithm(child);
                         break;
                     case "TerminationConditions":
-                        var terminationConditions = ParseTerminationConditions(child);
-                        foreach (var condition in terminationConditions)
-                            populationMetadata.AddTerminationCondition(condition);
+                        populationMetadata.AddTerminationCondition(ParseTerminationConditions(child));
                         break;
                     case "Chromosomes":
-                        var chromosomes = ParseChromosomes(child);
-                        foreach (var chromosome in chromosomes)
-                            populationMetadata.AddChromosomeMetadata(chromosome);
+                        populationMetadata.AddChromosomeMetadata(ParseChromosomes(child));
                         break;
-                    default:
-                        throw new AggregateException($"Error! {child.Name} is not a valid child element of Population.");
                 }
             }
-
-            return populationMetadata;
         }
 
         /// <summary>
@@ -91,11 +99,8 @@ namespace Galapagos.Metadata.Parser
         private static ISelectionAlgorithm ParseSelectionAlgorithm(XElement element)
         {
             var attributes = element.Attributes();
-            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-            var argAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Arg");
-
-            if (typeAttribute == null)
-                throw new ArgumentException("Error! SelectionAlgorithm element must contain a Type attribute.");
+            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Type");
+            var argAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Arg");
 
             var algorithm = (SelectionAlgorithm)Enum.Parse(typeof(SelectionAlgorithm), typeAttribute.Value);
 
@@ -110,14 +115,8 @@ namespace Galapagos.Metadata.Parser
         private static IList<ITerminationCondition> ParseTerminationConditions(XElement element)
         {
             var terminationConditions = new List<ITerminationCondition>();
-
             foreach (var child in element.Elements())
-            {
-                if (child.Name.ToString() != "TerminationCondition")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of TerminationConditions.");
-
                 terminationConditions.Add(ParseTerminationCondition(child));
-            }
 
             return terminationConditions;
         }
@@ -130,11 +129,8 @@ namespace Galapagos.Metadata.Parser
         private static ITerminationCondition ParseTerminationCondition(XElement element)
         {
             var attributes = element.Attributes();
-            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-            var argAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Arg");
-
-            if (typeAttribute == null)
-                throw new ArgumentException("Error! TerminationCondition element must contain a Type attribute.");
+            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Type");
+            var argAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Arg");
 
             var condition = (TerminationCondition)Enum.Parse(typeof(TerminationCondition), typeAttribute.Value);
 
@@ -151,12 +147,7 @@ namespace Galapagos.Metadata.Parser
             var chromosomes = new List<IChromosomeMetadata>();
 
             foreach (var child in element.Elements())
-            {
-                if (child.Name.ToString() != "Chromosome")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Chromosomes.");
-
                 chromosomes.AddRange(ParseChromosome(child));
-            }
 
             return chromosomes;
         }
@@ -169,302 +160,251 @@ namespace Galapagos.Metadata.Parser
         private static IList<IChromosomeMetadata> ParseChromosome(XElement element)
         {
             var attributes = element.Attributes();
-            var nameAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Name");
-            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-            var repeatAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Repeat");
-
-            if (nameAttribute == null)
-                throw new ArgumentException("Error! Chromosome element must contain a Name attribute.");
-
-            if (typeAttribute == null)
-                throw new ArgumentException("Error! Chromosome element must contain a Type attribute.");
-
-            var type = (ChromosomeType)Enum.Parse(typeof(ChromosomeType), typeAttribute.Value);
+            var repeatAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Repeat");
             var repeat = repeatAttribute == null ? 1 : Int32.Parse(repeatAttribute.Value);
-
-            if (repeat < 0)
-                throw new ArgumentException("Error! Repeat attribute must be a positive value.");
 
             var chromosomeMetadataList = new List<IChromosomeMetadata>();
 
             for (var i = 0; i < repeat; i++)
             {
-
-                ChromosomeMetadata chromosomeMetadata = 
-                    type == ChromosomeType.Binary ? new BinaryChromosomeMetadata() as ChromosomeMetadata :
-                    type == ChromosomeType.Permutation ? new PermutationChromosomeMetadata() as ChromosomeMetadata :
-                    type == ChromosomeType.Neural ? new NeuralChromosomeMetadata() as NeuralChromosomeMetadata :
-                    null;
-
-                if (chromosomeMetadata == null)
-                    throw new ArgumentException("Error! Invalid chromosome type.");
-
-                foreach (var attribute in element.Attributes())
+                IChromosomeMetadata chromosomeMetadata = null;
+                switch (element.Name.LocalName)
                 {
-                    switch (attribute.Name.ToString())
-                    {
-                        case "Name":
-                            chromosomeMetadata.Name = Regex.Replace(attribute.Value, "%i", $"{i}");
-                            break;
-                        case "CrossoverRate":
-                            chromosomeMetadata.CrossoverRate = Double.Parse(attribute.Value);
-                            break;
-                        case "MutationRate":
-                            chromosomeMetadata.MutationRate = Double.Parse(attribute.Value);
-                            break;
-                        case "GeneCount":
-                            chromosomeMetadata.Properties["GeneCount"] = UInt32.Parse(attribute.Value);
-                            break;
-                        case "InputSize":
-                            chromosomeMetadata.Properties["InputSize"] = UInt32.Parse(attribute.Value);
-                            break;
-                        case "OutputSize":
-                            chromosomeMetadata.Properties["OutputSize"] = UInt32.Parse(attribute.Value);
-                            break;
-                        case "C1":
-                            chromosomeMetadata.Properties["C1"] = Double.Parse(attribute.Value);
-                            break;
-                        case "C2":
-                            chromosomeMetadata.Properties["C2"] = Double.Parse(attribute.Value);
-                            break;
-                        case "C3":
-                            chromosomeMetadata.Properties["C3"] = Double.Parse(attribute.Value);
-                            break;
-                        case "Type":
-                        case "Repeat":
-                            break;
-                        default:
-                            throw new ArgumentException($"Error! {attribute.Name} is not a valid Chromosome attribute.");
-                    }
+                    case "BinaryChromosome":
+                        chromosomeMetadata = ParseBinaryChromosome(element);
+                        break;
+                    case "PermutationChromosome":
+                        chromosomeMetadata = ParsePermutationChromosome(element);
+                        break;
+                    case "NeuralChromosome":
+                        chromosomeMetadata = ParseNeuralChromosome(element);
+                        break;
                 }
 
-                foreach (var child in element.Elements())
-                {
-                    switch (child.Name.ToString())
-                    {
-                        case "Crossovers":
-                            if (type == ChromosomeType.Binary)
-                                ParseBinaryCrossovers(chromosomeMetadata, child);
-                            else if (type == ChromosomeType.Permutation)
-                                ParsePermutationCrossovers(chromosomeMetadata, child);
-                            else if (type == ChromosomeType.Neural)
-                                ParseNeuralCrossovers(chromosomeMetadata, child);
-                            break;
-                        case "Mutations":
-                            if (type == ChromosomeType.Binary)
-                                ParseBinaryMutations(chromosomeMetadata, child);
-                            else if (type == ChromosomeType.Permutation)
-                                ParsePermutationMutations(chromosomeMetadata, child);
-                            else if (type == ChromosomeType.Neural)
-                                ParseNeuralMutations(chromosomeMetadata, child);
-                            break;
-                        default:
-                            throw new AggregateException($"Error! {child.Name} is not a valid child element of Chromosome.");
-                    }
-                }
+                ParseChromosomeAttributes(ref chromosomeMetadata, element, i);
 
-                chromosomeMetadataList.Add(chromosomeMetadata as IChromosomeMetadata);
+                chromosomeMetadataList.Add(chromosomeMetadata);
             }
 
-            return chromosomeMetadataList;
+             return chromosomeMetadataList;
         }
 
         /// <summary>
-        /// Parses a binary cromosome Crossover elements.
+        /// Parses a BinaryChromosome element.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Crossovers element.</param>
-        private static void ParseBinaryCrossovers(IChromosomeMetadata metadata, XElement element)
+        /// <param name="element">The BinaryChromosome element.</param>
+        /// <returns>The parsed binary chromosome.</returns>
+        private static IChromosomeMetadata ParseBinaryChromosome(XElement element)
         {
-            foreach(var child in element.Elements())
-            {
-                if (child.Name.ToString() != "Crossover")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Crossovers.");
+            var chromosomeMetadata = new BinaryChromosomeMetadata() as IChromosomeMetadata;
 
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
+            ParseBinaryChromosomeAttributes(ref chromosomeMetadata, element);
+            ParseOperators<BinaryCrossover, BinaryMutation>(ref chromosomeMetadata, element);
 
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Crossover element must contain a type attribute");
-
-                var crossovers = (BinaryCrossover)Enum.Parse(typeof(BinaryCrossover), typeAttribute.Value);
-
-                if(weightAttribute != null)
-                {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((BinaryChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
-                }
-                else
-                {
-                    ((BinaryChromosomeMetadata)metadata).AddCrossoverOperators(crossovers);
-                }
-            }
+            return chromosomeMetadata;
         }
 
-        /// <summary>
-        /// Parses a permutation cromosome Crossover elements.
+        // <summary>
+        /// Parses a BinaryChromosome attributes.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Crossovers element.</param>
-        private static void ParsePermutationCrossovers(IChromosomeMetadata metadata, XElement element)
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The BinaryChromosome element.</param>
+        private static void ParseBinaryChromosomeAttributes(ref IChromosomeMetadata chromosomeMetadata, XElement element)
         {
-            foreach (var child in element.Elements())
+            foreach (var attribute in element.Attributes())
             {
-                if (child.Name.ToString() != "Crossover")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Crossovers.");
-
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
-
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Crossover element must contain a type attribute");
-
-                var crossovers = (PermutationCrossover)Enum.Parse(typeof(PermutationCrossover), typeAttribute.Value);
-
-                if (weightAttribute != null)
+                switch (attribute.Name.LocalName)
                 {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((PermutationChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
-                }
-                else
-                {
-                    ((PermutationChromosomeMetadata)metadata).AddCrossoverOperators(crossovers);
+                    case "GeneCount":
+                        chromosomeMetadata.Properties["GeneCount"] = UInt32.Parse(attribute.Value);
+                        break;
                 }
             }
         }
 
         /// <summary>
-        /// Parses a neural cromosome Crossover elements.
+        /// Parses a PermutationChromosome element.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Crossovers element.</param>
-        private static void ParseNeuralCrossovers(IChromosomeMetadata metadata, XElement element)
+        /// <param name="element">The PermutationChromosome element.</param>
+        /// <returns>The parsed permutation chromosome.</returns>
+        private static IChromosomeMetadata ParsePermutationChromosome(XElement element)
         {
-            foreach (var child in element.Elements())
+            var chromosomeMetadata = new PermutationChromosomeMetadata() as IChromosomeMetadata;
+
+            ParsePermutationChromosomeAttributes(ref chromosomeMetadata, element);
+            ParseOperators<PermutationCrossover, PermutationMutation>(ref chromosomeMetadata, element);
+
+            return chromosomeMetadata;
+        }
+
+        // <summary>
+        /// Parses a PermutationChromosome attributes.
+        /// </summary>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The PermutationChromosome element.</param>
+        private static void ParsePermutationChromosomeAttributes(ref IChromosomeMetadata chromosomeMetadata, XElement element)
+        {
+            foreach (var attribute in element.Attributes())
             {
-                if (child.Name.ToString() != "Crossover")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Crossovers.");
-
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
-
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Crossover element must contain a type attribute");
-
-                var crossovers = (NeuralCrossover)Enum.Parse(typeof(NeuralCrossover), typeAttribute.Value);
-
-                if (weightAttribute != null)
+                switch (attribute.Name.LocalName)
                 {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((NeuralChromosomeMetadata)metadata).AddCrossoverOperators(crossovers, weight);
-                }
-                else
-                {
-                    ((NeuralChromosomeMetadata)metadata).AddCrossoverOperators(crossovers);
+                    case "GeneCount":
+                        chromosomeMetadata.Properties["GeneCount"] = UInt32.Parse(attribute.Value);
+                        break;
                 }
             }
         }
 
         /// <summary>
-        /// Parses a binary cromosome Mutation elements.
+        /// Parses a BinaryChromosome element.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Mutations element.</param>
-        private static void ParseBinaryMutations(IChromosomeMetadata metadata, XElement element)
+        /// <param name="element">The BinaryChromosome element.</param>
+        /// <returns>The parsed neural chromosome.</returns>
+        private static IChromosomeMetadata ParseNeuralChromosome(XElement element)
+        {
+            var chromosomeMetadata = new NeuralChromosomeMetadata() as IChromosomeMetadata;
+
+            ParseNeuralChromosomeAttributes(ref chromosomeMetadata, element);
+            ParseOperators<NeuralCrossover, NeuralMutation>(ref chromosomeMetadata, element);
+
+            return chromosomeMetadata;
+        }
+
+        // <summary>
+        /// Parses a NeuralChromosome attributes.
+        /// </summary>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The NeuralChromosome element.</param>
+        private static void ParseNeuralChromosomeAttributes(ref IChromosomeMetadata chromosomeMetadata, XElement element)
+        {
+            foreach (var attribute in element.Attributes())
+            {
+                switch (attribute.Name.LocalName)
+                {
+                    case "InputSize":
+                        chromosomeMetadata.Properties["InputSize"] = UInt32.Parse(attribute.Value);
+                        break;
+                    case "OutputSize":
+                        chromosomeMetadata.Properties["OutputSize"] = UInt32.Parse(attribute.Value);
+                        break;
+                    case "C1":
+                        chromosomeMetadata.Properties["C1"] = Double.Parse(attribute.Value);
+                        break;
+                    case "C2":
+                        chromosomeMetadata.Properties["C2"] = Double.Parse(attribute.Value);
+                        break;
+                    case "C3":
+                        chromosomeMetadata.Properties["C3"] = Double.Parse(attribute.Value);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses the chromosome attributes.
+        /// </summary>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The chromosome element.</param>
+        /// <param name="i">The current repeat count.</param>
+        private static void ParseChromosomeAttributes(ref IChromosomeMetadata chromosomeMetadata, XElement element, int i)
+        {
+            foreach (var attribute in element.Attributes())
+            {
+                switch (attribute.Name.LocalName)
+                {
+                    case "Name":
+                        chromosomeMetadata.Name = Regex.Replace(attribute.Value, "%i", $"{i}");
+                        break;
+                    case "CrossoverRate":
+                        chromosomeMetadata.CrossoverRate = Double.Parse(attribute.Value);
+                        break;
+                    case "MutationRate":
+                        chromosomeMetadata.MutationRate = Double.Parse(attribute.Value);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses the chromosome genetic operators.
+        /// </summary>
+        /// <typeparam name="TCrossover">The crossover operator type.</typeparam>
+        /// <typeparam name="TMutation">The mutation operator type.</typeparam>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The chromosome element.</param>
+        private static void ParseOperators<TCrossover, TMutation>(ref IChromosomeMetadata chromosomeMetadata, XElement element)
         {
             foreach (var child in element.Elements())
             {
-                if (child.Name.ToString() != "Mutation")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Mutations.");
-
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
-
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Mutation element must contain a type attribute");
-
-                var mutations = (BinaryMutation)Enum.Parse(typeof(BinaryMutation), typeAttribute.Value);
-
-                if (weightAttribute != null)
+                switch (child.Name.LocalName)
                 {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
-                }
-                else
-                {
-                    ((BinaryChromosomeMetadata)metadata).AddMutationOperators(mutations);
+                    case "Crossover":
+                        ParseCrossoverOperators<TCrossover, TMutation>(ref chromosomeMetadata, child);
+                        break;
+                    case "Mutations":
+                        ParseMutationOperators<TCrossover, TMutation>(ref chromosomeMetadata, child);
+                        break;
                 }
             }
         }
 
         /// <summary>
-        /// Parses a permutation cromosome Mutation elements.
+        /// Parses the chromosome crossover operators.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Mutations element.</param>
-        private static void ParsePermutationMutations(IChromosomeMetadata metadata, XElement element)
+        /// <typeparam name="TCrossover">The crossover operator type.</typeparam>
+        /// <typeparam name="TMutation">The mutation operator type.</typeparam>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The chromosome element.</param>
+        private static void ParseCrossoverOperators<TCrossover, TMutation>(ref IChromosomeMetadata chromosomeMetadata, XElement element)
         {
             foreach (var child in element.Elements())
             {
-                if (child.Name.ToString() != "Mutation")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Mutations.");
+                var weightAttribute = child.Attributes().FirstOrDefault(attribute => attribute.Name.LocalName == "Weight");
+                var weight = weightAttribute == null ? 1 : Double.Parse(weightAttribute.Value);
 
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
+                var crossovers = ParseOperator<TCrossover>(child);
 
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Mutation element must contain a type attribute");
-
-                var mutations = (PermutationMutation)Enum.Parse(typeof(PermutationMutation), typeAttribute.Value);
-
-                if (weightAttribute != null)
-                {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
-                }
-                else
-                {
-                    ((PermutationChromosomeMetadata)metadata).AddMutationOperators(mutations);
-                }
+                var metadata = (ChromosomeMetadata<TCrossover, TMutation>)chromosomeMetadata;
+                metadata.AddCrossoverOperators(crossovers, weight);
             }
         }
 
         /// <summary>
-        /// Parses a neural cromosome Mutation elements.
+        /// Parses the chromosome mutation operators.
         /// </summary>
-        /// <param name="metadata">The chromosome metadata.</param>
-        /// <param name="element">The Mutations element.</param>
-        private static void ParseNeuralMutations(IChromosomeMetadata metadata, XElement element)
+        /// <typeparam name="TCrossover">The crossover operator type.</typeparam>
+        /// <typeparam name="TMutation">The mutation operator type.</typeparam>
+        /// <param name="chromosomeMetadata">The chromosome metadata.</param>
+        /// <param name="element">The chromosome element.</param>
+        private static void ParseMutationOperators<TCrossover, TMutation>(ref IChromosomeMetadata chromosomeMetadata, XElement element)
         {
             foreach (var child in element.Elements())
             {
-                if (child.Name.ToString() != "Mutation")
-                    throw new ArgumentException($"Error! {child.Name} is not a valid child element of Mutations.");
+                var weightAttribute = child.Attributes().FirstOrDefault(attribute => attribute.Name.LocalName == "Weight");
+                var weight = weightAttribute == null ? 1 : Double.Parse(weightAttribute.Value);
 
-                var attributes = child.Attributes();
-                var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Type");
-                var weightAttribute = attributes.FirstOrDefault(attribute => attribute.Name.ToString() == "Weight");
+                var mutations = ParseOperator<TMutation>(child);
 
-                if (typeAttribute == null)
-                    throw new ArgumentException($"Error! Mutation element must contain a type attribute");
-
-                var mutations = (NeuralMutation)Enum.Parse(typeof(NeuralMutation), typeAttribute.Value);
-
-                if (weightAttribute != null)
-                {
-                    var weight = Double.Parse(weightAttribute.Value);
-                    ((NeuralChromosomeMetadata)metadata).AddMutationOperators(mutations, weight);
-                }
-                else
-                {
-                    ((NeuralChromosomeMetadata)metadata).AddMutationOperators(mutations);
-                }
+                var metadata = (ChromosomeMetadata<TCrossover, TMutation>)chromosomeMetadata;
+                metadata.AddMutationOperators(mutations, weight);
             }
+        }
+
+        /// <summary>
+        /// Parses chromosome operator elements.
+        /// </summary>
+        /// <typeparam name="TOperator">The operator type.</typeparam>
+        /// <param name="element">The operator element.</param>
+        /// <returns>The parsed operator.</returns>
+        private static TOperator ParseOperator<TOperator>(XElement element)
+        {
+            var attributes = element.Attributes();
+            var typeAttribute = attributes.FirstOrDefault(attribute => attribute.Name.LocalName == "Type");
+            var type = Regex.Replace(typeAttribute.Value, " ", ", ");
+
+            var operators = (TOperator)Enum.Parse(typeof(TOperator), type);
+
+            return operators;
         }
     }
 }

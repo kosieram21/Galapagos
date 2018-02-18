@@ -69,6 +69,7 @@
     <Compile Include="DataLogger.cs" />
     <Compile Include="API\Enums.cs" />
     <Compile Include="Metadata\Parser\MetadataParser.cs" />
+    <Compile Include="Metadata\Parser\SyntacticValidater.cs" />
     <Compile Include="Metadata\PopulationMetadata.cs" />
     <Compile Include="API\Factory\GeneticFactory.cs" />
     <Compile Include="API\IChromosome.cs" />
@@ -109,12 +110,9 @@
     <Compile Include="TerminationConditions\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Metadata\Parser\Schema.xsd">
+    <EmbeddedResource Include="Metadata\Parser\Schema.xsd">
       <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Metadata\Parser\test.xml" />
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

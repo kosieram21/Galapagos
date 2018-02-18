@@ -13,7 +13,7 @@ namespace Galapagos.Metadata
     /// <summary>
     /// Metadata for a creature chromosome.
     /// </summary>
-    public abstract class ChromosomeMetadata : IChromosomeMetadata
+    public abstract class ChromosomeMetadata<TCrossover, TMutation> : IChromosomeMetadata
     {
         private const string DEFAULT_NAME = "[NULL]";
         private const double DEFAULT_CROSSOVER_RATE = 1;
@@ -130,6 +130,20 @@ namespace Galapagos.Metadata
         }
 
         /// <summary>
+        /// Adds new crossover operators to the metadata.
+        /// </summary>
+        /// <param name="crossoverOptions">The crossover options.</param>
+        /// <param name="weight">The operator weight.</param>
+        internal abstract void AddCrossoverOperators(TCrossover crossoverOptions, double weight = 1);
+
+        /// <summary>
+        /// Adds new mutation operators to the metadata.
+        /// </summary>
+        /// <param name="mutationOptions">The mutation options.</param>
+        /// <param name="weight">The operator weight.</param>
+        internal abstract void AddMutationOperators(TMutation mutationOptions, double weight = 1);
+
+        /// <summary>
         /// Gets the default crossover operators.
         /// </summary>
         /// <returns>The default crossover operators.</returns>
@@ -145,7 +159,7 @@ namespace Galapagos.Metadata
     /// <summary>
     /// Metadata for a binary creature chromosome.
     /// </summary>
-    public class BinaryChromosomeMetadata : ChromosomeMetadata
+    public class BinaryChromosomeMetadata : ChromosomeMetadata<BinaryCrossover, BinaryMutation>
     {
         private const uint DEFAULT_GENE_COUNT = 0;
 
@@ -168,7 +182,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddCrossoverOperators(BinaryCrossover crossoverOptions, double weight = 1)
+        internal override void AddCrossoverOperators(BinaryCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = GeneticFactory.ConstructBinaryCrossoverOperators(crossoverOptions, weight);
 
@@ -185,7 +199,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="mutationOptions">The mutation options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddMutationOperators(BinaryMutation mutationOptions, double weight = 1)
+        internal override void AddMutationOperators(BinaryMutation mutationOptions, double weight = 1)
         {
             var mutations = GeneticFactory.ConstructBinaryMutationOperators(mutationOptions, weight);
 
@@ -216,7 +230,7 @@ namespace Galapagos.Metadata
         }
     }
 
-    public class PermutationChromosomeMetadata : ChromosomeMetadata
+    public class PermutationChromosomeMetadata : ChromosomeMetadata<PermutationCrossover, PermutationMutation>
     {
         private const uint DEFAULT_GENE_COUNT = 0;
 
@@ -239,7 +253,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddCrossoverOperators(PermutationCrossover crossoverOptions, double weight = 1)
+        internal override void AddCrossoverOperators(PermutationCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = GeneticFactory.ConstructPermutationCrossoverOperators(crossoverOptions, weight);
 
@@ -256,7 +270,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="mutationOptions">The mutation options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddMutationOperators(PermutationMutation mutationOptions, double weight = 1)
+        internal override void AddMutationOperators(PermutationMutation mutationOptions, double weight = 1)
         {
             var mutations = GeneticFactory.ConstructPermutationMutationOperators(mutationOptions, weight);
 
@@ -290,7 +304,7 @@ namespace Galapagos.Metadata
     /// <summary>
     /// Metadata for a neural creature chromosome.
     /// </summary>
-    public class NeuralChromosomeMetadata : ChromosomeMetadata
+    public class NeuralChromosomeMetadata : ChromosomeMetadata<NeuralCrossover, NeuralMutation>
     {
         private const double DEFAULT_INPUT_SIZE = 1;
         private const double DEFAULT_OUTPUT_SIZE = 1;
@@ -323,7 +337,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="crossoverOptions">The crossover options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddCrossoverOperators(NeuralCrossover crossoverOptions, double weight = 1)
+        internal override void AddCrossoverOperators(NeuralCrossover crossoverOptions, double weight = 1)
         {
             var crossovers = GeneticFactory.ConstructNeuralCrossoverOperators(crossoverOptions, weight);
 
@@ -340,7 +354,7 @@ namespace Galapagos.Metadata
         /// </summary>
         /// <param name="mutationOptions">The mutation options.</param>
         /// <param name="weight">The operator weight.</param>
-        internal void AddMutationOperators(NeuralMutation mutationOptions, double weight = 1)
+        internal override void AddMutationOperators(NeuralMutation mutationOptions, double weight = 1)
         {
             var mutations = GeneticFactory.ConstructNeuralMutationOperators(mutationOptions, weight);
 

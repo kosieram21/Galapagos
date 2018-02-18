@@ -89,6 +89,16 @@ namespace Galapagos.Metadata
         }
 
         /// <summary>
+        /// Adds the termination conditions to the metadata.
+        /// </summary>
+        /// <param name="conditions"></param>
+        internal void AddTerminationCondition(IList<ITerminationCondition> conditions)
+        {
+            foreach (var condition in conditions)
+                AddTerminationCondition(condition);
+        }
+
+        /// <summary>
         /// Adds chromosome metadata to the metadata.
         /// </summary>
         /// <param name="metadata">The metadata to add.</param>
@@ -98,6 +108,16 @@ namespace Galapagos.Metadata
                 throw new ArgumentException($"Error! Chromosome metadata named {metadata.Name} already exists.");
 
             _chromosomeMetadata.Add(metadata);
+        }
+
+        /// <summary>
+        /// Adds the chromosome metadata to the metadata.
+        /// </summary>
+        /// <param name="metadata">The metadata to add.</param>
+        internal void AddChromosomeMetadata(IList<IChromosomeMetadata> metadataList)
+        {
+            foreach (var metadata in metadataList)
+                AddChromosomeMetadata(metadata);
         }
 
         /// <summary>

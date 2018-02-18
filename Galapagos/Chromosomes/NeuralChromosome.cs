@@ -167,6 +167,8 @@ namespace Galapagos.Chromosomes
         private readonly double _c2 = 1;
         private readonly double _c3 = 1;
 
+        private readonly ActivationFunction _activationFunction = ActivationFunction.Sigmoid;
+
         private readonly string _innovationTrackerName;
 
         private readonly IList<NodeGene> _nodeGenes = new List<NodeGene>();
@@ -184,7 +186,7 @@ namespace Galapagos.Chromosomes
         /// <param name="c2">C2 NEAT niching weight.</param>
         /// <param name="c3">C3 NEAT niching weight.</param>
         internal NeuralChromosome(uint inputSize, uint outputSize, string innovationTrackerName,
-            double c1 = 1, double c2 = 1, double c3 = 1)
+            double c1 = 1, double c2 = 1, double c3 = 1, ActivationFunction activationFunction = ActivationFunction.Sigmoid)
         {
             _inputSize = inputSize;
             _outputSize = outputSize;
@@ -192,6 +194,8 @@ namespace Galapagos.Chromosomes
             _c1 = c1;
             _c2 = c2;
             _c3 = c3;
+
+            _activationFunction = activationFunction;
 
             if (_inputSize == 0)
                 throw new ArgumentException("Error! Input size cannot be 0.");
@@ -219,7 +223,7 @@ namespace Galapagos.Chromosomes
         /// <param name="c2">C2 NEAT niching weight.</param>
         /// <param name="c3">C3 NEAT niching weight.</param>
         internal NeuralChromosome(IList<NodeGene> nodeGenes, IList<EdgeGene> edgeGenes, string innovationTrackerName,
-            double c1, double c2, double c3)
+            double c1, double c2, double c3, ActivationFunction activationFunction)
         {
             _nodeGenes = nodeGenes;
             _edgeGenes = edgeGenes;
@@ -227,6 +231,8 @@ namespace Galapagos.Chromosomes
             _c1 = c1;
             _c2 = c2;
             _c3 = c3;
+
+            _activationFunction = activationFunction;
 
             _innovationTrackerName = innovationTrackerName;
 
@@ -335,6 +341,11 @@ namespace Galapagos.Chromosomes
         internal double C3 => _c3;
 
         /// <summary>
+        /// Gets the neuron activation function.
+        /// </summary>
+        internal ActivationFunction ActivationFunction => _activationFunction;
+
+        /// <summary>
         /// Gets the node genes for this chromosome.
         /// </summary>
         public IReadOnlyList<NodeGene> NodeGenes => _nodeGenes as IReadOnlyList<NodeGene>;
@@ -362,7 +373,7 @@ namespace Galapagos.Chromosomes
         public double[] Evaluate(double[] inputs)
         {
             if (_network == null)
-                _network = new NeuralNetwork(_nodeGenes, _edgeGenes);
+                _network = new NeuralNetwork(_nodeGenes, _edgeGenes, _activationFunction);
             return _network.Evaluate(inputs);
         }
 
@@ -373,7 +384,7 @@ namespace Galapagos.Chromosomes
         public NeuralNetwork ToNeuralNetwork()
         {
             if (_network == null)
-                _network = new NeuralNetwork(_nodeGenes, _edgeGenes);
+                _network = new NeuralNetwork(_nodeGenes, _edgeGenes, _activationFunction);
             return _network;
         }
 

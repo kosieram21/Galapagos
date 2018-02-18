@@ -1,12 +1,14 @@
-﻿<Population Size="500" DistanceThreshold="1">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Population Size="10" DistanceThreshold="1" xmlns="http://tempuri.org/Schema.xsd">
   <SelectionAlgorithm Type="Tournament" Arg="2" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="500" />
     <TerminationCondition Type="FitnessPlateau" Arg="100" />
   </TerminationConditions>
   <Chromosomes>
-    <Chromosome Name="nn" Type="Neural" CrossoverRate="0.75" MutationRate="0.75" 
-                InputSize="5" OutputSize="6" C1="1" C2="1.25" C3="0.5">
+    <NeuralChromosome Name="nn" CrossoverRate="0.75" MutationRate="0.75" 
+                      InputSize="5" OutputSize="6" C1="1" C2="1.25" C3="0.5"
+                      ActivationFunction="ReLu">
       <Crossovers>
         <Crossover Type="Neat" />
       </Crossovers>
@@ -16,6 +18,6 @@
         <Mutation Type="Weight" Weight="1.5" />
         <Mutation Type="EnableDisable" Weight="0.5" />
       </Mutations>
-    </Chromosome>
+    </NeuralChromosome>
   </Chromosomes>
 </Population>

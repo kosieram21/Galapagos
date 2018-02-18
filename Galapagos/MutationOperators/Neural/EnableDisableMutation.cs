@@ -31,7 +31,7 @@ namespace Galapagos.MutationOperators.Neural
             //No edge genes in the genotype yet. Return original chromosome.
             if (edgeGenes.Count == 0)
                 return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
-                        chromosome.C1, chromosome.C2, chromosome.C3);
+                        chromosome.C1, chromosome.C2, chromosome.C3, chromosome.ActivationFunction);
 
             var index = Stochastic.Next(edgeGenes.Count);
             var selectedEdge = edgeGenes[index];
@@ -39,7 +39,7 @@ namespace Galapagos.MutationOperators.Neural
             selectedEdge.Enabled = !selectedEdge.Enabled;
 
             return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
-                chromosome.C1, chromosome.C2, chromosome.C3);
+                chromosome.C1, chromosome.C2, chromosome.C3, chromosome.ActivationFunction);
         }
     }
 }

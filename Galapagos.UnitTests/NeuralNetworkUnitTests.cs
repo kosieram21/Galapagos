@@ -10,7 +10,7 @@ namespace Galapagos.UnitTests
     public class NeuralNetworkUnitTests
     {
         private static readonly string _name = "test";
-        private static readonly ActivationFunction.Type _activationFunction = ActivationFunction.Type.Identity;
+        private static readonly ActivationFunction _activationFunction = ActivationFunction.Identity;
         private static readonly uint[] _inputNeurons = new uint[] { 0, 1, 2 };
         private static readonly uint[] _outputNeurons = new uint[] { 5, 6 };
         private static readonly double[,] _adjacencyMatrix = new double[,]

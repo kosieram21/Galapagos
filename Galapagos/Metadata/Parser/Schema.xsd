@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Schema"
+    targetNamespace="http://tempuri.org/Schema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/Schema.xsd"
+    xmlns:mstns="http://tempuri.org/Schema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:simpleType name="BinaryCrossover">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SinglePoint"/>
+          <xs:enumeration value="TwoPoint"/>
+          <xs:enumeration value="Uniform"/>
+          <xs:enumeration value="NoOp"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+
+  <xs:simpleType name="PermutationCrossover">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AlternatingPosition"/>
+          <xs:enumeration value="Order"/>
+          <xs:enumeration value="Midpoint"/>
+          <xs:enumeration value="NoOp"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+
+  <xs:simpleType name="NeuralCrossover">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Neat"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+
+  <xs:simpleType name="BinaryMutation">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CyclicShift"/>
+          <xs:enumeration value="Randomization"/>
+          <xs:enumeration value="Reverse"/>
+          <xs:enumeration value="FlipBit"/>
+          <xs:enumeration value="SingleBit"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+
+  <xs:simpleType name="PermutationMutation">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CyclicShift"/>
+          <xs:enumeration value="Randomization"/>
+          <xs:enumeration value="Reverse"/>
+          <xs:enumeration value="Transposition"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+
+  <xs:simpleType name="NeuralMutation">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Edge"/>
+          <xs:enumeration value="Node"/>
+          <xs:enumeration value="EnableDisable"/>
+          <xs:enumeration value="Weight"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  
+  <xs:simpleType name="SelectionAlgorithm" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FitnessProportionate"/>
+      <xs:enumeration value="StochasticUniversalSampling"/>
+      <xs:enumeration value="Tournament"/>
+      <xs:enumeration value="Truncation"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TerminationCondition" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FitnessPlateau"/>
+      <xs:enumeration value="FitnessThreshold"/>
+      <xs:enumeration value="GenerationThreshold"/>
+      <xs:enumeration value="Timer"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ActivationFunction" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Identity"/>
+      <xs:enumeration value="BinaryStep"/>
+      <xs:enumeration value="Sigmoid"/>
+      <xs:enumeration value="Tanh"/>
+      <xs:enumeration value="ArcTan"/>
+      <xs:enumeration value="Sinusoid"/>
+      <xs:enumeration value="Softsign"/>
+      <xs:enumeration value="ReLu"/>
+      <xs:enumeration value="LeakyReLu"/>
+      <xs:enumeration value="SoftPlus"/>
+      <xs:enumeration value="BentIdentity"/>
+      <xs:enumeration value="Sinc"/>
+      <xs:enumeration value="Gaussian"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Operator">
+    <xs:attribute name="Weight" type="xs:double" default="1" />
+  </xs:complexType>
+
+  <xs:complexType name="Chromosome">
+    <xs:attribute name="Repeat" type="xs:unsignedInt" default="1"/>
+    <xs:attribute name="Name" type="xs:string" default="[NULL]"/>
+    <xs:attribute name="CrossoverRate" type="xs:double" default="1"/>
+    <xs:attribute name="MutationRate" type="xs:double" default="0.25"/>
+  </xs:complexType>
+  
+  <xs:element name="Population">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SelectionAlgorithm">
+          <xs:complexType>
+            <xs:attribute name="Type" type="SelectionAlgorithm" default="FitnessProportionate" />
+            <xs:attribute name="Arg" type="xs:double" />
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="TerminationConditions">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="TerminationCondition">
+                <xs:complexType>
+                  <xs:attribute name="Type" type="TerminationCondition" default="GenerationThreshold"/>
+                  <xs:attribute name="Arg" type="xs:double" default="1000" />
+                </xs:complexType>
+              </xs:element>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="Chromosomes">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="BinaryChromosome">
+                <xs:complexType>
+                  <xs:complexContent>
+                    <xs:extension base="Chromosome">
+                      <xs:sequence>
+                        <xs:element name="Crossovers">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Crossover">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="BinaryCrossover" default="SinglePoint"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+
+                        <xs:element name="Mutations">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Mutation">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="BinaryMutation" default="SingleBit"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>  
+                    
+                      <xs:attribute name="GeneCount" type="xs:unsignedInt" default="0"/>
+                    </xs:extension>
+                  </xs:complexContent>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="PermutationChromosome">
+                <xs:complexType>
+                  <xs:complexContent>
+                    <xs:extension base="Chromosome">
+                      <xs:sequence>
+                        <xs:element name="Crossovers">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Crossover">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="PermutationCrossover" default="Order"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+
+                        <xs:element name="Mutations">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Mutation">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="PermutationMutation" default="Transposition"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                      
+                      <xs:attribute name="GeneCount" type="xs:unsignedInt" default="0"/>
+                    </xs:extension>
+                  </xs:complexContent>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="NeuralChromosome">
+                <xs:complexType>
+                  <xs:complexContent>
+                    <xs:extension base="Chromosome">
+                      <xs:sequence>
+                        <xs:element name="Crossovers">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Crossover">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="NeuralCrossover" default="Neat"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+
+                        <xs:element name="Mutations">
+                          <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                              <xs:element name="Mutation">
+                                <xs:complexType>
+                                  <xs:complexContent>
+                                    <xs:extension base="Operator">
+                                      <xs:attribute name="Type" type="NeuralMutation" default="Node Edge"/>
+                                    </xs:extension>
+                                  </xs:complexContent>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+
+                      <xs:attribute name="InputSize" type="xs:unsignedInt" default="1"/>
+                      <xs:attribute name="OutputSize" type="xs:unsignedInt" default="1"/>
+
+                      <xs:attribute name="C1" type="xs:double" default="1"/>
+                      <xs:attribute name="C2" type="xs:double" default="1"/>
+                      <xs:attribute name="C3" type="xs:double" default="1"/>
+                      
+                      <xs:attribute name="ActivationFunction" type="ActivationFunction" default="Sigmoid"/>
+                    </xs:extension>
+                  </xs:complexContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      
+      <xs:attribute name="Size" type="xs:unsignedInt" default="1000" />
+      <xs:attribute name="SurvivalRate" type="xs:double" default="0" />
+      <xs:attribute name="DistanceThreshold" type="xs:double" default="0" />
+      <xs:attribute name="CooperativeCoevolution" type="xs:boolean" default="false" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

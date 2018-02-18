@@ -57,14 +57,14 @@ namespace Galapagos.Metadata
         public bool CooperativeCoevolution { get; set; }
 
         /// <summary>
-        /// Gets the selection algorithm.
+        /// Gets or sets the selection algorithm.
         /// </summary>
-        public ISelectionAlgorithm SelectionAlgorithm { get; internal set; }
+        public ISelectionAlgorithm SelectionAlgorithm { get; set; }
 
         /// <summary>
         /// Gets the termination conditions.
         /// </summary>
-        public IReadOnlyList<ITerminationCondition> TerminationConditions
+        public IList<ITerminationCondition> TerminationConditions
         {
             get
             {
@@ -75,9 +75,9 @@ namespace Galapagos.Metadata
         }
 
         /// <summary>
-        /// Gets the fitness function.
+        /// Gets or sets the fitness function.
         /// </summary>
-        public Func<ICreature, double> FitnessFunction { get; internal set; }
+        public Func<ICreature, double> FitnessFunction { get; set; }
 
         /// <summary>
         /// Adds a termination condition to the metadata.
@@ -86,6 +86,16 @@ namespace Galapagos.Metadata
         internal void AddTerminationCondition(ITerminationCondition condition)
         {
             _terminationConditions.Add(condition);
+        }
+
+        /// <summary>
+        /// Adds the termination conditions to the metadata.
+        /// </summary>
+        /// <param name="conditions"></param>
+        internal void AddTerminationCondition(IList<ITerminationCondition> conditions)
+        {
+            foreach (var condition in conditions)
+                AddTerminationCondition(condition);
         }
 
         /// <summary>
@@ -98,6 +108,16 @@ namespace Galapagos.Metadata
                 throw new ArgumentException($"Error! Chromosome metadata named {metadata.Name} already exists.");
 
             _chromosomeMetadata.Add(metadata);
+        }
+
+        /// <summary>
+        /// Adds the chromosome metadata to the metadata.
+        /// </summary>
+        /// <param name="metadata">The metadata to add.</param>
+        internal void AddChromosomeMetadata(IList<IChromosomeMetadata> metadataList)
+        {
+            foreach (var metadata in metadataList)
+                AddChromosomeMetadata(metadata);
         }
 
         /// <summary>

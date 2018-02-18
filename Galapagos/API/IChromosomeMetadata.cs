@@ -34,10 +34,35 @@ namespace Galapagos.API
         IDictionary<string, double> Properties { get; }
 
         /// <summary>
+        /// Adds a crossover operator to the metadata.
+        /// </summary>
+        /// <param name="crossover">The crossover operator.</param>
+        void AddCrossover(ICrossover crossover);
+
+        /// <summary>
+        /// Removes a crossover operator to the metadata.
+        /// </summary>
+        /// <param name="crossover">The crossover operator.</param>
+        void RemoveCrossover(ICrossover crossover);
+
+        /// <summary>
         /// Gets a crossover from the metadata.
         /// </summary>
         /// <returns>The crossover.</returns>
         ICrossover GetCrossover();
+
+        /// <summary>
+        /// Adds a mutation operator to the metadata.
+        /// </summary>
+        /// <param name="mutation">The mutation operator.</param>
+
+        void AddMutation(IMutation mutation);
+
+        /// <summary>
+        /// Removes a mutation operator to the metadata.
+        /// </summary>
+        /// <param name="mutation">The mutation operator.</param>
+        void RemoveMutation(IMutation mutation);
 
         /// <summary>
         /// Gets a mutation from the metadata.

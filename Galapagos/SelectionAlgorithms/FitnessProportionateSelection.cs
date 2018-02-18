@@ -28,7 +28,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <param name="population">The population to select from.</param>
         public virtual void Initialize(IPopulation population)
         {
-            _creatures = ((Species)population).ToArray()
+            _creatures = population.ToArray()
                 .OrderByDescending(creature => creature.Fitness).ToArray();
 
             F = 0;

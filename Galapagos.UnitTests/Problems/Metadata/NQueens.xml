@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Population Size="100">
+<Population Size="100" xmlns="http://tempuri.org/Schema.xsd">
   <SelectionAlgorithm Type="Tournament" Arg="5" />
   <TerminationConditions>
     <TerminationCondition Type="GenerationThreshold" Arg="1000" />
     <TerminationCondition Type="FitnessPlateau" Arg="100" />
   </TerminationConditions>
   <Chromosomes>
-    <Chromosome Name="ordering" Type="Permutation" CrossoverRate="1" MutationRate="0.1" GeneCount="15">
+    <PermutationChromosome Name="ordering" CrossoverRate="1" MutationRate="0.1" GeneCount="15">
       <Crossovers>
         <Crossover Type="Order" />
       </Crossovers>
       <Mutations>
-        <Mutation Type="Transposition, CyclicShift" Weight="2" />
+        <Mutation Type="Transposition CyclicShift" Weight="2" />
         <Mutation Type="Randomization" Weight="1" />
       </Mutations>
-    </Chromosome>
+    </PermutationChromosome>
   </Chromosomes>
 </Population>

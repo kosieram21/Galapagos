@@ -338,7 +338,7 @@ namespace Galapagos.Metadata.Parser
             {
                 switch (child.Name.LocalName)
                 {
-                    case "Crossover":
+                    case "Crossovers":
                         ParseCrossoverOperators<TCrossover, TMutation>(ref chromosomeMetadata, child);
                         break;
                     case "Mutations":

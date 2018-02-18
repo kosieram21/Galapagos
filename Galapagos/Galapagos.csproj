@@ -69,6 +69,7 @@
     <Compile Include="DataLogger.cs" />
     <Compile Include="API\Enums.cs" />
     <Compile Include="Metadata\Parser\MetadataParser.cs" />
+    <Compile Include="Metadata\Parser\SemanticValidator.cs" />
     <Compile Include="Metadata\Parser\SyntacticValidater.cs" />
     <Compile Include="Metadata\PopulationMetadata.cs" />
     <Compile Include="API\Factory\GeneticFactory.cs" />

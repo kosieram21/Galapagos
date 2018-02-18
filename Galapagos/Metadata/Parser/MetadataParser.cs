@@ -21,6 +21,7 @@ namespace Galapagos.Metadata.Parser
         {
             SyntacticValidater.Validate(xDoc);
             var metadata = ParsePopulation(xDoc.Root);
+            SemanticValidator.Validate(metadata);
 
             return metadata;
         }

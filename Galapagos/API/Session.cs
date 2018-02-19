@@ -102,6 +102,7 @@ namespace Galapagos.API
         /// <returns>The constructed population.</returns>
         public IPopulation CreatePopulation(IPopulationMetadata metadata)
         {
+            SemanticValidator.Validate(metadata);
             return new Population(metadata) as IPopulation;
         }
     }

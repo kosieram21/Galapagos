@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Population Size="10" SurvivalRate="0.25" xmlns="http://tempuri.org/Schema.xsd">
+  <SelectionAlgorithm Type="Tournament" Arg="2"/>
+  <TerminationConditions>
+    <TerminationCondition Type="FitnessPlateau" Arg="10"/>
+  </TerminationConditions>
+  <Chromosomes>
+    <BinaryChromosome Name="cover" CrossoverRate="1" MutationRate="0.1">
+      <Crossovers>
+        <Crossover Type="SinglePoint"/>
+      </Crossovers>
+      <Mutations>
+        <Mutation Type="CyclicShift" Weight="1"/>
+        <Mutation Type="SingleBit" Weight="4"/>
+      </Mutations>
+    </BinaryChromosome>
+  </Chromosomes>
+</Population>

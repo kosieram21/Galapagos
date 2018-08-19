@@ -70,6 +70,7 @@
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
     <Compile Include="Problems\TSP.cs" />
+    <Compile Include="Problems\VertexCover.cs" />
     <Compile Include="Problems\WumpusWorld.cs" />
     <Compile Include="SampleProblemUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\TSP.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Problems\Metadata\VertexCover.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

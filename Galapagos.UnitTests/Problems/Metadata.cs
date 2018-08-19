@@ -31,6 +31,8 @@ namespace Galapagos.UnitTests.Problems
 
         public static Stream TSP => LoadEmbeddedResource(@"TSP");
 
+        public static Stream VertexCover => LoadEmbeddedResource(@"VertexCover");
+
         public static Stream WumpusWorld => LoadEmbeddedResource(@"WumpusWorld");
     }
 }

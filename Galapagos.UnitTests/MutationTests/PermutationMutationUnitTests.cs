@@ -10,7 +10,7 @@ namespace Galapagos.UnitTests.MutationTests
     [TestClass]
     public class PermutationMutationUnitTests
     {
-        private const int GENE_COUNT = 8;//5000;
+        private const int GENE_COUNT = 5000;
 
         private PermutationChromosome GetChromosome()
         {

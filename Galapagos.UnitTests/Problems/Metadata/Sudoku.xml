@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Population Size="400" CooperativeCoevolution="true" xmlns="http://tempuri.org/Schema.xsd">
+<Population Size="1000" CooperativeCoevolution="true" xmlns="http://tempuri.org/Schema.xsd">
   <SelectionAlgorithm Type="FitnessProportionate"/>
   <TerminationConditions>
     <TerminationCondition Type="FitnessThreshold" Arg="19" />
@@ -11,7 +11,7 @@
         <Crossover Type="AlternatingPosition Midpoint" />
       </Crossovers>
       <Mutations>
-        <Mutation Type="Transposition Reverse" Weight="2" />
+        <Mutation Type="Transposition Displacement" Weight="2" />
         <Mutation Type="Randomization" Weight="1" />
       </Mutations>
     </PermutationChromosome>

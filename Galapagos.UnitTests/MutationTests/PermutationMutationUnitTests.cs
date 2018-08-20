@@ -10,7 +10,7 @@ namespace Galapagos.UnitTests.MutationTests
     [TestClass]
     public class PermutationMutationUnitTests
     {
-        private const int GENE_COUNT = 5000;
+        private const int GENE_COUNT = 8;//5000;
 
         private PermutationChromosome GetChromosome()
         {
@@ -112,6 +112,15 @@ namespace Galapagos.UnitTests.MutationTests
             }
 
             Assert.AreEqual(2, different);
+        }
+
+        [TestMethod]
+        public void DisplacementMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, PermutationMutation.Displacement);
+
+            VerifyChangeOccured(chromosome, mutation);
         }
     }
 }

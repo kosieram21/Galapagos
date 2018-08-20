@@ -66,7 +66,8 @@ namespace Galapagos.API
         Randomization = 1 << 1,
         Reverse = 1 << 2,
         Transposition = 1 << 3,
-        All = CyclicShift | Randomization | Reverse | Transposition
+        Displacement = 1 << 4,
+        All = CyclicShift | Randomization | Reverse | Transposition | Displacement
     }
 
     /// <summary>

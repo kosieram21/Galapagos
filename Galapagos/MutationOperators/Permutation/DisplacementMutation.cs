@@ -28,34 +28,29 @@ namespace Galapagos.MutationOperators.Permutation
             var permutation = new uint[N];
             Array.Copy(chromosome.Permutation, permutation, chromosome.N);
 
-            long displacementSize = Stochastic.Next(N);
-            long displacementStart = Stochastic.Next(N);
-            long displacementEnd = displacementStart + displacementSize - 1;
-            long insertionPoint = Stochastic.Next(
-                displacementEnd + 1,
-                displacementEnd + N - displacementSize
-                ) % N;
-            long leftSize = ((insertionPoint - displacementEnd) % N) - 1; 
+            var displacementSize = Stochastic.Next(1, N);
+            var displacementStart = Stochastic.Next(N);
+            var displacementEnd = (displacementStart + displacementSize) % N;
+            var insertionPoint = Stochastic.Next(N - displacementSize);
+            var offset = displacementEnd > displacementStart ? 0 : displacementEnd;
 
-            // Copy displaced elements
-            var displacedElements = new uint[displacementSize];
-            for (long i = 0; i < displacementSize; i++)
-                displacedElements[i] = permutation[(i + displacementStart) % N];
-
-            // Overwritting permutation
-            for (long i = 0; i < leftSize; i++)
-                permutation[(displacementStart + i) % N] = permutation[(displacementEnd + i + 1) % N];
-            for (long i = 0; i < displacementSize; i++)
-                permutation[(displacementEnd + leftSize + i + 1) % N] = displacedElements[i];
-
-            // Cyclic shift the permutation
-            if(insertionPoint <= displacementStart)
+            for(var i = 0; i < insertionPoint; i++)
             {
-                var k = leftSize + 1;
-                var first = permutation[insertionPoint];
-                for (var i = 0; i < k; i++)
-                    permutation[insertionPoint + i] = permutation[displacementStart + i];
-                permutation[insertionPoint + k - 1] = first;
+                if (i < displacementStart)
+                    permutation[i] = chromosome[(int)(i + offset)];
+                else
+                    permutation[i] = chromosome[(int)((i + offset + displacementSize) % N)];
+            }
+
+            for (var i = 0; i < displacementSize; i++)
+                permutation[insertionPoint + i] = chromosome[(int)((i + displacementStart) % N)];
+
+            for (var i = insertionPoint; i < N - displacementSize; i++)
+            {
+                if(i < displacementStart)
+                    permutation[i + displacementSize] = chromosome[(int)(i + offset)];
+                else
+                    permutation[i + displacementSize] = chromosome[(int)((i + offset + displacementSize) % N)];
             }
 
             return new PermutationChromosome(permutation);

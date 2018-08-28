@@ -18,7 +18,7 @@ namespace Galapagos.MutationOperators.Shared
         /// <summary>
         /// Constructs a new instance of the <see cref="CyclicShiftMutation"/> class.
         /// </summary>
-        /// <param name="weigth">The crossover weight.</param>
+        /// <param name="weigth">The mutation weight.</param>
         protected CyclicShiftMutation(double weigth = 1)
             : base(weigth) { }
 

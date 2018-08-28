@@ -26,7 +26,7 @@ namespace Galapagos.MutationOperators.Permutation
         {
             var N = chromosome.N;
             var permutation = new uint[N];
-            Array.Copy(chromosome.Permutation, permutation, chromosome.N);
+            Array.Copy(chromosome.Permutation, permutation, N);
 
             var displacementSize = Stochastic.Next(1, N);
             var displacementStart = Stochastic.Next(N);

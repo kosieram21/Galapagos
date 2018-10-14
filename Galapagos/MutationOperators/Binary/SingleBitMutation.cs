@@ -27,7 +27,7 @@ namespace Galapagos.MutationOperators.Binary
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            var point = Stochastic.Next(chromosome.BitCount);
+            var point = Session.Instance.Stochastic.Next(chromosome.BitCount);
 
             var bits = new bool[chromosome.BitCount];
             for (var i = 0; i < chromosome.BitCount; i++)

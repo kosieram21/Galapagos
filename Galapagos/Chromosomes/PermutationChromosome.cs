@@ -47,7 +47,7 @@ namespace Galapagos.Chromosomes
             for (uint i = 0; i < n; i++)
                 permutation[i] = i;
 
-            return Stochastic.Shuffle(permutation);
+            return Session.Instance.Stochastic.Shuffle(permutation);
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace Galapagos.CrossoverOperators.Shared
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(TChromosome x, TChromosome y)
         {
-            return Stochastic.FlipCoin() ? x : y;
+            return Session.Instance.Stochastic.FlipCoin() ? x : y;
         }
     }
 }

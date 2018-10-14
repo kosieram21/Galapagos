@@ -28,10 +28,10 @@ namespace Galapagos.MutationOperators.Permutation
             var permutation = new uint[N];
             Array.Copy(chromosome.Permutation, permutation, chromosome.N);
 
-            var displacementSize = Stochastic.Next(1, N);
-            var displacementStart = Stochastic.Next(N);
+            var displacementSize = Session.Instance.Stochastic.Next(1, N);
+            var displacementStart = Session.Instance.Stochastic.Next(N);
             var displacementEnd = (displacementStart + displacementSize) % N;
-            var insertionPoint = Stochastic.Next(N - displacementSize);
+            var insertionPoint = Session.Instance.Stochastic.Next(N - displacementSize);
             var offset = displacementEnd > displacementStart ? 0 : displacementEnd;
 
             for(var i = 0; i < insertionPoint; i++)

@@ -34,8 +34,8 @@ namespace Galapagos.CrossoverOperators.Binary
             var bits = new bool[x.BitCount];
             Array.Copy(x.Bits, bits, x.BitCount);
 
-            var start = Stochastic.Next(x.BitCount - 1);
-            var end = Stochastic.Next(start + 1, x.BitCount);
+            var start = Session.Instance.Stochastic.Next(x.BitCount - 1);
+            var end = Session.Instance.Stochastic.Next(start + 1, x.BitCount);
 
             for (var i = start; i < end; i++)
                 bits[i] = y.Bits[i];

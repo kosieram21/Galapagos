@@ -105,7 +105,7 @@ namespace Galapagos
         /// </summary>
         public void Clear()
         {
-            var i = Stochastic.Next(Size);
+            var i = Session.Instance.Stochastic.Next(Size);
             _representative = _creatures[i];
             _creatures.Clear();
         }

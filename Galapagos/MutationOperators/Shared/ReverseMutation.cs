@@ -33,8 +33,8 @@ namespace Galapagos.MutationOperators.Shared
             var newArry = new T[arry.Count()];
             Array.Copy(arry, newArry, arry.Count());
 
-            var start = Stochastic.Next(newArry.Length - 1);
-            var end = Stochastic.Next(start + 1, newArry.Length);
+            var start = Session.Instance.Stochastic.Next(newArry.Length - 1);
+            var end = Session.Instance.Stochastic.Next(start + 1, newArry.Length);
 
             for (var i = 0; i <= (end - start) / 2; i++)
             {

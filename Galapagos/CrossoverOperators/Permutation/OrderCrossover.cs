@@ -34,8 +34,8 @@ namespace Galapagos.CrossoverOperators.Permutation
             var seen = new bool[x.N];
             var permutation = new uint[x.N];
 
-            var start = Stochastic.Next(x.N - 1);
-            var end = Stochastic.Next(start + 1, x.N);
+            var start = Session.Instance.Stochastic.Next(x.N - 1);
+            var end = Session.Instance.Stochastic.Next(start + 1, x.N);
 
             for (var i = start; i <= end; i++)
             {

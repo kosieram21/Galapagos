@@ -6,12 +6,47 @@ using System.Threading.Tasks;
 
 namespace Galapagos
 {
+
+    #region DETERMINISTIC UNIT TESTS
+
+    /// <summary>
+    /// An internal interface that allows unit test to implement
+    /// their own RNG outcomes and thus evaluate the correctness
+    /// of stochastic algorithms in a deterministic way.
+    /// </summary>
+    internal interface IStochastic
+    {
+        T[] Shuffle<T>(T[] array);
+
+        bool FlipCoin();
+
+        bool EvaluateProbability(double probability);
+
+        int Next();
+
+        int Next(int maxValue);
+
+        int Next(uint maxValue);
+
+        int Next(double maxValue);
+
+        int Next(int minValue, int maxValue);
+
+        int Next(uint minValue, uint maxValue);
+
+        int Next(double minValue, double maxValue);
+
+        double NextDouble();
+    }
+
+    #endregion
+
     /// <summary>
     /// Utility class for evaluating stochastic functions.
     /// </summary>
-    internal static class Stochastic
+    internal class Stochastic : IStochastic
     {
-        private static readonly Random _rng = new Random(DateTime.Now.Millisecond);
+        private readonly Random _rng = new Random(DateTime.Now.Millisecond);
 
         /// <summary>
         /// Shuffles the given input array.
@@ -19,7 +54,7 @@ namespace Galapagos
         /// <typeparam name="T">The type of elements in the array.</typeparam>
         /// <param name="array">The array to shuffle.</param>
         /// <returns>The shuffled array.</returns>
-        public static T[] Shuffle<T>(T[] array)
+        public T[] Shuffle<T>(T[] array)
         {
             return array.OrderBy(index => _rng.Next()).ToArray();
         }
@@ -28,7 +63,7 @@ namespace Galapagos
         /// Flips a coin.
         /// </summary>
         /// <returns>A value indicating if the coin landed on heads.</returns>
-        public static bool FlipCoin()
+        public bool FlipCoin()
         {
             return _rng.Next(2) > 0;
         }
@@ -38,7 +73,7 @@ namespace Galapagos
         /// </summary>
         /// <param name="probability">The probability.</param>
         /// <returns>A value indicating if the event occured.</returns>
-        public static bool EvaluateProbability(double probability)
+        public bool EvaluateProbability(double probability)
         {
             if (probability < 0 || probability > 1)
                 throw new ArgumentException("Error! probability must be a value between 0 and 1.");
@@ -51,7 +86,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next()
+        public int Next()
         {
             return _rng.Next();
         }
@@ -61,7 +96,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is less than the specified maximum.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(int maxValue)
+        public int Next(int maxValue)
         {
             return _rng.Next(maxValue);
         }
@@ -70,7 +105,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is less than the specified maximum.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(uint maxValue)
+        public int Next(uint maxValue)
         {
             return Next((int)maxValue);
         }
@@ -79,7 +114,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is less than the specified maximum.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(double maxValue)
+        public int Next(double maxValue)
         {
             return Next((int)maxValue);
         }
@@ -88,7 +123,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is within the specified range.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(int minValue, int maxValue)
+        public int Next(int minValue, int maxValue)
         {
             return _rng.Next(minValue, maxValue);
         }
@@ -97,7 +132,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is within the specified range.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(uint minValue, uint maxValue)
+        public int Next(uint minValue, uint maxValue)
         {
             return Next((int)minValue, (int)maxValue);
         }
@@ -106,7 +141,7 @@ namespace Galapagos
         /// Returns a nonnegative random integer that is within the specified range.
         /// </summary>
         /// <returns>The integer.</returns>
-        public static int Next(double minValue, double maxValue)
+        public int Next(double minValue, double maxValue)
         {
             return Next((int)minValue, (int)maxValue);
         }
@@ -115,7 +150,7 @@ namespace Galapagos
         /// Returns a random floating point number between 0 and 1.
         /// </summary>
         /// <returns>The double.</returns>
-        public static double NextDouble()
+        public double NextDouble()
         {
             return 1.0 - _rng.NextDouble();
         }

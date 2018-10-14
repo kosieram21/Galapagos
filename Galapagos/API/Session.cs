@@ -27,7 +27,14 @@ namespace Galapagos.API
         private Session()
         {
             LogToConsole = true;
+
         }
+
+        /// <summary>
+        /// Gets or sets the RNG outcomes.
+        /// <remarks>Allows unit tests to test stochastic algorithms deterministically.</remarks>
+        /// </summary>
+        internal IStochastic Stochastic { get; set; } = new Stochastic();
 
         /// <summary>
         /// Gets or sets a value indicating if console logging should be enabled.

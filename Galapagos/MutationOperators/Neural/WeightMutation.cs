@@ -35,10 +35,10 @@ namespace Galapagos.MutationOperators.Neural
                 return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
                         chromosome.C1, chromosome.C2, chromosome.C3, chromosome.ActivationFunction);
 
-            var index = Stochastic.Next(edgeGenes.Count);
+            var index = Session.Instance.Stochastic.Next(edgeGenes.Count);
             var selectedEdge = edgeGenes[index];
 
-            selectedEdge.Weight = selectedEdge.Weight + (Stochastic.NextDouble() * STEP_SIZE * 2) - STEP_SIZE;
+            selectedEdge.Weight = selectedEdge.Weight + (Session.Instance.Stochastic.NextDouble() * STEP_SIZE * 2) - STEP_SIZE;
 
             return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
                 chromosome.C1, chromosome.C2, chromosome.C3, chromosome.ActivationFunction);

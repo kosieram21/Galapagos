@@ -33,7 +33,7 @@ namespace Galapagos.MutationOperators.Neural
                 return new NeuralChromosome(nodeGenes, edgeGenes, chromosome.InnovationTrackerName,
                         chromosome.C1, chromosome.C2, chromosome.C3, chromosome.ActivationFunction);
 
-            var index = Stochastic.Next(edgeGenes.Count);
+            var index = Session.Instance.Stochastic.Next(edgeGenes.Count);
             var selectedEdge = edgeGenes[index];
 
             selectedEdge.Enabled = !selectedEdge.Enabled;

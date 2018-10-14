@@ -47,7 +47,7 @@ namespace Galapagos.SelectionAlgorithms
         /// <returns>The selected creature.</returns>
         public virtual ICreature Invoke()
         {
-            var value = Stochastic.NextDouble() * F;
+            var value = Session.Instance.Stochastic.NextDouble() * F;
             foreach(var creature in _creatures)
             {
                 value -= creature.Fitness;

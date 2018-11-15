@@ -155,7 +155,7 @@ namespace Galapagos.Metadata
         private TOperator SelectOperator<TOperator>(IList<TOperator> operators, double F)
             where TOperator : IOperator
         {
-            var value = Stochastic.NextDouble() * F;
+            var value = Session.Instance.Stochastic.NextDouble() * F;
             foreach (var op in operators)
             {
                 value -= op.Weight;

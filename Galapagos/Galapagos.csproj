@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Galapagos</RootNamespace>
     <AssemblyName>Galapagos</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,6 +81,7 @@
     <Compile Include="MutationOperators\Binary\FlipBitMutation.cs" />
     <Compile Include="MutationOperators\Binary\RandomizationBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\ReverseBinaryMutation.cs" />
+    <Compile Include="MutationOperators\Binary\ScrambleBinaryMutation.cs" />
     <Compile Include="MutationOperators\Binary\SingleBitMutation.cs" />
     <Compile Include="API\IMutation.cs" />
     <Compile Include="MutationOperators\Mutation.cs" />
@@ -88,9 +90,12 @@
     <Compile Include="MutationOperators\Neural\NodeMutation.cs" />
     <Compile Include="MutationOperators\Neural\WeightMutation.cs" />
     <Compile Include="MutationOperators\Permutation\CyclicShiftPermutationMutation.cs" />
+    <Compile Include="MutationOperators\Permutation\DisplacementMutation.cs" />
     <Compile Include="MutationOperators\Permutation\RandomizationPermutationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\ReversePermutationMutation.cs" />
+    <Compile Include="MutationOperators\Permutation\ScramblePermutationMutation.cs" />
     <Compile Include="MutationOperators\Permutation\TranspositionMutation.cs" />
+    <Compile Include="MutationOperators\Shared\ScrambleMutation.cs" />
     <Compile Include="MutationOperators\Shared\CyclicShiftMutation.cs" />
     <Compile Include="MutationOperators\Shared\ReverseMutation.cs" />
     <Compile Include="Niche.cs" />

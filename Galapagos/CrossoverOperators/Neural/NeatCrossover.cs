@@ -52,7 +52,7 @@ namespace Galapagos.CrossoverOperators.Neural
 
                 if(geneX.ID == geneY.ID)
                 {
-                    var selected = Stochastic.FlipCoin() ? geneX : geneY;
+                    var selected = Session.Instance.Stochastic.FlipCoin() ? geneX : geneY;
                     approvedEdgeGenes.Add(selected);
                     ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);
 
@@ -61,7 +61,7 @@ namespace Galapagos.CrossoverOperators.Neural
                 }
                 else if(geneX.ID < geneY.ID)
                 {
-                    if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                    if (x.Creature.Fitness == y.Creature.Fitness && Session.Instance.Stochastic.FlipCoin())
                     {
                         approvedEdgeGenes.Add(geneX);
                         ApproveNodeGenes(geneX, ref approvedNodeGenes, ref seen);
@@ -76,7 +76,7 @@ namespace Galapagos.CrossoverOperators.Neural
                 }
                 else
                 {
-                    if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                    if (x.Creature.Fitness == y.Creature.Fitness && Session.Instance.Stochastic.FlipCoin())
                     {
                         approvedEdgeGenes.Add(geneY);
                         ApproveNodeGenes(geneY, ref approvedNodeGenes, ref seen);
@@ -96,7 +96,7 @@ namespace Galapagos.CrossoverOperators.Neural
             while(remainingQueue.Any())
             {
                 var selected = remainingQueue.Dequeue();
-                if (x.Creature.Fitness == y.Creature.Fitness && Stochastic.FlipCoin())
+                if (x.Creature.Fitness == y.Creature.Fitness && Session.Instance.Stochastic.FlipCoin())
                 {
                     approvedEdgeGenes.Add(selected);
                     ApproveNodeGenes(selected, ref approvedNodeGenes, ref seen);

@@ -32,10 +32,10 @@ namespace Galapagos.MutationOperators.Neural
             var nodeGenes = genes.Item1;
             var edgeGenes = genes.Item2;
 
-            var sourceIndex = Stochastic.Next(nodeGenes.Count);
+            var sourceIndex = Session.Instance.Stochastic.Next(nodeGenes.Count);
             var source = nodeGenes[sourceIndex];
 
-            var targetIndex = Stochastic.Next(nodeGenes.Count);
+            var targetIndex = Session.Instance.Stochastic.Next(nodeGenes.Count);
             var target = nodeGenes[targetIndex];
 
             var index = targetIndex;
@@ -51,7 +51,7 @@ namespace Galapagos.MutationOperators.Neural
             }
 
             var edgeId = innovationTracker.GetNextEdgeInnovationNumber(source.ID, target.ID);
-            var weight = Stochastic.NextDouble();
+            var weight = Session.Instance.Stochastic.NextDouble();
             var newEdge = new NeuralChromosome.EdgeGene(edgeId, source, target, weight, true);
 
             edgeGenes.Add(newEdge);

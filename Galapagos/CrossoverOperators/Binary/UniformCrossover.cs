@@ -34,7 +34,7 @@ namespace Galapagos.CrossoverOperators.Binary
             var bits = new bool[x.BitCount];
 
             for (var i = 0; i < x.BitCount; i++)
-                bits[i] = Stochastic.FlipCoin() ?
+                bits[i] = Session.Instance.Stochastic.FlipCoin() ?
                     x.Bits[i] : y.Bits[i];
 
             return new BinaryChromosome(bits);

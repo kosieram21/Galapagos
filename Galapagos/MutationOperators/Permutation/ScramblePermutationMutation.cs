@@ -10,15 +10,15 @@ using Galapagos.API;
 namespace Galapagos.MutationOperators.Permutation
 {
     /// <summary>
-    /// Cyclic shift mutation operator.
+    /// Scramble  mutation operator.
     /// </summary>
-    public class CyclicShiftPermutationMutation : CyclicShiftMutation<PermutationChromosome>
+    public class ScramblePermutationMutation : ScrambleMutation<PermutationChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="CyclicShiftPermutationMutation"/> class.
+        /// Constructs a new instance of the <see cref="ScramblePermutationMutation"/> class.
         /// </summary>
         /// <param name="weigth">The mutation weight.</param>
-        internal CyclicShiftPermutationMutation(double weigth = 1)
+        internal ScramblePermutationMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Galapagos.MutationOperators.Permutation
         /// <returns>The new DNA.</returns>
         protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
         {
-            var permutation = CyclicShift(chromosome.Permutation);
+            var permutation = Scramble(chromosome.Permutation);
 
             return new PermutationChromosome(permutation);
         }

@@ -50,7 +50,7 @@ namespace Galapagos.SelectionAlgorithms
 
             for (var i = 0; i < K; i++)
             {
-                var j = Stochastic.Next(size);
+                var j = Session.Instance.Stochastic.Next(size);
                 var creature = _creatures[j];
                 if (best == null || creature.Fitness > best.Fitness)
                     best = creature;

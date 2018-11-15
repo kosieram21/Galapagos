@@ -54,6 +54,7 @@
           <xs:enumeration value="Reverse"/>
           <xs:enumeration value="FlipBit"/>
           <xs:enumeration value="SingleBit"/>
+          <xs:enumeration value="Scramble"/>
           <xs:enumeration value="All"/>
         </xs:restriction>
       </xs:simpleType>
@@ -68,6 +69,8 @@
           <xs:enumeration value="Randomization"/>
           <xs:enumeration value="Reverse"/>
           <xs:enumeration value="Transposition"/>
+          <xs:enumeration value="Displacement"/>
+          <xs:enumeration value="Scramble"/>
           <xs:enumeration value="All"/>
         </xs:restriction>
       </xs:simpleType>

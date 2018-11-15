@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Galapagos.UnitTests</RootNamespace>
     <AssemblyName>Galapagos.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +59,8 @@
     <Compile Include="CrossoverTests\BinaryCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\PermutationCrossoverUnitTests.cs" />
     <Compile Include="CrossoverTests\NeuralCrossoverUnitTests.cs" />
+    <Compile Include="StochasticUnitTestBase.cs" />
+    <Compile Include="UnitTestFactory.cs" />
     <Compile Include="Fakes\CreatureFake.cs" />
     <Compile Include="Fakes\CrossoverFake.cs" />
     <Compile Include="Fakes\MutationFake.cs" />
@@ -70,6 +73,7 @@
     <Compile Include="Problems\NQueens.cs" />
     <Compile Include="Problems\Sudoku.cs" />
     <Compile Include="Problems\TSP.cs" />
+    <Compile Include="Problems\VertexCover.cs" />
     <Compile Include="Problems\WumpusWorld.cs" />
     <Compile Include="SampleProblemUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,7 +90,9 @@
     <EmbeddedResource Include="Problems\Metadata\NQueens.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Problems\Metadata\Sudoku.xml" />
+    <EmbeddedResource Include="Problems\Metadata\Sudoku.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\Cryptarithmetic.xml" />
@@ -102,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Problems\Metadata\TSP.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Problems\Metadata\VertexCover.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

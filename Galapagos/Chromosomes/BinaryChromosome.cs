@@ -25,7 +25,7 @@ namespace Galapagos.Chromosomes
             _bitCount = bitCount;
             _bits = new bool[bitCount];
             for (var i = 0; i < bitCount; i++)
-                _bits[i] = Stochastic.FlipCoin();
+                _bits[i] = Session.Instance.Stochastic.FlipCoin();
         }
 
         /// <summary>

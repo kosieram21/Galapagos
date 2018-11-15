@@ -18,7 +18,7 @@ namespace Galapagos.MutationOperators.Shared
         /// <summary>
         /// Constructs a new instance of the <see cref="CyclicShiftMutation"/> class.
         /// </summary>
-        /// <param name="weigth">The crossover weight.</param>
+        /// <param name="weigth">The mutation weight.</param>
         protected CyclicShiftMutation(double weigth = 1)
             : base(weigth) { }
 
@@ -33,8 +33,8 @@ namespace Galapagos.MutationOperators.Shared
             var newArry = new T[arry.Count()];
             Array.Copy(arry, newArry, arry.Count());
 
-            var start = Stochastic.Next(newArry.Length - 1);
-            var end = Stochastic.Next(start + 1, newArry.Length);
+            var start = Session.Instance.Stochastic.Next(newArry.Length - 1);
+            var end = Session.Instance.Stochastic.Next(start + 1, newArry.Length);
 
             var first = newArry[start];
             for (var i = start + 1; i <= end; i++)

@@ -141,11 +141,11 @@ namespace Galapagos
                 var crossover = chromosomeMetadata.GetCrossover();
                 var mutation = chromosomeMetadata.GetMutation();
 
-                var newDna = Stochastic.EvaluateProbability(chromosomeMetadata.CrossoverRate) ? 
+                var newDna = Session.Instance.Stochastic.EvaluateProbability(chromosomeMetadata.CrossoverRate) ? 
                     crossover.Invoke(GetChromosome(chromosomeMetadata.Name), mate.GetChromosome(chromosomeMetadata.Name)) : 
                     GetChromosome(chromosomeMetadata.Name);
 
-                newDna = Stochastic.EvaluateProbability(chromosomeMetadata.MutationRate) ?
+                newDna = Session.Instance.Stochastic.EvaluateProbability(chromosomeMetadata.MutationRate) ?
                     mutation.Invoke(newDna) : newDna;
 
                 child.SetChromosome(chromosomeMetadata.Name, newDna);

@@ -53,7 +53,8 @@ namespace Galapagos.API
         Reverse = 1 << 2,
         FlipBit = 1 << 3,
         SingleBit = 1 << 4,
-        All = CyclicShift | Randomization | Reverse | FlipBit | SingleBit
+        Scramble = 1 << 5,
+        All = CyclicShift | Randomization | Reverse | FlipBit | SingleBit | Scramble
     }
 
     /// <summary>
@@ -66,7 +67,9 @@ namespace Galapagos.API
         Randomization = 1 << 1,
         Reverse = 1 << 2,
         Transposition = 1 << 3,
-        All = CyclicShift | Randomization | Reverse | Transposition
+        Displacement = 1 << 4,
+        Scramble = 1 << 5,
+        All = CyclicShift | Randomization | Reverse | Transposition | Displacement | Scramble
     }
 
     /// <summary>

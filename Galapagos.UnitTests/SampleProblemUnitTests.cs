@@ -55,6 +55,14 @@ namespace Galapagos.UnitTests
         }
 
         [TestMethod]
+        public void VertexCoverTest()
+        {
+            var puzzle = new VertexCover();
+            var solution = puzzle.Solve();
+            VertexCover.PrintCover(solution);
+        }
+
+        [TestMethod]
         public void WumpusWorldTrainerTest()
         {
             var environment = new WumpusWorld(WumpusWorld.Boards.Board2);

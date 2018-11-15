@@ -113,5 +113,14 @@ namespace Galapagos.UnitTests.MutationTests
 
             Assert.AreEqual(2, different);
         }
+
+        [TestMethod]
+        public void DisplacementMutationTest()
+        {
+            var chromosome = GetChromosome();
+            var mutation = GetMutation(chromosome, PermutationMutation.Displacement);
+
+            VerifyChangeOccured(chromosome, mutation);
+        }
     }
 }

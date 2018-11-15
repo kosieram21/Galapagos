@@ -8,7 +8,7 @@ using Galapagos.API.Factory;
 namespace Galapagos.UnitTests.CrossoverTests
 {
     [TestClass]
-    public class BinaryCrossoverUnitTests
+    public class BinaryCrossoverUnitTests : StochasticUnitTestBase
     {
         private const int GENE_COUNT = 5000;
 
@@ -24,40 +24,22 @@ namespace Galapagos.UnitTests.CrossoverTests
             return rator.Invoke(x, y) as BinaryChromosome;
         }
 
-        private void VerifyChangeOccured(BinaryChromosome x, BinaryChromosome y)
-        {
-            var diff = 0;
-            for (var i = 0; i < GENE_COUNT; i++)
-            {
-                if (x.Bits[i] != y.Bits[i])
-                    diff++;
-            }
-
-            Assert.IsTrue(diff > 0, "Mutation failed to change chromosome data.");
-        }
-
         [TestMethod]
         public void SinglePointCrossoverTest()
         {
             var x = GetChromosome();
             var y = GetChromosome();
+
+            var midPoint = (int)(x.BitCount / 2);
+            _NextMax = (maxValue) => midPoint;
+
             var crossover = GetCrossover(x, y, BinaryCrossover.SinglePoint);
 
-            VerifyChangeOccured(x, crossover);
-            VerifyChangeOccured(y, crossover);
-
-            var point = 0;
-            for(var i = 0; i < GENE_COUNT; i++)
+            for(var i = 0; i < x.BitCount; i++)
             {
-                if(crossover.Bits[i] != x.Bits[i])
-                {
-                    point = i;
-                    break;
-                }
+                if (i <= midPoint) Assert.AreEqual(x.Bits[i], crossover.Bits[i], "Inccorrect implementation.");
+                else Assert.AreEqual(y.Bits[i], crossover.Bits[i], "Inccorrect implementation.");
             }
-
-            for (var i = point; i < GENE_COUNT; i++)
-                Assert.IsTrue(crossover.Bits[i] == y.Bits[i], "Inccorrect implementation.");
         }
 
         [TestMethod]
@@ -65,36 +47,19 @@ namespace Galapagos.UnitTests.CrossoverTests
         {
             var x = GetChromosome();
             var y = GetChromosome();
+
+            var start = (int)(x.BitCount / 4);
+            var end = (int)(x.BitCount / 2);
+            _NextMax = (maxVale) => start;
+            _NextMinMax = (minValue, maxValue) => end;
+
             var crossover = GetCrossover(x, y, BinaryCrossover.TwoPoint);
 
-            VerifyChangeOccured(x, crossover);
-            VerifyChangeOccured(y, crossover);
-
-            var start = 0;
-            var end = 0;
-
-            for (var i = 0; i < GENE_COUNT; i++)
+            for (var i = 0; i < x.BitCount; i++)
             {
-                if (crossover.Bits[i] != x.Bits[i])
-                {
-                    start = i;
-                    while (i < GENE_COUNT)
-                    {
-                        if (crossover.Bits[i] != x.Bits[i])
-                            end = i;
-                        i++;
-                    }
-                }
+                if (i < start || i >= end) Assert.AreEqual(x.Bits[i], crossover.Bits[i], "Inccorrect implementation.");
+                else Assert.AreEqual(y.Bits[i], crossover.Bits[i], "Inccorrect implementation.");
             }
-
-            for (var i = 0; i < start; i++)
-                Assert.IsTrue(crossover.Bits[i] == x.Bits[i], "Inccorrect implementation.");
-
-            for(var i = start; i <= end; i++)
-                Assert.IsTrue(crossover.Bits[i] == y.Bits[i], "Inccorrect implementation.");
-
-            for (var i = end + 1; i < GENE_COUNT; i++)
-                Assert.IsTrue(crossover.Bits[i] == x.Bits[i], "Inccorrect implementation.");
         }
 
         [TestMethod]
@@ -112,6 +77,18 @@ namespace Galapagos.UnitTests.CrossoverTests
                 var consistent = crossover.Bits[i] == x.Bits[i] || crossover.Bits[i] == y.Bits[i];
                 Assert.IsTrue(consistent, "Inccorrect implementation.");
             }
+        }
+
+        private void VerifyChangeOccured(BinaryChromosome x, BinaryChromosome y)
+        {
+            var diff = 0;
+            for (var i = 0; i < GENE_COUNT; i++)
+            {
+                if (x.Bits[i] != y.Bits[i])
+                    diff++;
+            }
+
+            Assert.IsTrue(diff > 0, "Mutation failed to change chromosome data.");
         }
     }
 }

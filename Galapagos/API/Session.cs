@@ -27,7 +27,6 @@ namespace Galapagos.API
         private Session()
         {
             LogToConsole = true;
-
         }
 
         /// <summary>

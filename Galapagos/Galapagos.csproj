@@ -54,6 +54,7 @@
     <Compile Include="API\ANN\NeuralNetwork.cs" />
     <Compile Include="API\ANN\Neuron.cs" />
     <Compile Include="CrossoverOperators\Neural\NeatCrossover.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
@@ -120,6 +121,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PopulationTopologies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

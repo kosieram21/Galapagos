@@ -17,10 +17,10 @@ namespace Galapagos
 
         private readonly string _chromosomeFilter;
 
-        private Creature _optimalCreature;
-        private readonly Creature[] _creatures;
+        private Creature[] _creatures;
 
-        private IList<Niche> _niches = new List<Niche>();
+        private Group _optimalGroup;
+        private readonly Group[] _groups;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Species"/> class.
@@ -36,10 +36,12 @@ namespace Galapagos
 
             _chromosomeFilter = chromosomeFilter;
 
-            _creatures = new Creature[Population.Metadata.Size];
-            for (var i = 0; i < _creatures.Count(); i++)
-                _creatures[i] = new Creature(this);
-            _optimalCreature = _creatures[0];
+            _groups = new Group[1];
+            _groups[0] = new Group(this, Population.Metadata.Size);
+
+            _optimalGroup = _groups[0];
+
+            _creatures = _groups[0].Creatures;
         }
 
         /// <summary>
@@ -56,11 +58,6 @@ namespace Galapagos
         /// Gets the population size.
         /// </summary>
         public uint Size => Population.Metadata.Size;
-
-        /// <summary>
-        /// Gets the niches in this species.
-        /// </summary>
-        internal IReadOnlyList<Niche> Niches => _niches as IReadOnlyList<Niche>;
 
         /// <summary>
         /// Accesses a creature from the population.
@@ -80,40 +77,27 @@ namespace Galapagos
         /// <summary>
         /// Gets or sets the creature best suited to solve the propblem.
         /// </summary>
-        public ICreature OptimalCreature => InternalOptimalCreature as ICreature;
+        public ICreature OptimalCreature => _optimalGroup.OptimalCreature;
 
         /// <summary>
         /// Internal optimal creature getter/setter.
         /// </summary>
-        internal Creature InternalOptimalCreature
-        {
-            get
-            {
-                if (_optimalCreature == null)
-                    _optimalCreature = FindOptimalCreature();
-                return _optimalCreature;
-            }
-            private set
-            {
-                if (_optimalCreature == null || value.Fitness > _optimalCreature.Fitness)
-                    _optimalCreature = value;
-            }
-        }
+        internal Creature InternalOptimalCreature => _optimalGroup.InternalOptimalCreature;
 
         /// <summary>
-        /// Finds the optimal creature.
+        /// Finds the optimal group.
         /// </summary>
-        private Creature FindOptimalCreature()
+        private Group FindOptimalGroup()
         {
-            var optimalCreature = _creatures[0];
+            var optimalGroup = _groups[0];
 
-            for (var i = 1; i < Size; i++)
+            for (var i = 1; i < _groups.Count(); i++)
             {
-                if (_creatures[i].Fitness > optimalCreature.Fitness)
-                    optimalCreature = _creatures[i];
+                if (_groups[i].OptimalCreature.Fitness > optimalGroup.OptimalCreature.Fitness)
+                    optimalGroup = _groups[i];
             }
 
-            return optimalCreature;
+            return optimalGroup;
         }
 
         /// <summary>
@@ -138,8 +122,8 @@ namespace Galapagos
         /// </summary>
         public void Evolve()
         {
-            Action evaluateFitness = () => { foreach (var creature in _creatures) { creature.EvaluateFitness(); } };
-            RunEvolution(evaluateFitness);
+            Action evolveGroups = () => { foreach (var group in _groups) { group.Evolve(); } };
+            RunEvolution(evolveGroups);
         }
 
         /// <summary>
@@ -147,91 +131,20 @@ namespace Galapagos
         /// </summary>
         public void ParallelEvolve()
         {
-            Action evaluateFitness = () => { Parallel.ForEach(_creatures, (creature) => { creature.EvaluateFitness(); }); };
-            RunEvolution(evaluateFitness);
+            Action evolveGroups = () => { Parallel.ForEach(_groups, (group) => { group.ParallelEvolve(); }); };
+            RunEvolution(evolveGroups);
         }
 
         /// <summary>
         /// Runs the evolution process.
         /// </summary>
-        /// <param name="evaluateFitness">A delegate that evaluates creature fitness.</param>
-        private void RunEvolution(Action evaluateFitness)
+        /// <param name="evolveGroups">A delegate that evolves the group subpopulations.</param>
+        private void RunEvolution(Action evolveGroups)
         {
-            evaluateFitness();
-            BreedNewGeneration();
+            evolveGroups();
 
-            _optimalCreature = FindOptimalCreature();
-        }
-
-        /// <summary>
-        /// Breeds a new generation of creatures.
-        /// </summary>
-        /// <param name="selection">The selection algorithm.</param>
-        private void BreedNewGeneration()
-        {
-            var newGeneration = new Creature[Size];
-
-            Population.Metadata.SelectionAlgorithm.Initialize(this);
-
-            var i = 0;
-            if (Population.Metadata.SurvivalRate > 0)
-            {
-                var sortedCreatures = _creatures.OrderByDescending(creature => creature.Fitness).ToArray();
-                for (var j = 0; j < Size * Population.Metadata.SurvivalRate; j++)
-                {
-                    newGeneration[j] = sortedCreatures[j];
-                    i++;
-                }
-            }
-
-            while (i < Size)
-            {
-                var parentX = Population.Metadata.SelectionAlgorithm.Invoke();
-                var parentY = Population.Metadata.SelectionAlgorithm.Invoke();
-                newGeneration[i] = ((Creature)parentX).Breed((Creature)parentY);
-                i++;
-            }
-
-            Array.Copy(newGeneration, _creatures, Size);
-
-            if (Population.Metadata.DistanceThreshold > 0)
-            {
-                ClearNiches();
-                AssignNiches();
-            }
-        }
-
-        /// <summary>
-        /// Assigns each creature in the population to a niche.
-        /// </summary>
-        private void AssignNiches()
-        {
-            foreach (var creature in _creatures)
-            {
-                var candidate = _niches.FirstOrDefault(niche => niche.Compatible(creature));
-                if (candidate != null)
-                    candidate.Add(creature);
-                else
-                    _niches.Add(new Niche(creature, Population.Metadata.DistanceThreshold));
-            }
-
-            var activeNiches = new List<Niche>();
-            foreach (var niche in _niches)
-            {
-                if (niche.Size > 0)
-                    activeNiches.Add(niche);
-            }
-
-            _niches = activeNiches;
-        }
-
-        /// <summary>
-        /// Clears all niches of creatures.
-        /// </summary>
-        private void ClearNiches()
-        {
-            foreach (var niche in _niches)
-                niche.Clear();
+            _optimalGroup = FindOptimalGroup();
+            _creatures = _groups[0].Creatures;
         }
 
         #region IEnumerable Members

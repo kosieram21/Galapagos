@@ -13,7 +13,7 @@ namespace Galapagos
     /// </summary>
     public class Creature : ICreature
     {
-        private readonly Species _species;
+        private readonly Group _group;
 
         private readonly IList<IChromosomeMetadata> _chromosomeMetadata = new List<IChromosomeMetadata>();
         private readonly IDictionary<string, IChromosome> _chromosomes = new Dictionary<string, IChromosome>();
@@ -25,13 +25,14 @@ namespace Galapagos
         /// <summary>
         /// Constructs a new instance of the <see cref="Creature"/> class.
         /// </summary>
-        /// <param name="species">The species this creature belongs to.</param>
-        internal Creature(Species species)
+        /// <param name="group">The group this creature belongs to.</param>
+        internal Creature(Group group)
         {
-            _species = species;
+            _group = group;
 
-            _chromosomeMetadata = _species.Population.Metadata
-                .Where(metadata => metadata.Name == _species.ChromosomeFilter || _species.ChromosomeFilter == "*")
+            var chromosomeFilter = _group.Species.ChromosomeFilter;
+            _chromosomeMetadata = _group.Species.Population.Metadata
+                .Where(metadata => metadata.Name == chromosomeFilter || chromosomeFilter == "*")
                 .ToList();
 
             foreach (var chromosomeMetadata in _chromosomeMetadata)
@@ -51,7 +52,7 @@ namespace Galapagos
         /// <returns>The cloned creature.</returns>
         internal Creature Clone()
         {
-            var clone = new Creature(_species);
+            var clone = new Creature(_group);
             foreach(var chromosomeMetadata in _chromosomeMetadata)
             {
                 var chromosome = GetChromosome(chromosomeMetadata.Name);
@@ -63,7 +64,7 @@ namespace Galapagos
         /// <summary>
         /// Gets the species this creature belongs to.
         /// </summary>
-        internal Species Species => _species;
+        internal Species Species => _group.Species;
 
         /// <summary>
         /// Gets the creature's fitness.
@@ -88,7 +89,7 @@ namespace Galapagos
         /// </summary>
         internal void EvaluateFitness()
         {
-            _fitness = _species.Population.Metadata.FitnessFunction(this);
+            _fitness = _group.Species.Population.Metadata.FitnessFunction(this);
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace Galapagos
         /// <returns>The child creature.</returns>
         internal Creature Breed(Creature mate)
         {
-            var child = new Creature(_species);
+            var child = new Creature(_group);
             foreach(var chromosomeMetadata in _chromosomeMetadata)
             {
                 var crossover = chromosomeMetadata.GetCrossover();

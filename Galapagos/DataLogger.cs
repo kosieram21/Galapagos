@@ -39,17 +39,12 @@ namespace Galapagos
         /// Logs data.
         /// </summary>
         /// <param name="generation">The generation number.</param>
-        /// <param name="trueFitness">The true fitness of the optimal creature.</param>
         /// <param name="fitness">The best fitness in the population.</param>
-        /// <param name="niches">The niches of the optimal species.</param>
-        public void Log(int generation, double trueFitness, double fitness, IReadOnlyList<Niche> niches)
+        public void Log(int generation, double fitness)
         {
-            var nicheCount = niches.Count;
-            var nicheSizeGap = ComputeNicheSizeGap(niches);
-
             if (Session.Instance.LogToConsole)
             {
-                var msg = $"Generation: {generation}, True Fitness: {trueFitness}, Fitness: {fitness}, Niche Count: {nicheCount}, Niche Size Gap: {nicheSizeGap}";
+                var msg = $"Generation: {generation}, Fitness: {fitness}";
                 Console.WriteLine(msg);
                 System.Diagnostics.Debug.WriteLine(msg);
             }
@@ -60,14 +55,14 @@ namespace Galapagos
                 {
                     using (StreamWriter file = new StreamWriter(_path, true))
                     {
-                        file.WriteLine("Generation,True Fitness,Fitness,Niche Count,Niche Size Gap");
+                        file.WriteLine("Generation,Fitness");
                         file.Close();
                     }
                 }
 
                 using (StreamWriter file = new StreamWriter(_path, true))
                 {
-                    file.WriteLine($"{generation},{trueFitness},{fitness},{nicheCount},{nicheSizeGap}");
+                    file.WriteLine($"{generation},{fitness}");
                     file.Close();
                 }
             }

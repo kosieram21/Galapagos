@@ -157,7 +157,7 @@ namespace Galapagos
                 _generation++;
 
                 if (_loggingEnabled)
-                    _logger.Log(_generation, ((Creature)OptimalCreature).TrueFitness, OptimalCreature.Fitness, _optimalSpecies.Niches);
+                    _logger.Log(_generation, OptimalCreature.Fitness);
 
                 if (_populationMetadata.TerminationConditions.Any(condition => condition.Check(this)))
                 {

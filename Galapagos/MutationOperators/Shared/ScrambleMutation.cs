@@ -33,9 +33,9 @@ namespace Galapagos.MutationOperators.Shared
             var newArry = new T[N];
             Array.Copy(arry, newArry, N);
 
-            var start = Stochastic.Next(N);
-            var end = Stochastic.Next(N);
-            while(end != start) end = Stochastic.Next(N);
+            var start = Session.Instance.Stochastic.Next(N);
+            var end = Session.Instance.Stochastic.Next(N);
+            while(end != start) end = Session.Instance.Stochastic.Next(N);
 
             var isWrapped = start > end;
             var offset = isWrapped ? end + 1 : 0;
@@ -47,7 +47,7 @@ namespace Galapagos.MutationOperators.Shared
             for(var i = 0; i < len; i++)
                 scrambled[i] = arry[(start + i) % N];
 
-            scrambled = Stochastic.Shuffle(scrambled);
+            scrambled = Session.Instance.Stochastic.Shuffle(scrambled);
 
             for (var i = 0; i < len; i++)
                 newArry[(start + i) % N] = scrambled[i];

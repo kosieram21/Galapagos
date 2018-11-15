@@ -91,6 +91,7 @@ namespace Galapagos.API.Factory
             if ((mutationOptions & BinaryMutation.Reverse) == BinaryMutation.Reverse) mutations.Add(new ReverseBinaryMutation(weight));
             if ((mutationOptions & BinaryMutation.FlipBit) == BinaryMutation.FlipBit) mutations.Add(new FlipBitMutation(weight));
             if ((mutationOptions & BinaryMutation.SingleBit) == BinaryMutation.SingleBit) mutations.Add(new SingleBitMutation(weight));
+            if ((mutationOptions & BinaryMutation.Scramble) == BinaryMutation.Scramble) mutations.Add(new ScrambleBinaryMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid binary mutation selection.");
 
             return mutations;
@@ -111,6 +112,7 @@ namespace Galapagos.API.Factory
             if ((mutationOptions & PermutationMutation.Reverse) == PermutationMutation.Reverse) mutations.Add(new ReversePermutationMutation(weight));
             if ((mutationOptions & PermutationMutation.Transposition) == PermutationMutation.Transposition) mutations.Add(new TranspositionMutation(weight));
             if ((mutationOptions & PermutationMutation.Displacement) == PermutationMutation.Displacement) mutations.Add(new DisplacementMutation(weight));
+            if ((mutationOptions & PermutationMutation.Scramble) == PermutationMutation.Scramble) mutations.Add(new ScramblePermutationMutation(weight));
             if (mutations.Count == 0) throw new ArgumentException("Error! Invalid permutation mutation selection.");
 
             return mutations;

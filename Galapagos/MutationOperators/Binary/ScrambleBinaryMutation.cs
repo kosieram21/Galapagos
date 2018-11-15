@@ -7,18 +7,18 @@ using Galapagos.MutationOperators.Shared;
 using Galapagos.Chromosomes;
 using Galapagos.API;
 
-namespace Galapagos.MutationOperators.Permutation
+namespace Galapagos.MutationOperators.Binary
 {
     /// <summary>
-    /// Cyclic shift mutation operator.
+    /// Scramble  mutation operator.
     /// </summary>
-    public class CyclicShiftPermutationMutation : CyclicShiftMutation<PermutationChromosome>
+    public class ScrambleBinaryMutation : ScrambleMutation<BinaryChromosome>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="CyclicShiftPermutationMutation"/> class.
+        /// Constructs a new instance of the <see cref="ScrambleBinaryMutation"/> class.
         /// </summary>
         /// <param name="weigth">The mutation weight.</param>
-        internal CyclicShiftPermutationMutation(double weigth = 1)
+        internal ScrambleBinaryMutation(double weigth = 1)
             : base(weigth) { }
 
         /// <summary>
@@ -26,11 +26,11 @@ namespace Galapagos.MutationOperators.Permutation
         /// </summary>
         /// <param name="chromosome">The chromosome.</param>
         /// <returns>The new DNA.</returns>
-        protected override IChromosome InternalInvoke(PermutationChromosome chromosome)
+        protected override IChromosome InternalInvoke(BinaryChromosome chromosome)
         {
-            var permutation = CyclicShift(chromosome.Permutation);
+            var bits = Scramble(chromosome.Bits);
 
-            return new PermutationChromosome(permutation);
+            return new BinaryChromosome(bits);
         }
     }
 }

@@ -164,6 +164,11 @@ namespace Galapagos
         {
             var newGeneration = new Creature[Size];
 
+            // TODO: Make selection algorithm thread safe. One possible solution
+            // is to change the 'Initialize' method on ISelectionAlgorithm to return
+            // a closure that invokes the algorithm against the given population.
+            // This solution would remove the need for an 'Invoke' method on
+            // the interface.
             Species.Population.Metadata.SelectionAlgorithm.Initialize(this);
 
             var i = 0;

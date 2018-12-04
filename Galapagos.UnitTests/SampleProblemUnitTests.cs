@@ -49,7 +49,7 @@ namespace Galapagos.UnitTests
         [TestMethod]
         public void TspTest()
         {
-            var puzzle = new TSP(TSP.Maps.Map1);
+            var puzzle = new TSP(TSP.Maps.Map2);
             var solution = puzzle.Solve();
             TSP.PrintTour(solution);
         }

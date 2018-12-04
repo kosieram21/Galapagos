@@ -17,10 +17,12 @@ namespace Galapagos
 
         private readonly string _chromosomeFilter;
 
-        private Creature[] _creatures;
-
         private Group _optimalGroup;
         private readonly Group[] _groups;
+
+        // TODO: This needs to be part of the user editable metadata
+        private const int G_SIZE = 5;
+        private const int G_NUM = 10;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Species"/> class.
@@ -36,12 +38,23 @@ namespace Galapagos
 
             _chromosomeFilter = chromosomeFilter;
 
-            _groups = new Group[1];
-            _groups[0] = new Group(this, Population.Metadata.Size);
+            // GROUP SIZE PATAMETERS
+            //   N: The total number of creatures in the species
+            //   Q: The quotient when dividing N by number of groups
+            //   R: The remainder when dividing N by number of groups
+            var N = (int)Population.Metadata.Size;
+            var R = 0;
+            var Q = Math.DivRem(N, G_SIZE, out R);
+
+            _groups = new Group[G_SIZE];
+            for(var i = 0; i < G_SIZE; i++)
+            {
+                var groupSize = i == (G_SIZE - 1) ? // is this the last group?
+                    Q + R : Q;
+                _groups[i] = new Group(this, (uint)groupSize);
+            }
 
             _optimalGroup = _groups[0];
-
-            _creatures = _groups[0].Creatures;
         }
 
         /// <summary>
@@ -70,7 +83,7 @@ namespace Galapagos
             {
                 if (index >= Size)
                     throw new Exception($"Error! {index} is larger than the population size.");
-                return _creatures[index] as ICreature;
+                return GetCreature(index) as ICreature;
             }
         }
 
@@ -141,17 +154,48 @@ namespace Galapagos
         /// <param name="evolveGroups">A delegate that evolves the group subpopulations.</param>
         private void RunEvolution(Action evolveGroups)
         {
-            evolveGroups();
+            for(var i = 0; i < G_NUM; i++)
+                evolveGroups();
 
             _optimalGroup = FindOptimalGroup();
-            _creatures = _groups[0].Creatures;
+        }
+
+        /// <summary>
+        /// Utility method for indexing creatures as if they where in a single collection.
+        /// </summary>
+        /// <param name="index">The creature index.</param>
+        /// <returns>The creature.</returns>
+        private Creature GetCreature(int index)
+        {
+            uint count = 0;
+            var j = index; // real index into group
+            for (var i = 0; i < G_SIZE; i++)
+            {
+                var group = _groups[i];
+
+                count = i == (G_SIZE - 1) ? // is this the last group?
+                    Population.Metadata.Size : count + group.Size;
+
+                if (index < count)
+                    return group[j] as Creature;
+
+                j = (index - (int)count);
+            }
+
+            throw new IndexOutOfRangeException();
         }
 
         #region IEnumerable Members
 
         public IEnumerator<ICreature> GetEnumerator()
         {
-            return _creatures.ToList().GetEnumerator();
+            var creatures = new List<ICreature>();
+
+            var N = Population.Metadata.Size;
+            for (var i = 0; i < N; i++)
+                creatures.Add(GetCreature(i));
+
+            return creatures.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

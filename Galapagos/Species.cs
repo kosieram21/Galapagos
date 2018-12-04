@@ -21,8 +21,8 @@ namespace Galapagos
         private readonly Group[] _groups;
 
         // TODO: This needs to be part of the user editable metadata
-        private const int G_SIZE = 5;
-        private const int G_NUM = 10;
+        private const int G_SIZE = 1;
+        private const int G_NUM = 1;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Species"/> class.

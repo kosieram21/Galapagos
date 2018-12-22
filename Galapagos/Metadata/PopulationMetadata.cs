@@ -17,6 +17,8 @@ namespace Galapagos.Metadata
         private const uint DEFAULT_SIZE = 1000;
         private const double DEFAULT_SURVIVAL_RATE = 0;
         private const double DEFAULT_DISTANCE_THRESHOLD = 0;
+        private const uint DEFUALT_GROUP_COUNT = 1;
+        private const uint DEFUALT_GROUP_ITER = 1;
         private const SelectionAlgorithm DEFAULT_SELECTION_ALGORITHM = API.SelectionAlgorithm.FitnessProportionate;
         private const TerminationCondition DEFAULT_TERMINATION_CONDITION = TerminationCondition.GenerationThreshold;
         private const uint DEFAULT_GENERATION_THRESHOLD = 1000;
@@ -33,6 +35,8 @@ namespace Galapagos.Metadata
             Size = DEFAULT_SIZE;
             SurvivalRate = DEFAULT_SURVIVAL_RATE;
             DistanceThreshold = DEFAULT_DISTANCE_THRESHOLD;
+            GroupCount = DEFUALT_GROUP_COUNT;
+            GroupIter = DEFUALT_GROUP_ITER;
             SelectionAlgorithm = GeneticFactory.ConstructSelectionAlgorithm(DEFAULT_SELECTION_ALGORITHM);
         }
 
@@ -55,6 +59,18 @@ namespace Galapagos.Metadata
         /// Gets or sets a value indicating if cooperative coevolution should be used.
         /// </summary>
         public bool CooperativeCoevolution { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of groups a population should be divided into. 
+        /// A group count of 0 disables MLEO between group dynamics.
+        /// </summary>
+        public uint GroupCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating how many time MLEO within group dynamics
+        /// should be carried out per generation.
+        /// </summary>
+        public uint GroupIter { get; set; }
 
         /// <summary>
         /// Gets or sets the selection algorithm.

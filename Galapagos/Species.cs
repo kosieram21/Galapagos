@@ -20,10 +20,6 @@ namespace Galapagos
         private Group _optimalGroup;
         private readonly Group[] _groups;
 
-        // TODO: This needs to be part of the user editable metadata
-        private const int G_SIZE = 1;
-        private const int G_NUM = 1;
-
         /// <summary>
         /// Constructs a new instance of the <see cref="Species"/> class.
         /// </summary>
@@ -38,18 +34,20 @@ namespace Galapagos
 
             _chromosomeFilter = chromosomeFilter;
 
+            var groupCount = (int)Population.Metadata.GroupCount;
+
             // GROUP SIZE PATAMETERS
             //   N: The total number of creatures in the species
             //   Q: The quotient when dividing N by number of groups
             //   R: The remainder when dividing N by number of groups
             var N = (int)Population.Metadata.Size;
             var R = 0;
-            var Q = Math.DivRem(N, G_SIZE, out R);
+            var Q = Math.DivRem(N, groupCount, out R);
 
-            _groups = new Group[G_SIZE];
-            for(var i = 0; i < G_SIZE; i++)
+            _groups = new Group[groupCount];
+            for(var i = 0; i < groupCount; i++)
             {
-                var groupSize = i == (G_SIZE - 1) ? // is this the last group?
+                var groupSize = i == (groupCount - 1) ? // is this the last group?
                     Q + R : Q;
                 _groups[i] = new Group(this, (uint)groupSize);
             }
@@ -154,8 +152,12 @@ namespace Galapagos
         /// <param name="evolveGroups">A delegate that evolves the group subpopulations.</param>
         private void RunEvolution(Action evolveGroups)
         {
-            for(var i = 0; i < G_NUM; i++)
+            // within group dynamics
+            var iter = (int)Population.Metadata.GroupIter;
+            for(var i = 0; i < iter; i++)
                 evolveGroups();
+
+            // between group dynamics
 
             _optimalGroup = FindOptimalGroup();
         }
@@ -167,13 +169,15 @@ namespace Galapagos
         /// <returns>The creature.</returns>
         private Creature GetCreature(int index)
         {
+            var groupCount = (int)Population.Metadata.GroupCount;
+
             uint count = 0;
             var j = index; // real index into group
-            for (var i = 0; i < G_SIZE; i++)
+            for (var i = 0; i < groupCount; i++)
             {
                 var group = _groups[i];
 
-                count = i == (G_SIZE - 1) ? // is this the last group?
+                count = i == (groupCount - 1) ? // is this the last group?
                     Population.Metadata.Size : count + group.Size;
 
                 if (index < count)

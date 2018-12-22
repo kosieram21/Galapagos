@@ -64,6 +64,12 @@ namespace Galapagos.Metadata.Parser
                     case "CooperativeCoevolution":
                         populationMetadata.CooperativeCoevolution = Boolean.Parse(attribute.Value);
                         break;
+                    case "GroupCount":
+                        populationMetadata.GroupCount = UInt32.Parse(attribute.Value);
+                        break;
+                    case "GroupIter":
+                        populationMetadata.GroupIter = UInt32.Parse(attribute.Value);
+                        break;
                 }
             }
         }

@@ -29,6 +29,18 @@ namespace Galapagos.API
         bool CooperativeCoevolution { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of groups a population should be divided into. 
+        /// A group count of 1 disables MLEO between group dynamics.
+        /// </summary>
+        uint GroupCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating how many times MLEO within group dynamics
+        /// should be carried out per generation.
+        /// </summary>
+        uint GroupIter { get; set; }
+
+        /// <summary>
         /// Gets or sets the selection algorithm.
         /// </summary>
         ISelectionAlgorithm SelectionAlgorithm { get; set; }

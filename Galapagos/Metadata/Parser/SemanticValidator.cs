@@ -55,6 +55,12 @@ namespace Galapagos.Metadata.Parser
                 throw new ArgumentException("Error! Survival rate must be a value between 0 and 1.");
             if (populationMetadata.DistanceThreshold < 0)
                 throw new ArgumentException("Error! Distance threshold must be a positive value.");
+            if (populationMetadata.GroupCount < 1)
+                throw new ArgumentException("Error! Group count must be at least 1.");
+            if (populationMetadata.Size < populationMetadata.GroupCount)
+                throw new ArgumentException("Error! Group count cannot be larger than the population size.");
+            if (populationMetadata.GroupIter < 1)
+                throw new ArgumentException("Error! Group iter must be at least 1.");
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace Galapagos
                 double fitness = 0;
                 foreach (var creature in _creatures)
                     fitness += creature.Fitness;
-                return fitness;
+                return fitness / Size;
             }
         }
 

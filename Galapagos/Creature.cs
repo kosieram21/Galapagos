@@ -69,7 +69,7 @@ namespace Galapagos
         /// <summary>
         /// Gets the creature's fitness.
         /// </summary>
-        public double Fitness => _niche == null ? TrueFitness : TrueFitness / _niche.Size;
+        public double Fitness => _niche == null ? TrueFitness : _niche.AdjustedFitness; // Make sure this change is right.
 
         /// <summary>
         /// Gets the true fitness of the creature.

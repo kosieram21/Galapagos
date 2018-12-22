@@ -311,6 +311,8 @@
       <xs:attribute name="SurvivalRate" type="xs:double" default="0" />
       <xs:attribute name="DistanceThreshold" type="xs:double" default="0" />
       <xs:attribute name="CooperativeCoevolution" type="xs:boolean" default="false" />
+      <xs:attribute name="GroupCount" type="xs:unsignedInt" default="1" />
+      <xs:attribute name="GroupIter" type="xs:unsignedInt" default="1" />
     </xs:complexType>
   </xs:element>
 </xs:schema>

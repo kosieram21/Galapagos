@@ -49,5 +49,10 @@ namespace Galapagos.UnitTests
         {
             return _stochastic.Shuffle<T>(array);
         }
+
+        public T[] Shuffle<T>(T[] A, T[] B)
+        {
+            return _stochastic.Shuffle(A, B);
+        }
     }
 }

@@ -55,6 +55,9 @@
     <Compile Include="API\ANN\Neuron.cs" />
     <Compile Include="CrossoverOperators\Neural\NeatCrossover.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="GroupTopologies\CircularTopology.cs" />
+    <Compile Include="GroupTopologies\GroupTopology.cs" />
+    <Compile Include="InterGroupDynamics\ColinizationDynamic.cs" />
     <Compile Include="Metadata\ChromosomeMetadata.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="CrossoverOperators\Binary\NoOpBinaryCrossover.cs" />
@@ -122,9 +125,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GroupTopologies\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

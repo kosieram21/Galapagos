@@ -36,6 +36,24 @@ namespace Galapagos
         }
 
         /// <summary>
+        /// Assigns creatures to this group.
+        /// </summary>
+        /// <param name="creatures">The creatures.</param>
+        internal void AssignCreatures(Creature[] creatures)
+        {
+            Array.Copy(creatures, _creatures, Size);
+            foreach (var creature in _creatures) creature.Group = this;
+
+            if (Species.Population.Metadata.DistanceThreshold > 0)
+            {
+                ClearNiches();
+                AssignNiches();
+            }
+
+            _optimalCreature = FindOptimalCreature();
+        }
+
+        /// <summary>
         /// Gets the species this group belongs to.
         /// </summary>
         internal Species Species => _species;
@@ -151,16 +169,14 @@ namespace Galapagos
         private void RunEvolution(Action evaluateFitness)
         {
             evaluateFitness();
-            BreedNewGeneration();
-
-            _optimalCreature = FindOptimalCreature();
+            var newGeneration = BreedNewGeneration();
+            AssignCreatures(newGeneration);
         }
 
         /// <summary>
         /// Breeds a new generation of creatures.
         /// </summary>
-        /// <param name="selection">The selection algorithm.</param>
-        private void BreedNewGeneration()
+        public Creature[] BreedNewGeneration()
         {
             var newGeneration = new Creature[Size];
 
@@ -190,13 +206,7 @@ namespace Galapagos
                 i++;
             }
 
-            Array.Copy(newGeneration, _creatures, Size);
-
-            if (Species.Population.Metadata.DistanceThreshold > 0)
-            {
-                ClearNiches();
-                AssignNiches();
-            }
+            return newGeneration;
         }
 
         /// <summary>

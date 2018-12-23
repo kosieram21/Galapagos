@@ -18,6 +18,8 @@ namespace Galapagos
     {
         T[] Shuffle<T>(T[] array);
 
+        T[] Shuffle<T>(T[] A, T[] B);
+
         bool FlipCoin();
 
         bool EvaluateProbability(double probability);
@@ -57,6 +59,21 @@ namespace Galapagos
         public T[] Shuffle<T>(T[] array)
         {
             return array.OrderBy(index => _rng.Next()).ToArray();
+        }
+
+        /// <summary>
+        /// Shuffles the two input arrays into one array.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the array.</typeparam>
+        /// <param name="A">The first array to shuffle.</param>
+        /// /// <param name="B">The first array to shuffle.</param>
+        /// <returns>The shuffled array.</returns>
+        public T[] Shuffle<T>(T[] A, T[] B)
+        {
+            var C = new T[A.Length + B.Length];
+            Array.Copy(A, C, A.Length);
+            Array.Copy(B, 0, C, A.Length, B.Length);
+            return Shuffle(C);
         }
 
         /// <summary>

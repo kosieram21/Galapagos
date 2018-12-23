@@ -108,6 +108,16 @@ namespace Galapagos.API
     }
 
     /// <summary>
+    /// The available group topologies.
+    /// </summary>
+    public enum GroupTopology
+    {
+        Circular,
+        Social,
+        Square
+    }
+
+    /// <summary>
     /// The available chromosome types.
     /// </summary>
     public enum ChromosomeType

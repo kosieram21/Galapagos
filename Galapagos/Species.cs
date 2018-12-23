@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Galapagos.API;
+using Galapagos.GroupTopologies;
+using Galapagos.InterGroupDynamics;
 
 namespace Galapagos
 {
@@ -18,7 +20,10 @@ namespace Galapagos
         private readonly string _chromosomeFilter;
 
         private Group _optimalGroup;
-        private readonly Group[] _groups;
+
+        // TODO: Add to metadata.
+        private GroupTopologies.GroupTopology _groupTopology;
+        private readonly ColinizationDynamic _interGroupDynamic = new ColinizationDynamic();
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Species"/> class.
@@ -44,15 +49,16 @@ namespace Galapagos
             var R = 0;
             var Q = Math.DivRem(N, groupCount, out R);
 
-            _groups = new Group[groupCount];
+            var groups = new Group[groupCount];
             for(var i = 0; i < groupCount; i++)
             {
                 var groupSize = i == (groupCount - 1) ? // is this the last group?
                     Q + R : Q;
-                _groups[i] = new Group(this, (uint)groupSize);
+                groups[i] = new Group(this, (uint)groupSize);
             }
+            _groupTopology = new CircularTopology(groups);
 
-            _optimalGroup = _groups[0];
+            _optimalGroup = _groupTopology[0];
         }
 
         /// <summary>
@@ -100,12 +106,12 @@ namespace Galapagos
         /// </summary>
         private Group FindOptimalGroup()
         {
-            var optimalGroup = _groups[0];
+            var optimalGroup = _groupTopology[0];
 
-            for (var i = 1; i < _groups.Count(); i++)
+            for (var i = 1; i < _groupTopology.Count(); i++)
             {
-                if (_groups[i].OptimalCreature.Fitness > optimalGroup.OptimalCreature.Fitness)
-                    optimalGroup = _groups[i];
+                if (_groupTopology[i].OptimalCreature.Fitness > optimalGroup.OptimalCreature.Fitness)
+                    optimalGroup = _groupTopology[i];
             }
 
             return optimalGroup;
@@ -133,7 +139,7 @@ namespace Galapagos
         /// </summary>
         public void Evolve()
         {
-            Action evolveGroups = () => { foreach (var group in _groups) { group.Evolve(); } };
+            Action evolveGroups = () => { foreach (var group in _groupTopology) { group.Evolve(); } };
             RunEvolution(evolveGroups);
         }
 
@@ -142,7 +148,7 @@ namespace Galapagos
         /// </summary>
         public void ParallelEvolve()
         {
-            Action evolveGroups = () => { Parallel.ForEach(_groups, (group) => { group.ParallelEvolve(); }); };
+            Action evolveGroups = () => { Parallel.ForEach(_groupTopology, (group) => { group.ParallelEvolve(); }); };
             RunEvolution(evolveGroups);
         }
 
@@ -158,6 +164,9 @@ namespace Galapagos
                 evolveGroups();
 
             // between group dynamics
+            var groupCount = Population.Metadata.GroupCount;
+            if (groupCount > 1)
+                _interGroupDynamic.Invoke(_groupTopology);
 
             _optimalGroup = FindOptimalGroup();
         }
@@ -175,7 +184,7 @@ namespace Galapagos
             var j = index; // real index into group
             for (var i = 0; i < groupCount; i++)
             {
-                var group = _groups[i];
+                var group = _groupTopology[i];
 
                 count = i == (groupCount - 1) ? // is this the last group?
                     Population.Metadata.Size : count + group.Size;

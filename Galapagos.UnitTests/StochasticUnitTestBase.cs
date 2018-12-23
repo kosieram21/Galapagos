@@ -16,6 +16,22 @@ namespace Galapagos.UnitTests
             Session.Instance.Stochastic = this;
         }
 
+        protected void ExecuteUnitTest(Action ut)
+        {
+            ut();
+            Reset();
+        }
+
+        private void Reset()
+        {
+            _EvaluateProbability = (probability) => _stochastic.EvaluateProbability(probability);
+            _FlipCoin = () => _stochastic.FlipCoin();
+            _Next = () => _stochastic.Next();
+            _NextMax = (maxValue) => _stochastic.Next(maxValue);
+            _NextMinMax = (minValue, maxValue) => _stochastic.Next(minValue, maxValue);
+            _NextDouble = () => _stochastic.NextDouble();
+        }
+
         protected Func<double, bool> _EvaluateProbability { get; set; } =
             (probability) => _stochastic.EvaluateProbability(probability);
         public bool EvaluateProbability(double probability) { return _EvaluateProbability(probability); }
